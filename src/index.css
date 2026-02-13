@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply text-secondary font-sans bg-[#f8f9fa] dark:bg-[#0f1115] dark:text-zinc-300 transition-colors duration-300 antialiased;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    @apply bg-red-600/30 text-black dark:text-white;
+  }
+
+
+  /* Premium Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 dark:bg-white/10 rounded-full hover:bg-accent/50 transition-colors;
+  }
+}
+
+@layer utilities {
+  .premium-shadow {
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+  }
+
+  .dark .premium-shadow {
+    box-shadow: 0 10px 40px -15px rgba(0, 0, 0, 0.4);
+  }
+
+  .glass-effect {
+    @apply bg-white/80 dark:bg-black/80 backdrop-blur-md;
+  }
+}
