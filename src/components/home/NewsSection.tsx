@@ -1,6 +1,5 @@
 import { Play } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import MediaRenderer from '../ui/MediaRenderer';
 
 interface NewsItem {
     id: number | string;
@@ -8,9 +7,6 @@ interface NewsItem {
     category: string;
     image: string;
     time: string;
-    type?: 'image' | 'video';
-    mediaUrl?: string;
-    videoUrl?: string;
 }
 
 interface NewsSectionProps {
@@ -31,14 +27,10 @@ export function NewsSection({ title, items, variant = 'grid' }: NewsSectionProps
                 {items.map((item) => (
                     <Link key={item.id} to={`/news/${item.id}`} className="group cursor-pointer block">
                         <div className="relative overflow-hidden mb-3 aspect-video bg-gray-200 dark:bg-white/5 rounded-lg">
-                            <MediaRenderer
-                                type={item.type}
-                                mediaUrl={item.mediaUrl}
-                                imageUrl={item.image}
-                                videoUrl={item.videoUrl}
+                            <img
+                                src={item.image}
                                 alt={item.title}
                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                                showVideoIcon={item.type === 'video' || item.videoUrl ? true : false}
                             />
                             <span className="absolute bottom-0 left-0 bg-accent text-white text-[10px] uppercase font-bold px-2 py-1 z-10">
                                 {item.category}

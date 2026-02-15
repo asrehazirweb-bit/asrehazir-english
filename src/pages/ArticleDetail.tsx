@@ -235,33 +235,13 @@ const ArticleDetail: React.FC = () => {
                 </div>
             </div>
 
-            {/* Featured Media (Image or Video) */}
+            {/* Featured Image */}
             <div className="max-w-6xl mx-auto px-0 md:px-4 mb-12">
                 <div className="relative w-full bg-gray-100 dark:bg-zinc-900 md:rounded-3xl overflow-hidden shadow-2xl">
-                    {/* Render Video if type is video */}
-                    {(article.type === 'video' || article.videoUrl) && article.mediaUrl ? (
-                        <div className="relative">
-                            <video
-                                src={article.mediaUrl || article.videoUrl}
-                                controls
-                                playsInline
-                                className="w-full h-auto max-h-[600px] object-contain"
-                                style={{ width: '100%', height: 'auto', maxWidth: '100%' }}
-                                controlsList="nodownload"
-                                preload="metadata"
-                            >
-                                <source src={article.mediaUrl || article.videoUrl} type="video/mp4" />
-                                Your browser does not support the video tag.
-                            </video>
-                            <div className="absolute top-4 left-4 bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold uppercase z-10">
-                                Video
-                            </div>
-                        </div>
-                    ) : article.mediaUrl || article.imageUrl ? (
-                        /* Render Image if type is image or no type specified */
+                    {article.imageUrl ? (
                         <>
                             <img
-                                src={article.mediaUrl || article.imageUrl}
+                                src={article.imageUrl}
                                 alt={article.title}
                                 className="w-full h-auto object-contain max-h-[600px]"
                                 style={{ width: '100%', height: 'auto' }}
@@ -269,10 +249,9 @@ const ArticleDetail: React.FC = () => {
                             <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none"></div>
                         </>
                     ) : (
-                        /* Fallback if no media */
                         <div className="flex items-center justify-center bg-gray-200 dark:bg-gray-800 h-64">
                             <p className="text-gray-500 dark:text-gray-400 text-center p-4">
-                                Media unavailable
+                                Image unavailable
                             </p>
                         </div>
                     )}

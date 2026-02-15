@@ -30,28 +30,4 @@ export const uploadImage = async (file: File, folder: string = 'english'): Promi
     }
 };
 
-export const uploadVideo = async (file: File, folder: string = 'english'): Promise<string> => {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', UPLOAD_PRESET);
-    formData.append('folder', folder);
-    formData.append('resource_type', 'video'); // Explicitly set resource_type for video
 
-    try {
-        const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/video/upload`, {
-            method: 'POST',
-            body: formData,
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error?.message || 'Video upload failed');
-        }
-
-        const data = await response.json();
-        return data.secure_url;
-    } catch (error) {
-        console.error('Error uploading video:', error);
-        throw error;
-    }
-};

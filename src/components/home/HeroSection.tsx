@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import MediaRenderer from '../ui/MediaRenderer';
 
 interface NewsItem {
     id: number | string;
@@ -8,29 +7,22 @@ interface NewsItem {
     image: string;
     time: string;
     excerpt?: string;
-    type?: 'image' | 'video';
-    mediaUrl?: string;
-    videoUrl?: string;
 }
 
 interface HeroSectionProps {
     leadStory: NewsItem;
-    className?: string; // Allow custom classes
+    className?: string;
 }
 
 export function HeroSection({ leadStory, className = "" }: HeroSectionProps) {
     return (
         <Link to={`/news/${leadStory.id}`} className={`relative w-full block mb-16 group cursor-pointer border-b border-gray-100 dark:border-white/5 pb-12 transition-all duration-500 hover:shadow-2xl hover:shadow-red-500/5 ${className}`}>
-            {/* Image/Video Container */}
+            {/* Image Container */}
             <div className="relative aspect-video sm:aspect-[21/10] w-full overflow-hidden mb-10 bg-gray-100 dark:bg-white/5 rounded-xl shadow-inner">
-                <MediaRenderer
-                    type={leadStory.type}
-                    mediaUrl={leadStory.mediaUrl}
-                    imageUrl={leadStory.image}
-                    videoUrl={leadStory.videoUrl}
+                <img
+                    src={leadStory.image}
                     alt={leadStory.title}
                     className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-[1.03]"
-                    showVideoIcon={leadStory.type === 'video' || leadStory.videoUrl ? true : false}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60"></div>
                 <div className="absolute top-6 left-6 bg-red-700 text-white px-6 py-2.5 text-[11px] font-black uppercase tracking-[0.25em] shadow-2xl backdrop-blur-sm bg-opacity-90 rounded-sm">

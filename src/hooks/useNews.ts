@@ -8,10 +8,7 @@ export interface NewsArticle {
     content: string;
     category: string;
     subCategory?: string;
-    type?: 'image' | 'video'; // NEW: Content type
-    mediaUrl?: string; // NEW: Unified media URL
-    imageUrl: string; // Legacy: Image URL (still required for backward compatibility)
-    videoUrl?: string; // NEW: Video URL
+    imageUrl: string;
     createdAt: any;
     author: string;
     authorId: string;
@@ -69,10 +66,16 @@ export const useNews = (category?: string, maxItems: number = 20, subCategory?: 
             }
 
             const unsubscribe = onSnapshot(q, (snapshot) => {
-                const fetchedNews = snapshot.docs.map(doc => ({
-                    id: doc.id,
-                    ...doc.data()
-                })) as NewsArticle[];
+                const fetchedNews = snapshot.docs
+                    .map(doc => ({
+                        id: doc.id,
+                        ...doc.data()
+                    } as NewsArticle))
+                    // Filter out legacy video documents or documents without images
+                    .filter(item => {
+                        const data = item as any;
+                        return data.type !== 'video' && item.imageUrl && item.imageUrl !== '';
+                    });
 
                 setNews(fetchedNews);
                 setLoading(false);
