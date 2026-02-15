@@ -7,11 +7,6 @@ interface AdminGuardProps {
 }
 
 export const AdminGuard: React.FC<AdminGuardProps> = ({ children }) => {
-    const { user, isAdmin, loading } = useAuth();
-
-    // TEMPORARY: Bypassing auth check for UI review
-    return <>{children}</>;
-
-
+    // TEMPORARY: Bypassing auth check for development
     return <>{children}</>;
 };

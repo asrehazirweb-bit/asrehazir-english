@@ -1,101 +1,129 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
-import { Search, Menu, Facebook, Twitter, Instagram, Moon, Sun } from 'lucide-react';
+import { Search, Menu, Facebook, Twitter, Instagram, Moon, Sun, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useDarkMode } from '../hooks/useDarkMode';
 
 export function Header() {
     const currentDate = format(new Date(), 'EEEE, MMMM do, yyyy');
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isScrolled, setIsScrolled] = useState(false);
     const { isDark, toggle } = useDarkMode();
 
+    useEffect(() => {
+        const handleScroll = () => setIsScrolled(window.scrollY > 20);
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
     const menuItems = [
-        { label: 'World News', path: '/world' },
-        { label: 'National News', path: '/national' },
-        { label: 'Deccan News', path: '/deccan' },
+        { label: 'World', path: '/world' },
+        { label: 'National', path: '/national' },
+        { label: 'Deccan', path: '/deccan' },
         { label: 'Articles & Essays', path: '/articles-essays' },
-        { label: 'Advertisements', path: '/advertisements' },
         { label: 'Sports & Entertainment', path: '/sports-entertainment' },
         { label: 'Crime & Accidents', path: '/crime-accidents' },
-        { label: 'Contact', path: '/contact' },
-        { label: 'About Us', path: '/about-us' },
     ];
 
     return (
-        <header className="flex flex-col w-full font-serif border-b border-gray-200 dark:border-zinc-800 bg-white dark:bg-[#0a0807] transition-colors duration-300">
-            {/* Top Bar - Minimalistic */}
-            <div className="w-full flex justify-between items-center py-2 px-6 text-[10px] md:text-xs tracking-tight text-gray-500 border-b border-gray-100 dark:border-zinc-900 uppercase">
-                <div className="flex items-center gap-4 font-medium">
-                    <span>{currentDate}</span>
-                    <span className="hidden md:inline text-gray-300">|</span>
-                    <span className="hidden md:inline">Electronic Edition</span>
+        <header className={`sticky top-0 z-50 transition-all duration-300 ${isScrolled
+            ? 'glass-effect border-b border-gray-200/50 dark:border-white/10 shadow-lg'
+            : 'bg-white dark:bg-[#0f1115] border-b border-gray-100 dark:border-white/5'
+            }`}>
+            {/* Top Bar */}
+            {!isScrolled && (
+                <div className="hidden md:block border-b border-gray-100 dark:border-white/5 py-2">
+                    <div className="w-full mx-auto px-6 flex justify-between items-center text-[10px] font-bold uppercase tracking-[0.15em] text-gray-400">
+                        <div className="flex gap-4 items-center font-medium">
+                            <span>{currentDate}</span>
+                            <span className="text-gray-300">|</span>
+                            <span className="flex items-center gap-1.5 uppercase font-black">
+                                <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse"></span>
+                                Electronic Edition
+                            </span>
+                        </div>
+                        <div className="flex items-center gap-6">
+                            <div className="flex gap-4">
+                                <Facebook size={14} className="hover:text-red-700 cursor-pointer transition-colors" />
+                                <Twitter size={14} className="hover:text-red-700 cursor-pointer transition-colors" />
+                                <Instagram size={14} className="hover:text-red-700 cursor-pointer transition-colors" />
+                            </div>
+                            <button onClick={toggle} className="p-1 hover:text-red-700 transition-colors">
+                                {isDark ? <Sun size={14} /> : <Moon size={14} />}
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-3">
-                        <button
-                            onClick={toggle}
-                            className="p-1 hover:text-red-700 transition-colors"
-                            title={isDark ? "Light Mode" : "Dark Mode"}
-                        >
-                            {isDark ? <Sun size={14} /> : <Moon size={14} />}
+            )}
+
+            {/* Main Branding */}
+            <div className={`w-full mx-auto px-6 transition-all duration-300 ${isScrolled ? 'py-3' : 'py-6 md:py-10'}`}>
+                <div className="flex justify-between items-center">
+                    <button className="md:hidden p-2 text-gray-900 dark:text-white" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                        <Menu size={24} />
+                    </button>
+
+                    <Link to="/" className="text-center group transition-transform duration-300 active:scale-95">
+                        <h1 className={`${isScrolled ? 'text-2xl md:text-3xl' : 'text-4xl md:text-7xl'} font-serif font-black tracking-[-0.04em] leading-none text-gray-900 dark:text-white transition-all duration-300`}>
+                            asre<span className="text-red-700">hazir</span>
+                        </h1>
+                    </Link>
+
+                    <div className="flex items-center gap-4">
+                        <button className="p-2 text-gray-500 hover:text-red-700 transition-all">
+                            <Search size={22} />
                         </button>
-                    </div>
-                    <div className="hidden sm:flex gap-3 text-gray-400">
-                        <Facebook size={14} className="hover:text-red-700 cursor-pointer transition-colors" />
-                        <Twitter size={14} className="hover:text-red-700 cursor-pointer transition-colors" />
-                        <Instagram size={14} className="hover:text-red-700 cursor-pointer transition-colors" />
+                        <Link to="/login" className="hidden sm:block bg-red-600 text-white px-5 py-2 text-[11px] font-black uppercase tracking-wider rounded-full hover:bg-black transition-all hover:scale-105 shadow-md">
+                            Admin
+                        </Link>
                     </div>
                 </div>
             </div>
 
-            {/* Main Branding - Newspaper Masthead */}
-            <div className="w-full py-8 md:py-12 flex flex-col items-center relative px-4 text-center">
-                {/* Mobile Menu Toggle */}
-                <button
-                    className="absolute left-6 top-1/2 -translate-y-1/2 md:hidden p-2 text-gray-900 dark:text-white"
-                    onClick={() => setIsMenuOpen(!isMenuOpen)}
-                    aria-label="Toggle Menu"
-                >
-                    <Menu size={24} />
-                </button>
-
-                <Link to="/" className="text-center group no-underline inline-block">
-                    <h1 className="text-5xl md:text-8xl font-black tracking-[-0.04em] leading-none mb-2 text-gray-900 dark:text-white font-serif">
-                        asre<span className="text-red-700">hazir</span>
-                    </h1>
-                    <div className="flex items-center justify-center gap-3 w-full max-w-xl mx-auto">
-                        <div className="h-[1px] bg-gray-200 dark:bg-zinc-800 flex-grow hidden md:block"></div>
-                        <p className="text-[9px] md:text-[11px] font-sans tracking-[0.3em] uppercase text-gray-500 font-bold whitespace-nowrap">
-                            Dedicated to Truthful Journalism
-                        </p>
-                        <div className="h-[1px] bg-gray-200 dark:bg-zinc-800 flex-grow hidden md:block"></div>
-                    </div>
-                </Link>
-
-                <button className="absolute right-6 top-1/2 -translate-y-1/2 p-2 text-gray-500 hover:text-red-700 transition-all">
-                    <Search size={20} />
-                </button>
-            </div>
-
-            {/* Primary Navigation - Centered, Clean, Rigid */}
-            <nav className={`
-                w-full border-t border-b border-gray-900 dark:border-zinc-700 py-1
-                ${isMenuOpen ? 'block' : 'hidden md:block'}
-            `}>
-                <ul className="flex flex-col md:flex-row justify-center items-center gap-0 md:gap-1 divide-y md:divide-y-0 md:divide-x divide-gray-100 dark:divide-zinc-800">
+            {/* Navigation */}
+            <nav className={`w-full border-t border-gray-100 dark:border-white/5 py-1 hidden md:block`}>
+                <ul className="flex justify-center items-center gap-2">
                     {menuItems.map((item) => (
-                        <li key={item.label} className="w-full md:w-auto">
+                        <li key={item.label}>
                             <Link
                                 to={item.path}
-                                onClick={() => setIsMenuOpen(false)}
-                                className="block px-4 md:px-5 py-3 md:py-2 text-[11px] md:text-[12px] font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 hover:text-red-700 dark:hover:text-red-500 transition-colors text-center font-sans tracking-tight"
+                                className="px-5 py-2 text-[11px] font-black uppercase tracking-[0.1em] text-gray-700 dark:text-gray-300 hover:text-red-700 transition-colors relative group"
                             >
                                 {item.label}
+                                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-700 transition-all duration-300 group-hover:w-full"></span>
                             </Link>
                         </li>
                     ))}
                 </ul>
             </nav>
-        </header>
+
+            {/* Mobile Sidebar Navigation */}
+            {isMenuOpen && (
+                <div className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm md:hidden" onClick={() => setIsMenuOpen(false)}>
+                    <div className="absolute top-0 left-0 w-4/5 h-full bg-white dark:bg-[#0f1115] p-6 shadow-2xl" onClick={e => e.stopPropagation()}>
+                        <div className="flex justify-between items-center mb-8 pb-4 border-b border-gray-100 dark:border-white/10">
+                            <h2 className="font-serif font-black text-2xl text-red-700 font-black">Menu</h2>
+                            <button onClick={() => setIsMenuOpen(false)}><X size={24} /></button>
+                        </div>
+                        <ul className="flex flex-col gap-1">
+                            {menuItems.map((item) => (
+                                <li key={item.label}>
+                                    <Link
+                                        to={item.path}
+                                        onClick={() => setIsMenuOpen(false)}
+                                        className="block py-4 text-base font-bold text-gray-900 dark:text-gray-100 hover:text-red-700 border-b border-gray-50 dark:border-white/5"
+                                    >
+                                        {item.label}
+                                    </Link>
+                                </li>
+                            ))}
+                            <li className="mt-6">
+                                <Link to="/login" onClick={() => setIsMenuOpen(false)} className="block w-full text-center bg-red-700 text-white py-3 font-bold uppercase tracking-widest rounded-lg">Admin Login</Link>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            )}
+        </header >
     );
 }

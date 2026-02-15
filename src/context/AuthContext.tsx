@@ -18,39 +18,52 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         // Handle redirect result
-        getRedirectResult(auth).catch((error) => {
+        getRedirectResult(auth).then((result) => {
+            if (result?.user) {
+                console.log("Google Redirect Success:", result.user.uid);
+            }
+        }).catch((error) => {
             console.error("Redirect Error:", error);
         });
 
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
-            console.log("Auth State Changed. User:", user?.uid);
+            console.log("Auth State Changed. User UID:", user?.uid || "null");
+
+            // Set user state immediately
             setUser(user);
+
             if (user) {
+                // If we have a user, keep loading true while we check their role
+                setLoading(true);
                 try {
                     const userRef = doc(db, "users", user.uid);
+                    console.log("Fetching Firestore doc for UID:", user.uid);
                     const userDoc = await getDoc(userRef);
 
                     if (userDoc.exists()) {
                         const userData = userDoc.data();
-                        console.log("User Data from Firestore:", userData);
+                        console.log("Firestore User Data:", userData);
                         if (userData.role === 'admin') {
                             setIsAdmin(true);
                         } else {
-                            console.warn("User is not an admin. Role:", userData.role);
+                            console.warn("User role is not admin:", userData.role);
                             setIsAdmin(false);
                         }
                     } else {
-                        console.error("No user document found for UID:", user.uid);
+                        console.error("No user document found in 'users' collection for UID:", user.uid);
                         setIsAdmin(false);
                     }
                 } catch (error) {
-                    console.error("Error fetching user role:", error);
+                    console.error("Error fetching user data from Firestore:", error);
                     setIsAdmin(false);
+                } finally {
+                    setLoading(false);
                 }
             } else {
+                // No user, definitely not an admin
                 setIsAdmin(false);
+                setLoading(false);
             }
-            setLoading(false);
         });
 
         return () => unsubscribe();

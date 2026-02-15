@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { auth } from '../lib/firebase';
-import { signInWithEmailAndPassword, signInWithRedirect } from 'firebase/auth';
+import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, LogIn, Chrome } from 'lucide-react';
 import { googleProvider } from '../lib/firebase';
@@ -15,12 +15,10 @@ const LoginPage: React.FC = () => {
     const [localLoading, setLocalLoading] = useState(false);
     const navigate = useNavigate();
 
-    // Agar user pehle se logged in hai aur admin hai, toh direct bhej do
+    // TEMPORARY: Direct redirect for testing
     React.useEffect(() => {
-        if (!loading && user && isAdmin) {
-            navigate('/admin');
-        }
-    }, [user, isAdmin, loading, navigate]);
+        navigate('/admin');
+    }, [navigate]);
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -42,10 +40,12 @@ const LoginPage: React.FC = () => {
         setLocalLoading(true);
         setError('');
         try {
-            // Popup ke bajaye Redirect use karenge taake COOP error na aaye
-            await signInWithRedirect(auth, googleProvider);
+            // Using Popup for immediate feedback
+            const result = await signInWithPopup(auth, googleProvider);
+            console.log("Login Success UID:", result.user.uid);
+            // navigate('/admin') will be handled by the useEffect
         } catch (err: any) {
-            console.error("Full Login Error:", err);
+            console.error("Popup Login Error:", err);
             setError(`Login failed: ${err.message}`);
             setLocalLoading(false);
         }
@@ -125,18 +125,33 @@ const LoginPage: React.FC = () => {
                         type="button"
                         onClick={handleGoogleLogin}
                         disabled={localLoading || loading}
-                        className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-300 dark:border-zinc-700 rounded-lg shadow-sm bg-white dark:bg-zinc-800 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-zinc-700 focus:outline-none transition-all"
+                        className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-300 dark:border-zinc-700 rounded-lg shadow-sm bg-white dark:bg-zinc-800 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-zinc-700 focus:outline-none transition-all duration-200 active:scale-95"
                     >
                         <Chrome className="h-5 w-5 text-red-500" />
-                        <span>Sign in with Google</span>
+                        <span className="font-semibold">Sign in with Google</span>
                     </button>
                 </form>
-                {auth.currentUser && (
-                    <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                        <p className="text-xs text-blue-800 dark:text-blue-300 break-all font-mono">
-                            <strong>Your UID:</strong> {auth.currentUser.uid}
+
+                {user && !isAdmin && !loading && (
+                    <div className="mt-6 p-4 bg-amber-50 dark:bg-amber-900/20 rounded-xl border border-amber-200 dark:border-amber-800/50">
+                        <div className="flex items-center gap-2 mb-2 text-amber-800 dark:text-amber-400">
+                            <Lock className="h-4 w-4" />
+                            <span className="text-sm font-semibold">Access Denied</span>
+                        </div>
+                        <p className="text-xs text-amber-700 dark:text-amber-500 mb-3">
+                            You are logged in, but your account does not have admin privileges. Please contact the developer with your UID:
                         </p>
-                        <p className="text-[10px] text-blue-600 mt-1">Copy this UID to Firestore 'users' collection</p>
+                        <div className="bg-white dark:bg-zinc-800 p-2 rounded border border-amber-200 dark:border-amber-800 flex items-center justify-between">
+                            <code className="text-[10px] break-all font-mono text-gray-800 dark:text-gray-200">
+                                {user.uid}
+                            </code>
+                            <button
+                                onClick={() => navigator.clipboard.writeText(user.uid)}
+                                className="text-[10px] text-red-600 font-semibold hover:underline"
+                            >
+                                Copy
+                            </button>
+                        </div>
                     </div>
                 )}
             </div>
