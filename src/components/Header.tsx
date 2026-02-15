@@ -25,6 +25,18 @@ export function Header() {
         { label: 'Crime & Accidents', path: '/crime-accidents' },
     ];
 
+    // Lock background scroll when menu is open
+    useEffect(() => {
+        if (isMenuOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [isMenuOpen]);
+
     return (
         <header className={`sticky top-0 z-50 transition-all duration-300 ${isScrolled
             ? 'glass-effect border-b border-gray-200/50 dark:border-white/10 shadow-lg'
@@ -99,15 +111,14 @@ export function Header() {
 
             {/* Mobile Sidebar Navigation */}
             {isMenuOpen && (
-                <div className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm md:hidden" onClick={() => setIsMenuOpen(false)}>
+                <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm md:hidden" onClick={() => setIsMenuOpen(false)}>
                     <div
-                        className="absolute top-0 left-0 w-4/5 h-full p-6 shadow-2xl overflow-y-auto"
-                        style={{ backgroundColor: 'var(--menu-bg, #fff)' }}
+                        className="fixed top-0 left-0 w-[85%] h-full max-h-screen bg-white dark:bg-[#0f1115] p-6 shadow-2xl overflow-y-auto"
                         onClick={e => e.stopPropagation()}
                     >
                         <div className="flex justify-between items-center mb-8 pb-4 border-b border-gray-100 dark:border-white/10">
-                            <h2 className="font-serif font-black text-2xl text-red-700 font-black">Menu</h2>
-                            <button onClick={() => setIsMenuOpen(false)}><X size={24} /></button>
+                            <h2 className="font-serif font-black text-2xl text-red-700">Menu</h2>
+                            <button onClick={() => setIsMenuOpen(false)} className="p-2 text-gray-900 dark:text-white"><X size={24} /></button>
                         </div>
                         <ul className="flex flex-col gap-1">
                             {menuItems.map((item) => (
@@ -122,7 +133,7 @@ export function Header() {
                                 </li>
                             ))}
                             <li className="mt-6">
-                                <Link to="/login" onClick={() => setIsMenuOpen(false)} className="block w-full text-center bg-red-700 text-white py-3 font-bold uppercase tracking-widest rounded-lg">Admin Login</Link>
+                                <Link to="/login" onClick={() => setIsMenuOpen(false)} className="block w-full text-center bg-red-700 text-white py-4 font-bold uppercase tracking-widest rounded-xl shadow-lg shadow-red-700/20">Admin Login</Link>
                             </li>
                         </ul>
                     </div>
