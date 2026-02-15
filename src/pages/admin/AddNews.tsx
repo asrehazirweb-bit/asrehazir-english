@@ -150,10 +150,10 @@ const AddNews: React.FC = () => {
                 content,
                 category,
                 subCategory,
-                type: contentType, // NEW: Content type field
-                mediaUrl: mediaUrl, // NEW: Unified media URL
-                // Legacy fields for backward compatibility
-                imageUrl: contentType === 'image' ? mediaUrl : 'https://via.placeholder.com/800x400?text=Video+Content',
+                type: contentType, // Content type identifier
+                mediaUrl: mediaUrl, // Unified media URL
+                // Legacy compatibility fields
+                imageUrl: contentType === 'image' ? mediaUrl : '', // NO PLACEHOLDER for videos
                 videoUrl: contentType === 'video' ? mediaUrl : null,
                 createdAt: serverTimestamp(),
                 author: auth.currentUser?.displayName || 'Asre Hazir Desk',

@@ -244,6 +244,7 @@ const ArticleDetail: React.FC = () => {
                             <video
                                 src={article.mediaUrl || article.videoUrl}
                                 controls
+                                playsInline
                                 className="w-full h-auto max-h-[600px] object-contain"
                                 style={{ width: '100%', height: 'auto', maxWidth: '100%' }}
                                 controlsList="nodownload"
@@ -252,7 +253,7 @@ const ArticleDetail: React.FC = () => {
                                 <source src={article.mediaUrl || article.videoUrl} type="video/mp4" />
                                 Your browser does not support the video tag.
                             </video>
-                            <div className="absolute top-4 left-4 bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold uppercase">
+                            <div className="absolute top-4 left-4 bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold uppercase z-10">
                                 Video
                             </div>
                         </div>
