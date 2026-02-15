@@ -5,6 +5,8 @@ import { ref, deleteObject } from 'firebase/storage';
 import { Edit2, Trash2, Search, Filter, Calendar, User, ExternalLink, Copy, Check } from 'lucide-react';
 import { useNews, type NewsArticle } from '../../hooks/useNews';
 import EditNewsModal from '../../components/admin/EditNewsModal';
+import ConfirmationModal from '../../components/admin/ConfirmationModal';
+import Toast from '../../components/ui/Toast';
 
 const ManageNews: React.FC = () => {
     const { news, loading, formatTime } = useNews('All', 100);
@@ -13,26 +15,42 @@ const ManageNews: React.FC = () => {
     const [editingArticle, setEditingArticle] = useState<NewsArticle | null>(null);
     const [copiedId, setCopiedId] = useState<string | null>(null);
 
-    const handleDelete = async (id: string, imageUrl?: string) => {
-        if (window.confirm('Are you sure you want to delete this article? This action cannot be undone.')) {
-            try {
-                // 1. Delete from Firestore
-                await deleteDoc(doc(db, 'news', id));
+    // New state for modal and toast
+    const [deleteModal, setDeleteModal] = useState<{ isOpen: boolean; id: string | null; imageUrl?: string }>({
+        isOpen: false,
+        id: null,
+        imageUrl: undefined
+    });
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
-                // 2. Delete from Storage if image exists and is not a placeholder
-                if (imageUrl && !imageUrl.includes('placeholder')) {
-                    try {
-                        const imageRef = ref(storage, imageUrl);
-                        await deleteObject(imageRef);
-                    } catch (storageErr) {
-                        console.error("Error deleting image from storage:", storageErr);
-                    }
+    const handleDeleteClick = (id: string, imageUrl?: string) => {
+        setDeleteModal({ isOpen: true, id, imageUrl });
+    };
+
+    const confirmDelete = async () => {
+        if (!deleteModal.id) return;
+        setIsDeleting(true);
+        try {
+            // 1. Delete from Firestore
+            await deleteDoc(doc(db, 'news', deleteModal.id));
+
+            // 2. Delete from Storage if image exists and is not a placeholder
+            if (deleteModal.imageUrl && !deleteModal.imageUrl.includes('placeholder')) {
+                try {
+                    const imageRef = ref(storage, deleteModal.imageUrl);
+                    await deleteObject(imageRef);
+                } catch (storageErr) {
+                    console.error("Error deleting image from storage:", storageErr);
                 }
-                alert('Article deleted successfully');
-            } catch (error) {
-                console.error("Error deleting article:", error);
-                alert('Error deleting article');
             }
+            setToast({ message: 'Article deleted successfully', type: 'success' });
+            setDeleteModal({ isOpen: false, id: null });
+        } catch (error) {
+            console.error("Error deleting article:", error);
+            setToast({ message: 'Failed to delete article', type: 'error' });
+        } finally {
+            setIsDeleting(false);
         }
     };
 
@@ -169,7 +187,7 @@ const ManageNews: React.FC = () => {
                                                     <Edit2 size={16} />
                                                 </button>
                                                 <button
-                                                    onClick={() => handleDelete(item.id, item.imageUrl)}
+                                                    onClick={() => handleDeleteClick(item.id, item.imageUrl)}
                                                     className="p-3 rounded-xl bg-gray-50 dark:bg-zinc-800 text-gray-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10 transition-all shadow-sm"
                                                     title="Delete Article"
                                                 >
@@ -210,6 +228,26 @@ const ManageNews: React.FC = () => {
                     onSuccess={() => {
                         setEditingArticle(null);
                     }}
+                />
+            )}
+
+            {/* Confirmation Modal */}
+            <ConfirmationModal
+                isOpen={deleteModal.isOpen}
+                onClose={() => setDeleteModal({ ...deleteModal, isOpen: false })}
+                onConfirm={confirmDelete}
+                title="Delete Article"
+                message="Are you sure you want to delete this article? This action cannot be undone."
+                confirmText="Delete Permanently"
+                isLoading={isDeleting}
+            />
+
+            {/* Toast Notification */}
+            {toast && (
+                <Toast
+                    message={toast.message}
+                    type={toast.type}
+                    onClose={() => setToast(null)}
                 />
             )}
         </div>

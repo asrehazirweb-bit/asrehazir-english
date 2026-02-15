@@ -3,15 +3,22 @@ import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { auth } from '../../lib/firebase';
 import { LayoutDashboard, FileText, PlusSquare, LogOut, Home, Settings, ShieldCheck, Zap } from 'lucide-react';
 
+import ConfirmationModal from './ConfirmationModal';
+import { useState } from 'react';
+
 const AdminLayout: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
-    const handleLogout = async () => {
-        if (window.confirm('Are you sure you want to exit the control center?')) {
-            await auth.signOut();
-            navigate('/');
-        }
+    const handleLogoutClick = () => {
+        setIsLogoutModalOpen(true);
+    };
+
+    const confirmLogout = async () => {
+        await auth.signOut();
+        navigate('/');
+        setIsLogoutModalOpen(false);
     };
 
     const isActive = (path: string) => location.pathname === path;
@@ -45,8 +52,8 @@ const AdminLayout: React.FC = () => {
                                     key={item.path}
                                     to={item.path}
                                     className={`flex items-center space-x-3 px-4 py-3.5 rounded-2xl transition-all duration-300 group ${isActive(item.path)
-                                            ? 'bg-red-600 text-white shadow-lg shadow-red-600/20'
-                                            : 'text-gray-500 hover:bg-gray-50 dark:hover:bg-zinc-800 hover:text-gray-900 dark:hover:text-white'
+                                        ? 'bg-red-600 text-white shadow-lg shadow-red-600/20'
+                                        : 'text-gray-500 hover:bg-gray-50 dark:hover:bg-zinc-800 hover:text-gray-900 dark:hover:text-white'
                                         }`}
                                 >
                                     <span className={`${isActive(item.path) ? 'text-white' : 'group-hover:text-red-600'} transition-colors`}>
@@ -88,7 +95,7 @@ const AdminLayout: React.FC = () => {
                         </div>
                     </div>
                     <button
-                        onClick={handleLogout}
+                        onClick={handleLogoutClick}
                         className="w-full flex items-center justify-center space-x-2 p-3.5 rounded-2xl bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-gray-400 hover:bg-red-50 dark:hover:bg-red-900/10 hover:text-red-600 transition-all font-black uppercase tracking-widest text-[10px]"
                     >
                         <LogOut size={16} />
@@ -118,6 +125,15 @@ const AdminLayout: React.FC = () => {
                     <Outlet />
                 </div>
             </main>
+
+            <ConfirmationModal
+                isOpen={isLogoutModalOpen}
+                onClose={() => setIsLogoutModalOpen(false)}
+                onConfirm={confirmLogout}
+                title="Sign Out"
+                message="Are you sure you want to sign out? You will need to login again to access the admin panel."
+                confirmText="Sign Out"
+            />
         </div>
     );
 };

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { db, storage, auth } from '../../lib/firebase';
+import { db, auth } from '../../lib/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { Image as ImageIcon, Send, Layout, Type, FileText, Tag, Eye, EyeOff, Trash2, Sparkles, CheckCircle2 } from 'lucide-react';
+import { uploadImage, uploadVideo } from '../../lib/cloudinary';
+import { Image as ImageIcon, Video as VideoIcon, Send, Layout, Type, FileText, Tag, Eye, EyeOff, Trash2, Sparkles, CheckCircle2 } from 'lucide-react';
+import ConfirmationModal from '../../components/admin/ConfirmationModal';
+import Toast from '../../components/ui/Toast';
 
 const CATEGORIES = [
     { name: 'World News', subCategories: ['Top Stories', 'Middle East', 'International', 'Diplomacy'] },
@@ -20,9 +22,15 @@ const AddNews: React.FC = () => {
     const [subCategory, setSubCategory] = useState('Top Stories');
     const [image, setImage] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [video, setVideo] = useState<File | null>(null);
+    const [videoPreview, setVideoPreview] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [showPreview, setShowPreview] = useState(false);
     const [successMessage, setSuccessMessage] = useState(false);
+
+    // New state for modal and toast
+    const [isClearModalOpen, setIsClearModalOpen] = useState(false);
+    const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
     // Load draft
     useEffect(() => {
@@ -46,14 +54,20 @@ const AddNews: React.FC = () => {
         return () => clearTimeout(timer);
     }, [title, content, category, subCategory]);
 
-    const handleClearDraft = () => {
-        if (window.confirm('Clear all fields? This will delete your current draft.')) {
-            setTitle('');
-            setContent('');
-            setImage(null);
-            setImagePreview(null);
-            localStorage.removeItem('asre-hazir-draft');
-        }
+    const handleClearDraftClick = () => {
+        setIsClearModalOpen(true);
+    };
+
+    const confirmClearDraft = () => {
+        setTitle('');
+        setContent('');
+        setImage(null);
+        setImagePreview(null);
+        setVideo(null);
+        setVideoPreview(null);
+        localStorage.removeItem('asre-hazir-draft');
+        setIsClearModalOpen(false);
+        setToast({ message: 'Draft cleared successfully', type: 'success' });
     };
 
     const handleCategoryChange = (val: string) => {
@@ -78,6 +92,17 @@ const AddNews: React.FC = () => {
         }
     };
 
+    const handleVideoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files ? e.target.files[0] : null;
+        setVideo(file);
+        if (file) {
+            const url = URL.createObjectURL(file);
+            setVideoPreview(url);
+        } else {
+            setVideoPreview(null);
+        }
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
@@ -86,12 +111,20 @@ const AddNews: React.FC = () => {
             let imageUrl = '';
             if (image) {
                 try {
-                    const storageRef = ref(storage, `news/${Date.now()}_${image.name}`);
-                    await uploadBytes(storageRef, image);
-                    imageUrl = await getDownloadURL(storageRef);
-                } catch (storageErr: any) {
-                    console.error("Storage error:", storageErr);
-                    alert(`Image upload failed: ${storageErr.message || 'Unknown error'}. Posting with placeholder instead.`);
+                    imageUrl = await uploadImage(image, 'english');
+                } catch (imgErr: any) {
+                    console.error("Image upload error:", imgErr);
+                    setToast({ message: `Image upload failed: ${imgErr.message || 'Unknown error'}`, type: 'error' });
+                }
+            }
+
+            let videoUrl = '';
+            if (video) {
+                try {
+                    videoUrl = await uploadVideo(video, 'english');
+                } catch (vidErr: any) {
+                    console.error("Video upload error:", vidErr);
+                    setToast({ message: `Video upload failed: ${vidErr.message || 'Unknown error'}`, type: 'error' });
                 }
             }
 
@@ -101,6 +134,7 @@ const AddNews: React.FC = () => {
                 category,
                 subCategory,
                 imageUrl: imageUrl || 'https://via.placeholder.com/800x400?text=Asre+Hazir+News',
+                videoUrl: videoUrl || null,
                 createdAt: serverTimestamp(),
                 author: auth.currentUser?.displayName || 'Asre Hazir Desk',
                 authorId: auth.currentUser?.uid,
@@ -112,6 +146,8 @@ const AddNews: React.FC = () => {
             setContent('');
             setImage(null);
             setImagePreview(null);
+            setVideo(null);
+            setVideoPreview(null);
             localStorage.removeItem('asre-hazir-draft');
 
             setTimeout(() => setSuccessMessage(false), 5000);
@@ -120,7 +156,7 @@ const AddNews: React.FC = () => {
             if (fileInput) fileInput.value = '';
         } catch (error) {
             console.error('Error adding document: ', error);
-            alert('Broadcast failed. Check connection.');
+            setToast({ message: 'Broadcast failed. Check connection.', type: 'error' });
         } finally {
             setLoading(false);
         }
@@ -168,7 +204,7 @@ const AddNews: React.FC = () => {
                                     </button>
                                     <button
                                         type="button"
-                                        onClick={handleClearDraft}
+                                        onClick={handleClearDraftClick}
                                         className="flex items-center gap-2 bg-zinc-800 text-zinc-500 hover:text-white px-6 py-3 rounded-xl font-black uppercase tracking-widest text-[10px] transition-all"
                                     >
                                         <Trash2 size={14} /> Reset
@@ -261,11 +297,37 @@ const AddNews: React.FC = () => {
                                 </div>
                             </div>
 
+                            {/* Video Upload */}
+                            <div className="space-y-4">
+                                <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
+                                    <VideoIcon className="w-3.5 h-3.5 text-red-600" /> Video Asset
+                                </label>
+                                <div className={`relative border-2 border-dashed rounded-[2rem] p-6 transition-all duration-500 ${videoPreview ? 'border-red-600 bg-red-50/5' : 'border-gray-200 dark:border-zinc-800 hover:border-red-600'}`}>
+                                    {videoPreview ? (
+                                        <div className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl bg-black">
+                                            <video src={videoPreview} controls className="w-full h-full object-contain" />
+                                            <button type="button" onClick={() => { setVideo(null); setVideoPreview(null); }} className="absolute top-4 right-4 bg-black/80 backdrop-blur-md text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase z-10">Change Video</button>
+                                        </div>
+                                    ) : (
+                                        <label className="flex flex-col items-center justify-center min-h-[16rem] cursor-pointer">
+                                            <VideoIcon className="w-12 h-12 text-gray-300 mb-4" />
+                                            <span className="text-gray-900 dark:text-white font-bold">Select News Video</span>
+                                            <input type="file" onChange={handleVideoChange} className="hidden" accept="video/*" />
+                                        </label>
+                                    )}
+                                </div>
+                            </div>
+
                             {/* Preview Section */}
                             {showPreview && (
                                 <div className="mt-12 p-8 md:p-12 bg-gray-50 dark:bg-white/5 rounded-[3rem] border-2 border-red-600/10">
                                     <h2 className="text-3xl md:text-5xl font-serif font-black text-gray-900 dark:text-white leading-tight mb-8 underline decoration-red-600 decoration-4">{title || 'Headline'}</h2>
                                     {imagePreview && <img src={imagePreview} className="w-full aspect-video object-cover rounded-3xl shadow-xl mb-8" />}
+                                    {videoPreview && (
+                                        <div className="mb-8 rounded-3xl overflow-hidden shadow-xl bg-black">
+                                            <video src={videoPreview} controls className="w-full max-h-[500px] object-contain" />
+                                        </div>
+                                    )}
                                     <div className="prose prose-xl dark:prose-invert">
                                         {content.split('\n').map((p, i) => <p key={i} className="text-gray-700 dark:text-zinc-400 text-lg leading-relaxed">{p}</p>)}
                                     </div>
@@ -294,6 +356,25 @@ const AddNews: React.FC = () => {
                     </div>
                 </div>
             </div>
+            {/* Confirmation Modal */}
+            <ConfirmationModal
+                isOpen={isClearModalOpen}
+                onClose={() => setIsClearModalOpen(false)}
+                onConfirm={confirmClearDraft}
+                title="Reset Content"
+                message="Are you sure you want to clear all fields? This will delete your current draft and cannot be undone."
+                confirmText="Reset Everything"
+                isLoading={false}
+            />
+
+            {/* Toast Notification */}
+            {toast && (
+                <Toast
+                    message={toast.message}
+                    type={toast.type}
+                    onClose={() => setToast(null)}
+                />
+            )}
         </div>
     );
 };

@@ -4,6 +4,7 @@ import { db } from '../lib/firebase';
 import { doc, getDoc, collection, query, where, limit, getDocs } from 'firebase/firestore';
 import { Calendar, Share2, Facebook, Twitter, Link2, ArrowLeft, Clock, Bookmark } from 'lucide-react';
 import type { NewsArticle } from '../hooks/useNews';
+import Toast from '../components/ui/Toast';
 
 const ArticleDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -11,6 +12,7 @@ const ArticleDetail: React.FC = () => {
     const [relatedNews, setRelatedNews] = useState<NewsArticle[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
     useEffect(() => {
         const fetchArticle = async () => {
             if (!id) return;
@@ -90,7 +92,7 @@ const ArticleDetail: React.FC = () => {
             window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`, '_blank');
         } else if (platform === 'copy') {
             navigator.clipboard.writeText(url);
-            alert('Link copied to clipboard!');
+            setToast({ message: 'Link copied to clipboard!', type: 'success' });
         }
     };
 
@@ -254,6 +256,15 @@ const ArticleDetail: React.FC = () => {
                         ))}
                     </div>
                 </div>
+            )}
+
+            {/* Toast Notification */}
+            {toast && (
+                <Toast
+                    message={toast.message}
+                    type={toast.type}
+                    onClose={() => setToast(null)}
+                />
             )}
         </article>
     );

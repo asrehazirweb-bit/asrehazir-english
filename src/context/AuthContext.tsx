@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { auth, db } from '../lib/firebase';
 import { onAuthStateChanged, type User, getRedirectResult } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 interface AuthContextType {
     user: User | null;
@@ -50,8 +50,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                             setIsAdmin(false);
                         }
                     } else {
-                        console.error("No user document found in 'users' collection for UID:", user.uid);
-                        setIsAdmin(false);
+                        // FOR INITIAL SETUP ONLY: Create user with admin role
+                        console.log("No user document found. Creating admin profile for:", user.email);
+                        try {
+                            const newUserData = {
+                                email: user.email,
+                                role: 'admin',
+                                createdAt: new Date()
+                            };
+                            await setDoc(doc(db, "users", user.uid), newUserData);
+                            console.log("Admin user created successfully");
+                            setIsAdmin(true);
+                        } catch (e) {
+                            console.error("Error creating user:", e);
+                            setIsAdmin(false);
+                        }
                     }
                 } catch (error) {
                     console.error("Error fetching user data from Firestore:", error);
