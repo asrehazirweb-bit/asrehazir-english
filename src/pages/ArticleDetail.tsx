@@ -2,17 +2,22 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { db } from '../lib/firebase';
 import { doc, getDoc, collection, query, where, limit, getDocs } from 'firebase/firestore';
-import { Calendar, Share2, Facebook, Twitter, Link2, ArrowLeft, Clock, Bookmark } from 'lucide-react';
+import { Calendar, Share2, Facebook, Twitter, Link2, ArrowLeft, Clock, Bookmark, BookmarkCheck } from 'lucide-react';
 import type { NewsArticle } from '../hooks/useNews';
 import Toast from '../components/ui/Toast';
+import { useAuth } from '../context/AuthContext';
+import { saveNewsArticle, unsaveNewsArticle, isNewsSaved } from '../lib/savedNews';
 
 const ArticleDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
+    const { user } = useAuth();
     const [article, setArticle] = useState<NewsArticle | null>(null);
     const [relatedNews, setRelatedNews] = useState<NewsArticle[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+    const [isSaved, setIsSaved] = useState(false);
+    const [saving, setSaving] = useState(false);
     useEffect(() => {
         const fetchArticle = async () => {
             if (!id) return;
@@ -96,6 +101,54 @@ const ArticleDetail: React.FC = () => {
         }
     };
 
+    const handleSaveArticle = async () => {
+        if (!user) {
+            setToast({ message: 'Please login to save articles', type: 'error' });
+            return;
+        }
+
+        if (!article || !id) return;
+
+        setSaving(true);
+        try {
+            if (isSaved) {
+                await unsaveNewsArticle(user.uid, id);
+                setIsSaved(false);
+                setToast({ message: 'Article removed from saved', type: 'success' });
+            } else {
+                await saveNewsArticle(
+                    user.uid,
+                    id,
+                    article.title,
+                    article.imageUrl,
+                    article.category
+                );
+                setIsSaved(true);
+                setToast({ message: 'Article saved successfully!', type: 'success' });
+            }
+        } catch (error: any) {
+            console.error('Error saving article:', error);
+            if (error.message.includes('already saved')) {
+                setToast({ message: 'Article already saved', type: 'error' });
+            } else {
+                setToast({ message: 'Failed to save article', type: 'error' });
+            }
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    // Check if article is saved
+    useEffect(() => {
+        const checkSavedStatus = async () => {
+            if (user && id) {
+                const saved = await isNewsSaved(user.uid, id);
+                setIsSaved(saved);
+            }
+        };
+        checkSavedStatus();
+    }, [user, id]);
+
     if (loading) {
         return (
             <div className="flex justify-center items-center min-h-screen bg-white dark:bg-zinc-950">
@@ -161,8 +214,22 @@ const ArticleDetail: React.FC = () => {
                             <Link2 size={18} />
                         </button>
                         <div className="w-[1px] h-6 bg-gray-200 dark:bg-zinc-800 mx-2"></div>
-                        <button className="p-2.5 rounded-full bg-gray-50 dark:bg-zinc-900 text-gray-600 dark:text-gray-400 hover:text-red-600 transition-all">
-                            <Bookmark size={18} />
+                        <button
+                            onClick={handleSaveArticle}
+                            disabled={saving}
+                            className={`p-2.5 rounded-full transition-all ${isSaved
+                                    ? 'bg-red-600 text-white hover:bg-red-700'
+                                    : 'bg-gray-50 dark:bg-zinc-900 text-gray-600 dark:text-gray-400 hover:text-red-600'
+                                }`}
+                            title={isSaved ? 'Remove from saved' : 'Save article'}
+                        >
+                            {saving ? (
+                                <div className="w-[18px] h-[18px] border-2 border-current border-t-transparent rounded-full animate-spin"></div>
+                            ) : isSaved ? (
+                                <BookmarkCheck size={18} />
+                            ) : (
+                                <Bookmark size={18} />
+                            )}
                         </button>
                     </div>
                 </div>
@@ -271,3 +338,4 @@ const ArticleDetail: React.FC = () => {
 };
 
 export default ArticleDetail;
+

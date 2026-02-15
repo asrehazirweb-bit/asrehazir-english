@@ -10,6 +10,7 @@ import AddNews from './pages/admin/AddNews';
 import ManageNews from './pages/admin/ManageNews';
 import LoginPage from './pages/LoginPage';
 import ArticleDetail from './pages/ArticleDetail';
+import SavedNews from './pages/SavedNews';
 import ScrollToTop from './components/ScrollToTop';
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
         {/* Utility Routes */}
         <Route element={<Layout><LoginPage /></Layout>} path="/login" />
         <Route element={<Layout><ArticleDetail /></Layout>} path="/news/:id" />
+        <Route element={<Layout><SavedNews /></Layout>} path="/saved-news" />
 
         {/* Admin Routes */}
         <Route
