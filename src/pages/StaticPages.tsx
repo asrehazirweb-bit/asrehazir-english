@@ -114,7 +114,7 @@ export function AdvertisementsPage() {
                 <div className="mt-12 bg-black dark:bg-red-700 text-white p-10 rounded-3xl">
                     <h2 className="text-3xl font-black mb-4 uppercase tracking-tighter">Ready to Scale?</h2>
                     <p className="mb-6 font-sans text-sm tracking-widest uppercase opacity-80">Download our Media Kit or contact our sales team</p>
-                    <a href="mailto:ads@asrehazir.com" className="inline-block bg-white text-black font-black px-10 py-4 rounded-full uppercase tracking-widest text-[10px] hover:scale-105 transition-transform">Contact Sales Team</a>
+                    <a href="mailto:asrehazir.web@gmail.com" className="inline-block bg-white text-black font-black px-10 py-4 rounded-full uppercase tracking-widest text-[10px] hover:scale-105 transition-transform">Contact Sales Team</a>
                 </div>
             </div>
         </div>

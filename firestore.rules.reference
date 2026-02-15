@@ -1,0 +1,39 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Users collection
+    match /users/{userId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // News collection
+    match /news/{newsId} {
+      // Anyone can read published news
+      allow read: if true;
+      
+      // Only admins can create, update, or delete news
+      allow write: if request.auth != null 
+                   && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Saved News collection (NEW)
+    match /saved_news/{savedId} {
+      // Users can only create saved items for themselves
+      allow create: if request.auth != null 
+                    && request.resource.data.userId == request.auth.uid;
+      
+      // Users can only read their own saved items
+      allow read: if request.auth != null 
+                  && resource.data.userId == request.auth.uid;
+      
+      // Users can only delete their own saved items
+      allow delete: if request.auth != null 
+                    && resource.data.userId == request.auth.uid;
+      
+      // No updates allowed (create/delete pattern only)
+      allow update: if false;
+    }
+  }
+}

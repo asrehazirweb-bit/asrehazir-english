@@ -9,6 +9,11 @@
     @apply text-secondary font-sans bg-[#f8f9fa] dark:bg-[#0f1115] dark:text-zinc-300 transition-colors duration-300 antialiased;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
+    --menu-bg: #ffffff;
+  }
+
+  body.dark {
+    --menu-bg: #0f1115;
   }
 
   ::selection {

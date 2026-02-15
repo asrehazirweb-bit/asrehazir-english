@@ -100,7 +100,11 @@ export function Header() {
             {/* Mobile Sidebar Navigation */}
             {isMenuOpen && (
                 <div className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm md:hidden" onClick={() => setIsMenuOpen(false)}>
-                    <div className="absolute top-0 left-0 w-4/5 h-full bg-white dark:bg-[#0f1115] p-6 shadow-2xl" onClick={e => e.stopPropagation()}>
+                    <div
+                        className="absolute top-0 left-0 w-4/5 h-full p-6 shadow-2xl overflow-y-auto"
+                        style={{ backgroundColor: 'var(--menu-bg, #fff)' }}
+                        onClick={e => e.stopPropagation()}
+                    >
                         <div className="flex justify-between items-center mb-8 pb-4 border-b border-gray-100 dark:border-white/10">
                             <h2 className="font-serif font-black text-2xl text-red-700 font-black">Menu</h2>
                             <button onClick={() => setIsMenuOpen(false)}><X size={24} /></button>

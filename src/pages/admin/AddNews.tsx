@@ -108,24 +108,41 @@ const AddNews: React.FC = () => {
         setLoading(true);
 
         try {
-            let imageUrl = '';
-            if (image) {
-                try {
-                    imageUrl = await uploadImage(image, 'english');
-                } catch (imgErr: any) {
-                    console.error("Image upload error:", imgErr);
-                    setToast({ message: `Image upload failed: ${imgErr.message || 'Unknown error'}`, type: 'error' });
-                }
-            }
+            let mediaUrl = '';
+            let contentType: 'image' | 'video' = 'image';
 
-            let videoUrl = '';
+            // Upload video first if present (video takes priority)
             if (video) {
                 try {
-                    videoUrl = await uploadVideo(video, 'english');
+                    mediaUrl = await uploadVideo(video, 'english');
+                    contentType = 'video';
+                    console.log('✅ Video uploaded:', mediaUrl);
                 } catch (vidErr: any) {
                     console.error("Video upload error:", vidErr);
                     setToast({ message: `Video upload failed: ${vidErr.message || 'Unknown error'}`, type: 'error' });
+                    setLoading(false);
+                    return; // Stop if video upload fails
                 }
+            }
+            // Upload image if no video
+            else if (image) {
+                try {
+                    mediaUrl = await uploadImage(image, 'english');
+                    contentType = 'image';
+                    console.log('✅ Image uploaded:', mediaUrl);
+                } catch (imgErr: any) {
+                    console.error("Image upload error:", imgErr);
+                    setToast({ message: `Image upload failed: ${imgErr.message || 'Unknown error'}`, type: 'error' });
+                    setLoading(false);
+                    return; // Stop if image upload fails
+                }
+            }
+
+            // Validation: Ensure media is uploaded
+            if (!mediaUrl) {
+                setToast({ message: 'Please upload an image or video', type: 'error' });
+                setLoading(false);
+                return;
             }
 
             await addDoc(collection(db, 'news'), {
@@ -133,13 +150,19 @@ const AddNews: React.FC = () => {
                 content,
                 category,
                 subCategory,
-                imageUrl: imageUrl || 'https://via.placeholder.com/800x400?text=Asre+Hazir+News',
-                videoUrl: videoUrl || null,
+                type: contentType, // NEW: Content type field
+                mediaUrl: mediaUrl, // NEW: Unified media URL
+                // Legacy fields for backward compatibility
+                imageUrl: contentType === 'image' ? mediaUrl : 'https://via.placeholder.com/800x400?text=Video+Content',
+                videoUrl: contentType === 'video' ? mediaUrl : null,
                 createdAt: serverTimestamp(),
                 author: auth.currentUser?.displayName || 'Asre Hazir Desk',
                 authorId: auth.currentUser?.uid,
                 status: 'published'
             });
+
+            console.log(`✅ ${contentType.toUpperCase()} post published successfully`);
+            setToast({ message: `${contentType === 'video' ? 'Video' : 'Image'} post published successfully!`, type: 'success' });
 
             setSuccessMessage(true);
             setTitle('');

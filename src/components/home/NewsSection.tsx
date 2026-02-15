@@ -49,31 +49,33 @@ export function NewsSection({ title, items, variant = 'grid' }: NewsSectionProps
 
 export function VideoSection({ items }: { items: NewsItem[] }) {
     return (
-        <div className="mb-12 bg-secondary py-12 px-4 -mx-4 sm:-mx-8 sm:px-8 text-white relative">
-            <div className="flex items-center mb-8 border-b border-white/10 pb-2">
-                <h2 className="text-xl font-bold font-sans uppercase text-accent tracking-wider">Must Watch</h2>
-            </div>
+        <div className="mb-12 bg-secondary py-8 sm:py-12 px-4 sm:px-8 text-white relative overflow-hidden">
+            <div className="max-w-7xl mx-auto">
+                <div className="flex items-center mb-6 sm:mb-8 border-b border-white/10 pb-2">
+                    <h2 className="text-xl font-bold font-sans uppercase text-accent tracking-wider">Must Watch</h2>
+                </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {items.map((item) => (
-                    <div key={item.id} className="group cursor-pointer">
-                        <div className="relative overflow-hidden mb-3 aspect-video bg-gray-800 border border-gray-700">
-                            <img
-                                src={item.image}
-                                alt={item.title}
-                                className="w-full h-full object-cover group-hover:opacity-80 transition-opacity"
-                            />
-                            <div className="absolute inset-0 flex items-center justify-center">
-                                <div className="w-12 h-12 rounded-full bg-accent/90 flex items-center justify-center pl-1 group-hover:scale-110 transition-transform">
-                                    <Play size={20} className="text-white fill-current" />
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+                    {items.map((item) => (
+                        <div key={item.id} className="group cursor-pointer">
+                            <div className="relative overflow-hidden mb-3 aspect-video bg-gray-800 border border-gray-700 rounded-lg">
+                                <img
+                                    src={item.image}
+                                    alt={item.title}
+                                    className="w-full h-full object-cover group-hover:opacity-80 transition-opacity"
+                                />
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    <div className="w-12 h-12 rounded-full bg-accent/90 flex items-center justify-center pl-1 group-hover:scale-110 transition-transform">
+                                        <Play size={20} className="text-white fill-current" />
+                                    </div>
                                 </div>
                             </div>
+                            <h3 className="font-serif font-bold text-sm sm:text-base leading-snug group-hover:text-accent transition-colors text-gray-100 line-clamp-2">
+                                {item.title}
+                            </h3>
                         </div>
-                        <h3 className="font-serif font-bold text-base leading-snug group-hover:text-accent transition-colors text-gray-100">
-                            {item.title}
-                        </h3>
-                    </div>
-                ))}
+                    ))}
+                </div>
             </div>
         </div>
     )

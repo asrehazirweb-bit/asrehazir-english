@@ -8,7 +8,10 @@ export interface NewsArticle {
     content: string;
     category: string;
     subCategory?: string;
-    imageUrl: string;
+    type?: 'image' | 'video'; // NEW: Content type
+    mediaUrl?: string; // NEW: Unified media URL
+    imageUrl: string; // Legacy: Image URL (still required for backward compatibility)
+    videoUrl?: string; // NEW: Video URL
     createdAt: any;
     author: string;
     authorId: string;
