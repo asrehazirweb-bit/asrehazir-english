@@ -1,7 +1,7 @@
 import React from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { auth } from '../../lib/firebase';
-import { LayoutDashboard, FileText, PlusSquare, LogOut, Home, Settings, ShieldCheck, Zap } from 'lucide-react';
+import { LayoutDashboard, FileText, PlusSquare, LogOut, Home, Settings, ShieldCheck, Zap, Menu, X } from 'lucide-react';
 
 import ConfirmationModal from './ConfirmationModal';
 import { useState } from 'react';
@@ -44,7 +44,7 @@ const AdminLayout: React.FC = () => {
                     onClick={() => setIsMobileSidebarOpen(true)}
                     className="p-2 text-gray-500 hover:text-red-600 transition-colors"
                 >
-                    <Settings size={20} />
+                    <Menu size={24} />
                 </button>
             </div>
 
@@ -65,7 +65,7 @@ const AdminLayout: React.FC = () => {
                         </div>
                     </div>
                     <button onClick={() => setIsMobileSidebarOpen(false)} className="lg:hidden p-2 text-gray-400 hover:text-red-600">
-                        <LogOut size={18} className="rotate-180" />
+                        <X size={24} />
                     </button>
                 </div>
 
@@ -95,7 +95,11 @@ const AdminLayout: React.FC = () => {
                     <div>
                         <p className="px-4 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-4">Platform</p>
                         <nav className="space-y-1.5">
-                            <Link to="/" className="flex items-center space-x-3 px-4 py-3.5 rounded-2xl text-gray-500 hover:bg-gray-50 dark:hover:bg-zinc-800 hover:text-gray-900 dark:hover:text-white transition-all group">
+                            <Link
+                                to="/"
+                                onClick={() => setIsMobileSidebarOpen(false)}
+                                className="flex items-center space-x-3 px-4 py-3.5 rounded-2xl text-gray-500 hover:bg-gray-50 dark:hover:bg-zinc-800 hover:text-gray-900 dark:hover:text-white transition-all group"
+                            >
                                 <Home size={18} className="group-hover:text-red-600 transition-colors" />
                                 <span className="text-sm font-bold tracking-tight">Main Portal</span>
                             </Link>

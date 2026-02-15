@@ -37,10 +37,10 @@ const AdminDashboard: React.FC = () => {
                             <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse delay-75"></div>
                         </div>
                     </div>
-                    <h1 className="text-4xl md:text-5xl lg:text-7xl font-serif font-black text-gray-900 dark:text-white uppercase tracking-tighter leading-none mb-4 italic">
+                    <h1 className="text-3xl md:text-5xl lg:text-7xl font-serif font-black text-gray-900 dark:text-white uppercase tracking-tighter leading-none mb-4 italic">
                         Maindeck, <span className="text-red-600">{user?.displayName?.split(' ')[0] || 'Admin'}</span>
                     </h1>
-                    <p className="text-gray-500 dark:text-zinc-500 text-base md:text-lg font-sans tracking-tight leading-relaxed max-w-lg">
+                    <p className="text-gray-500 dark:text-zinc-500 text-sm md:text-lg font-sans tracking-tight leading-relaxed max-w-lg">
                         You are at the <span className="text-black dark:text-white font-bold border-b-2 border-red-600">Asre Hazir</span> core. Finalize your broadcasts and monitor global reach in real-time.
                     </p>
 

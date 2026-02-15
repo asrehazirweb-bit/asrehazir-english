@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { db, storage } from '../../lib/firebase';
 import { doc, deleteDoc } from 'firebase/firestore';
 import { ref, deleteObject } from 'firebase/storage';
-import { Edit2, Trash2, Search, Filter, Calendar, User, ExternalLink, Copy, Check } from 'lucide-react';
+import { Edit2, Trash2, Search, Filter, Calendar, User, ExternalLink, Copy } from 'lucide-react';
 import { useNews, type NewsArticle } from '../../hooks/useNews';
 import EditNewsModal from '../../components/admin/EditNewsModal';
 import ConfirmationModal from '../../components/admin/ConfirmationModal';
@@ -110,7 +110,8 @@ const ManageNews: React.FC = () => {
 
             {/* News List */}
             <div className="bg-white dark:bg-zinc-900 rounded-[2rem] border border-gray-100 dark:border-zinc-800 overflow-hidden shadow-sm">
-                <div className="overflow-x-auto">
+                {/* Desktop Table View */}
+                <div className="hidden lg:block overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr className="bg-gray-50 dark:bg-zinc-800/50 border-b border-gray-100 dark:border-zinc-800">
@@ -121,95 +122,80 @@ const ManageNews: React.FC = () => {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-50 dark:divide-zinc-800/50">
-                            {loading ? (
-                                <tr>
-                                    <td colSpan={4} className="p-24 text-center">
-                                        <div className="flex flex-col items-center gap-4">
-                                            <div className="w-10 h-10 border-4 border-red-600 border-t-transparent rounded-full animate-spin"></div>
-                                            <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Fetching Archives...</span>
+                            {filteredNews.map((item) => (
+                                <tr key={item.id} className="group hover:bg-gray-50/50 dark:hover:bg-zinc-800/20 transition-all duration-300">
+                                    <td className="p-6">
+                                        <div className="w-16 h-16 mx-auto rounded-2xl overflow-hidden bg-gray-100 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 shadow-sm transition-transform group-hover:scale-105">
+                                            <img
+                                                src={item.imageUrl}
+                                                alt={item.title}
+                                                className="w-full h-full object-cover"
+                                                onError={(e) => (e.currentTarget.src = 'https://via.placeholder.com/150')}
+                                            />
+                                        </div>
+                                    </td>
+                                    <td className="p-6 max-w-md">
+                                        <div className="space-y-1">
+                                            <h3 className="text-base font-bold text-gray-900 dark:text-white line-clamp-1 group-hover:text-red-600 transition-colors">{item.title}</h3>
+                                            <div className="flex items-center gap-3 text-[10px] text-gray-400 font-black uppercase tracking-widest">
+                                                <span className="flex items-center gap-1"><User size={10} className="text-red-600" /> {item.author || 'Desk'}</span>
+                                                <span className="text-gray-200 dark:text-zinc-800">•</span>
+                                                <span className="flex items-center gap-1"><Calendar size={10} /> {formatTime(item.createdAt)}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className="p-6">
+                                        <div className="flex flex-col gap-1.5">
+                                            <span className="self-start px-3 py-1 bg-red-50 dark:bg-red-900/10 text-red-600 text-[10px] font-black uppercase tracking-widest rounded-full border border-red-100 dark:border-red-900/20">
+                                                {item.category}
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td className="p-6">
+                                        <div className="flex items-center justify-end gap-2 text-right">
+                                            <button onClick={() => window.open(`/news/${item.id}`, '_blank')} className="p-3 rounded-xl bg-gray-50 dark:bg-zinc-800 text-gray-500 hover:text-red-600 transition-all"><ExternalLink size={16} /></button>
+                                            <button onClick={() => handleCopyLink(item.id)} className={`p-3 rounded-xl transition-all ${copiedId === item.id ? 'bg-green-500 text-white' : 'bg-gray-50 dark:bg-zinc-800 text-gray-500 hover:text-red-600'}`}><Copy size={16} /></button>
+                                            <button onClick={() => setEditingArticle(item)} className="p-3 rounded-xl bg-gray-50 dark:bg-zinc-800 text-gray-500 hover:text-red-600 transition-all"><Edit2 size={16} /></button>
+                                            <button onClick={() => handleDeleteClick(item.id, item.imageUrl)} className="p-3 rounded-xl bg-gray-50 dark:bg-zinc-800 text-gray-500 hover:text-red-600 transition-all"><Trash2 size={16} /></button>
                                         </div>
                                     </td>
                                 </tr>
-                            ) : filteredNews.length > 0 ? (
-                                filteredNews.map((item) => (
-                                    <tr key={item.id} className="group hover:bg-gray-50/50 dark:hover:bg-zinc-800/20 transition-all duration-300">
-                                        <td className="p-6">
-                                            <div className="w-16 h-16 mx-auto rounded-2xl overflow-hidden bg-gray-100 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 shadow-sm transition-transform group-hover:scale-105">
-                                                <img
-                                                    src={item.imageUrl}
-                                                    alt={item.title}
-                                                    className="w-full h-full object-cover"
-                                                    onError={(e) => (e.currentTarget.src = 'https://via.placeholder.com/150')}
-                                                />
-                                            </div>
-                                        </td>
-                                        <td className="p-6 max-w-md">
-                                            <div className="space-y-1">
-                                                <h3 className="text-base font-bold text-gray-900 dark:text-white line-clamp-1 group-hover:text-red-600 transition-colors">{item.title}</h3>
-                                                <div className="flex items-center gap-3 text-[10px] text-gray-400 font-black uppercase tracking-widest">
-                                                    <span className="flex items-center gap-1"><User size={10} className="text-red-600" /> {item.author || 'Desk'}</span>
-                                                    <span className="text-gray-200 dark:text-zinc-800">•</span>
-                                                    <span className="flex items-center gap-1"><Calendar size={10} /> {formatTime(item.createdAt)}</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className="p-6">
-                                            <div className="flex flex-col gap-1.5">
-                                                <span className="self-start px-3 py-1 bg-red-50 dark:bg-red-900/10 text-red-600 text-[10px] font-black uppercase tracking-widest rounded-full border border-red-100 dark:border-red-900/20">
-                                                    {item.category}
-                                                </span>
-                                                <span className="text-[10px] text-gray-400 font-black uppercase tracking-widest pl-1">
-                                                    {item.subCategory || 'General'}
-                                                </span>
-                                            </div>
-                                        </td>
-                                        <td className="p-6">
-                                            <div className="flex items-center justify-end gap-2 text-right">
-                                                <button
-                                                    onClick={() => window.open(`/news/${item.id}`, '_blank')}
-                                                    className="p-3 rounded-xl bg-gray-50 dark:bg-zinc-800 text-gray-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10 transition-all shadow-sm"
-                                                    title="View Live"
-                                                >
-                                                    <ExternalLink size={16} />
-                                                </button>
-                                                <button
-                                                    onClick={() => handleCopyLink(item.id)}
-                                                    className={`p-3 rounded-xl transition-all shadow-sm ${copiedId === item.id ? 'bg-green-500 text-white' : 'bg-gray-50 dark:bg-zinc-800 text-gray-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10'}`}
-                                                    title="Copy Public Link"
-                                                >
-                                                    {copiedId === item.id ? <Check size={16} /> : <Copy size={16} />}
-                                                </button>
-                                                <button
-                                                    onClick={() => setEditingArticle(item)}
-                                                    className="p-3 rounded-xl bg-gray-50 dark:bg-zinc-800 text-gray-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10 transition-all shadow-sm"
-                                                    title="Edit Article"
-                                                >
-                                                    <Edit2 size={16} />
-                                                </button>
-                                                <button
-                                                    onClick={() => handleDeleteClick(item.id, item.imageUrl)}
-                                                    className="p-3 rounded-xl bg-gray-50 dark:bg-zinc-800 text-gray-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10 transition-all shadow-sm"
-                                                    title="Delete Article"
-                                                >
-                                                    <Trash2 size={16} />
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td colSpan={4} className="p-24 text-center">
-                                        <div className="flex flex-col items-center gap-2 opacity-30">
-                                            <Search size={48} className="text-gray-400 mb-2" />
-                                            <p className="text-sm font-serif font-black uppercase italic">No matching archives found</p>
-                                            <p className="text-xs text-gray-500 font-sans font-bold">Try adjusting your search filters</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            )}
+                            ))}
                         </tbody>
                     </table>
+                </div>
+
+                {/* Mobile Card View */}
+                <div className="lg:hidden divide-y divide-gray-50 dark:divide-zinc-800">
+                    {loading ? (
+                        <div className="p-20 text-center text-gray-400">Loading archives...</div>
+                    ) : filteredNews.length > 0 ? (
+                        filteredNews.map((item) => (
+                            <div key={item.id} className="p-4 space-y-4">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0">
+                                        <img src={item.imageUrl} alt="" className="w-full h-full object-cover" />
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <h3 className="text-sm font-bold text-gray-900 dark:text-white truncate">{item.title}</h3>
+                                        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">{item.category}</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-center justify-between gap-2 border-t border-gray-50 dark:border-zinc-800 pt-4">
+                                    <div className="flex items-center gap-2">
+                                        <button onClick={() => window.open(`/news/${item.id}`, '_blank')} className="p-2 rounded-lg bg-gray-50 dark:bg-zinc-800 text-gray-500"><ExternalLink size={14} /></button>
+                                        <button onClick={() => handleCopyLink(item.id)} className="p-2 rounded-lg bg-gray-50 dark:bg-zinc-800 text-gray-500"><Copy size={14} /></button>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <button onClick={() => setEditingArticle(item)} className="p-2 rounded-lg bg-blue-50 dark:bg-blue-600/10 text-blue-600"><Edit2 size={14} /></button>
+                                        <button onClick={() => handleDeleteClick(item.id, item.imageUrl)} className="p-2 rounded-lg bg-red-50 dark:bg-red-600/10 text-red-600"><Trash2 size={14} /></button>
+                                    </div>
+                                </div>
+                            </div>
+                        ))
+                    ) : (
+                        <div className="p-20 text-center text-gray-400 uppercase text-[10px] font-black tracking-widest">No matching archives</div>
+                    )}
                 </div>
                 {/* Pagination Placeholder */}
                 <div className="p-6 bg-gray-50/50 dark:bg-zinc-800/30 border-t border-gray-100 dark:border-zinc-800 flex items-center justify-between">
