@@ -41,6 +41,9 @@ export function CategoryPage({ category, title }: CategoryPageProps) {
         title: item.title,
         excerpt: item.content.substring(0, 150) + '...',
         image: item.imageUrl,
+        type: item.type, // NEW: Video/Image type
+        mediaUrl: item.mediaUrl, // NEW: Unified media URL
+        videoUrl: item.videoUrl, // NEW: Video URL
         location: category,
         subCategory: item.subCategory,
         date: formatTime(item.createdAt)
@@ -51,6 +54,9 @@ export function CategoryPage({ category, title }: CategoryPageProps) {
         title: item.title,
         category: item.category,
         image: item.imageUrl,
+        type: item.type, // NEW
+        mediaUrl: item.mediaUrl, // NEW
+        videoUrl: item.videoUrl, // NEW
         time: formatTime(item.createdAt)
     }));
 

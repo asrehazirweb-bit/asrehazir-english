@@ -1,12 +1,16 @@
 
 import { Clock, MapPin, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import MediaRenderer from '../ui/MediaRenderer';
 
 export interface FeedItem {
     id: string | number;
     title: string;
     excerpt: string;
     image?: string;
+    type?: 'image' | 'video';
+    mediaUrl?: string;
+    videoUrl?: string;
     location?: string;
     subCategory?: string;
     date: string;
@@ -42,19 +46,23 @@ export function IndiaNewsFeed({ items }: IndiaNewsFeedProps) {
             {/* 2. NEWS LIST (VERTICAL FEED) */}
             <div className="flex flex-col gap-8">
                 {items.map((article) => (
-                    <Link key={article.id} to={`/news/${article.id}`} className="group flex flex-col md:flex-row gap-6 border-b border-gray-100 pb-8 last:border-0 last:pb-0 block cursor-pointer">
-                        {/* LEFT: Article Image (Fixed Container) */}
-                        <div className="w-full md:w-[260px] h-[160px] flex-shrink-0 bg-gray-100 relative overflow-hidden">
-                            {article.image ? (
-                                <img
-                                    src={article.image}
+                    <Link key={article.id} to={`/news/${article.id}`} className="group flex flex-col md:flex-row gap-6 border-b border-gray-100 dark:border-zinc-800 pb-8 last:border-0 last:pb-0 block cursor-pointer">
+                        {/* LEFT: Article Image/Video (Fixed Container) */}
+                        <div className="w-full md:w-[260px] h-[160px] flex-shrink-0 bg-gray-100 dark:bg-zinc-900 relative overflow-hidden rounded-lg">
+                            {article.image || article.mediaUrl ? (
+                                <MediaRenderer
+                                    type={article.type}
+                                    mediaUrl={article.mediaUrl}
+                                    imageUrl={article.image}
+                                    videoUrl={article.videoUrl}
                                     alt={article.title}
                                     className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-90"
+                                    showVideoIcon={article.type === 'video' || article.videoUrl ? true : false}
                                 />
                             ) : (
                                 /* Empty Neutral Container - Layout stability */
-                                <div className="w-full h-full bg-gray-100 flex items-center justify-center">
-                                    <span className="text-gray-300 font-sans text-xs uppercase tracking-widest">No Image</span>
+                                <div className="w-full h-full bg-gray-100 dark:bg-zinc-900 flex items-center justify-center">
+                                    <span className="text-gray-300 dark:text-gray-700 font-sans text-xs uppercase tracking-widest">No Media</span>
                                 </div>
                             )}
                         </div>

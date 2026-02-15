@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Layout } from './Layout';
 import { Home } from './pages/Home';
 import { CategoryPage } from './pages/CategoryPage';
@@ -52,6 +52,9 @@ function App() {
           <Route path="add-news" element={<AddNews />} />
           <Route path="manage" element={<ManageNews />} />
         </Route>
+
+        {/* Catch-all 404 - Redirect to Home */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );
