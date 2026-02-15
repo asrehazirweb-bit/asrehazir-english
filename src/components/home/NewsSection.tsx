@@ -49,7 +49,7 @@ export function NewsSection({ title, items, variant = 'grid' }: NewsSectionProps
 
 export function VideoSection({ items }: { items: NewsItem[] }) {
     return (
-        <div className="mb-12 bg-secondary py-12 px-4 -mx-4 md:-mx-8 md:px-8 text-white relative">
+        <div className="mb-12 bg-secondary py-12 px-4 -mx-4 sm:-mx-8 sm:px-8 text-white relative">
             <div className="flex items-center mb-8 border-b border-white/10 pb-2">
                 <h2 className="text-xl font-bold font-sans uppercase text-accent tracking-wider">Must Watch</h2>
             </div>
