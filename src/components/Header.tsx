@@ -1,14 +1,18 @@
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { Search, Menu, Facebook, Twitter, Instagram, Moon, Sun, X, ChevronRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDarkMode } from '../hooks/useDarkMode';
+import { AdBlock } from './home/AdBlock';
 
 export function Header() {
     const currentDate = format(new Date(), 'EEEE, MMMM do, yyyy');
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
     const { isDark, toggle } = useDarkMode();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -37,12 +41,41 @@ export function Header() {
         };
     }, [isMenuOpen]);
 
+    const handleSearch = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (searchQuery.trim()) {
+            navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+            setIsSearchOpen(false);
+            setSearchQuery('');
+        }
+    };
+
     return (
         <>
             <header className={`sticky top-0 z-50 transition-all duration-300 ${isScrolled
                 ? 'glass-effect border-b border-gray-200/50 dark:border-white/10 shadow-lg'
                 : 'bg-white dark:bg-[#0f1115] border-b border-gray-100 dark:border-white/5'
                 }`}>
+                {/* Search Overlay */}
+                {isSearchOpen && (
+                    <div className="absolute inset-0 z-50 bg-white dark:bg-[#0f1115] flex items-center px-4 md:px-6">
+                        <form onSubmit={handleSearch} className="w-full max-w-4xl mx-auto flex items-center gap-4">
+                            <Search className="text-gray-400" size={24} />
+                            <input
+                                autoFocus
+                                type="text"
+                                placeholder="Search news, topics, keywords..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="flex-1 bg-transparent border-none outline-none text-xl md:text-2xl font-serif text-gray-900 dark:text-white"
+                            />
+                            <button type="button" onClick={() => setIsSearchOpen(false)} className="p-2 text-gray-500 hover:text-red-700 transition-colors">
+                                <X size={24} />
+                            </button>
+                        </form>
+                    </div>
+                )}
+
                 {/* Top Bar */}
                 {!isScrolled && (
                     <div className="hidden md:block border-b border-gray-100 dark:border-white/5 py-2">
@@ -83,7 +116,10 @@ export function Header() {
                         </Link>
 
                         <div className="flex items-center gap-1 md:gap-4">
-                            <button className="p-2 text-gray-500 hover:text-red-700 transition-all">
+                            <button
+                                onClick={() => setIsSearchOpen(true)}
+                                className="p-2 text-gray-500 hover:text-red-700 transition-all"
+                            >
                                 <Search size={22} className="w-5 h-5 md:w-[22px] md:h-[22px]" />
                             </button>
                             <Link to="/login" className="hidden sm:block bg-red-600 text-white px-5 py-2 text-[11px] font-black uppercase tracking-wider rounded-full hover:bg-black transition-all hover:scale-105 shadow-md">
@@ -92,6 +128,13 @@ export function Header() {
                         </div>
                     </div>
                 </div>
+
+                {/* Header Ad Slot */}
+                {!isScrolled && (
+                    <div className="w-full max-w-7xl mx-auto px-4 md:px-6 mb-4 hidden md:block">
+                        <AdBlock placement="header" className="h-24 !my-0" label="Premium Header Ad" />
+                    </div>
+                )}
 
                 {/* Navigation */}
                 <nav className={`w-full border-t border-gray-100 dark:border-white/5 py-1 hidden md:block`}>

@@ -1,5 +1,5 @@
-
 import { Link } from 'react-router-dom';
+import { Facebook, Twitter, Instagram } from 'lucide-react';
 
 export function Footer() {
     return (
@@ -40,24 +40,26 @@ export function Footer() {
                     </ul>
                 </div>
 
-                <div className="col-span-1 border-t border-gray-700 pt-6 md:pt-0 md:border-t-0">
-                    <h3 className="font-sans font-bold uppercase tracking-wider text-accent mb-6 text-sm">About & Services</h3>
-                    <ul className="space-y-3 text-sm text-gray-300 font-serif">
-                        <li><Link to="/about-us" className="hover:text-white transition-colors">About Us</Link></li>
-                        <li><Link to="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
-                        <li><Link to="/advertisements" className="hover:text-white transition-colors">Advertisements</Link></li>
-                        <li><a href="#" className="hover:text-white transition-colors">Guest Columns</a></li>
-                    </ul>
-                </div>
-
-                <div className="col-span-1 border-t border-gray-700 pt-6 md:pt-0 md:border-t-0">
-                    <h3 className="font-sans font-bold uppercase tracking-wider text-accent mb-6 text-sm">Subscribe</h3>
-                    <p className="text-sm text-gray-400 mb-4">Get the latest news delivered to your inbox daily.</p>
-                    <div className="flex flex-col gap-2">
-                        <input type="email" placeholder="Your email address" className="bg-gray-800 border-none text-white text-sm p-3 focus:outline-none focus:ring-1 focus:ring-accent" />
-                        <button className="bg-accent text-white font-bold text-sm uppercase p-3 hover:bg-white hover:text-accent transition-colors">
-                            Subscribe
-                        </button>
+                <div className="col-span-2 bg-gray-50 dark:bg-zinc-900/50 p-8 rounded-xl border border-gray-100 dark:border-zinc-800">
+                    <h3 className="text-2xl font-black mb-6 uppercase tracking-tight text-gray-900 dark:text-white">Our Presence</h3>
+                    <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-6 font-sans">
+                        You can find us across multiple platforms. For urgent news tips, please use our editorial email or phone number listed. Our desk is active 24/7 to bring you the latest verified reports.
+                    </p>
+                    <div className="space-y-4 font-sans mb-8">
+                        <div className="p-4 bg-white dark:bg-zinc-800 rounded-lg border border-gray-100 dark:border-zinc-700">
+                            <h4 className="text-[10px] font-black uppercase tracking-widest text-red-600 mb-1">WhatsApp Broadcast</h4>
+                            <p className="text-sm font-bold">+91 40 1234 5678</p>
+                        </div>
+                        <div className="p-4 bg-white dark:bg-zinc-800 rounded-lg border border-gray-100 dark:border-zinc-700">
+                            <h4 className="text-[10px] font-black uppercase tracking-widest text-red-600 mb-1">Office Hours</h4>
+                            <p className="text-sm font-bold">Mon - Sat: 10:00 AM - 08:00 PM</p>
+                        </div>
+                    </div>
+                    <h3 className="font-sans font-bold uppercase tracking-wider text-accent mb-6 text-sm">Follow Us</h3>
+                    <div className="flex gap-4">
+                        <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-accent transition-colors"><Facebook size={18} /></a>
+                        <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-accent transition-colors"><Twitter size={18} /></a>
+                        <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-accent transition-colors"><Instagram size={18} /></a>
                     </div>
                 </div>
             </div>

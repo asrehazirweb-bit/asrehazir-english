@@ -1,7 +1,7 @@
 import React from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { auth } from '../../lib/firebase';
-import { LayoutDashboard, FileText, PlusSquare, LogOut, Home, Settings, ShieldCheck, Zap, Menu, X } from 'lucide-react';
+import { LayoutDashboard, FileText, PlusSquare, LogOut, Home, ShieldCheck, Zap, Menu, X, Megaphone } from 'lucide-react';
 
 import ConfirmationModal from './ConfirmationModal';
 import { useState } from 'react';
@@ -28,6 +28,7 @@ const AdminLayout: React.FC = () => {
         { path: '/admin', label: 'Dashboard', icon: <LayoutDashboard size={18} /> },
         { path: '/admin/add-news', label: 'News Desk', icon: <PlusSquare size={18} /> },
         { path: '/admin/manage', label: 'Archives', icon: <FileText size={18} /> },
+        { path: '/admin/ads', label: 'Ads Manager', icon: <Megaphone size={18} /> },
     ];
 
     return (
@@ -50,10 +51,10 @@ const AdminLayout: React.FC = () => {
 
             {/* Sidebar Desktop & Mobile */}
             <aside className={`
-                fixed inset-y-0 left-0 z-40 w-72 bg-white dark:bg-zinc-900 border-r border-gray-100 dark:border-zinc-800 flex flex-col shadow-xl transition-transform duration-300 transform
-                lg:translate-x-0 lg:static lg:inset-0
+                fixed inset - y - 0 left - 0 z - 40 w - 72 bg - white dark: bg - zinc - 900 border - r border - gray - 100 dark: border - zinc - 800 flex flex - col shadow - xl transition - transform duration - 300 transform
+lg: translate - x - 0 lg:static lg: inset - 0
                 ${isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-            `}>
+`}>
                 <div className="p-8 border-b border-gray-50 dark:border-zinc-800 flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-red-600 rounded-xl flex items-center justify-center shadow-lg shadow-red-600/20">
@@ -78,12 +79,12 @@ const AdminLayout: React.FC = () => {
                                     key={item.path}
                                     to={item.path}
                                     onClick={() => setIsMobileSidebarOpen(false)}
-                                    className={`flex items-center space-x-3 px-4 py-3.5 rounded-2xl transition-all duration-300 group ${isActive(item.path)
+                                    className={`flex items - center space - x - 3 px - 4 py - 3.5 rounded - 2xl transition - all duration - 300 group ${isActive(item.path)
                                         ? 'bg-red-600 text-white shadow-lg shadow-red-600/20'
                                         : 'text-gray-500 hover:bg-gray-50 dark:hover:bg-zinc-800 hover:text-gray-900 dark:hover:text-white'
-                                        }`}
+                                        } `}
                                 >
-                                    <span className={`${isActive(item.path) ? 'text-white' : 'group-hover:text-red-600'} transition-colors`}>
+                                    <span className={`${isActive(item.path) ? 'text-white' : 'group-hover:text-red-600'} transition - colors`}>
                                         {item.icon}
                                     </span>
                                     <span className="text-sm font-bold tracking-tight">{item.label}</span>
@@ -103,11 +104,8 @@ const AdminLayout: React.FC = () => {
                                 <Home size={18} className="group-hover:text-red-600 transition-colors" />
                                 <span className="text-sm font-bold tracking-tight">Main Portal</span>
                             </Link>
-                            <button className="w-full flex items-center space-x-3 px-4 py-3.5 rounded-2xl text-gray-500 hover:bg-gray-50 dark:hover:bg-zinc-800 hover:text-gray-900 dark:hover:text-white transition-all group cursor-not-allowed opacity-50">
-                                <Settings size={18} />
-                                <span className="text-sm font-bold tracking-tight">Portal Config</span>
-                            </button>
                         </nav>
+
                     </div>
                 </div>
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { db, auth } from '../../lib/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { uploadImage } from '../../lib/cloudinary';
-import { Image as ImageIcon, Send, Layout, Type, FileText, Tag, Eye, EyeOff, Trash2, Sparkles, CheckCircle2 } from 'lucide-react';
+import { Image as ImageIcon, Send, Layout, Type, FileText, Tag, Trash2, Sparkles, CheckCircle2 } from 'lucide-react';
 import ConfirmationModal from '../../components/admin/ConfirmationModal';
 import Toast from '../../components/ui/Toast';
 
@@ -18,12 +18,12 @@ const CATEGORIES = [
 const AddNews: React.FC = () => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
+    const [section, setSection] = useState('Top Stories');
     const [category, setCategory] = useState('World News');
     const [subCategory, setSubCategory] = useState('Top Stories');
     const [image, setImage] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
-    const [showPreview, setShowPreview] = useState(false);
     const [successMessage, setSuccessMessage] = useState(false);
 
     // New state for modal and toast
@@ -34,11 +34,12 @@ const AddNews: React.FC = () => {
     useEffect(() => {
         const draft = localStorage.getItem('asre-hazir-draft');
         if (draft) {
-            const { title: dTitle, content: dContent, category: dCategory, subCategory: dSubCategory } = JSON.parse(draft);
+            const { title: dTitle, content: dContent, category: dCategory, subCategory: dSubCategory, section: dSection } = JSON.parse(draft);
             setTitle(dTitle || '');
             setContent(dContent || '');
             setCategory(dCategory || 'World News');
             setSubCategory(dSubCategory || 'Top Stories');
+            setSection(dSection || 'Top Stories');
         }
     }, []);
 
@@ -46,11 +47,11 @@ const AddNews: React.FC = () => {
     useEffect(() => {
         const timer = setTimeout(() => {
             if (title || content) {
-                localStorage.setItem('asre-hazir-draft', JSON.stringify({ title, content, category, subCategory }));
+                localStorage.setItem('asre-hazir-draft', JSON.stringify({ title, content, category, subCategory, section }));
             }
         }, 2000);
         return () => clearTimeout(timer);
-    }, [title, content, category, subCategory]);
+    }, [title, content, category, subCategory, section]);
 
     const handleClearDraftClick = () => {
         setIsClearModalOpen(true);
@@ -61,6 +62,9 @@ const AddNews: React.FC = () => {
         setContent('');
         setImage(null);
         setImagePreview(null);
+        setSection('Top Stories');
+        setCategory('World News');
+        setSubCategory('Top Stories');
         localStorage.removeItem('asre-hazir-draft');
         setIsClearModalOpen(false);
         setToast({ message: 'Draft cleared successfully', type: 'success' });
@@ -71,6 +75,8 @@ const AddNews: React.FC = () => {
         const cat = CATEGORIES.find(c => c.name === val);
         if (cat) {
             setSubCategory(cat.subCategories[0]);
+        } else if (val !== 'Other') {
+            setSubCategory('General');
         }
     };
 
@@ -116,6 +122,7 @@ const AddNews: React.FC = () => {
             await addDoc(collection(db, 'news'), {
                 title,
                 content,
+                section,
                 category,
                 subCategory,
                 imageUrl: imageUrl,  // Single image field
@@ -148,6 +155,7 @@ const AddNews: React.FC = () => {
     };
 
     const currentSubCategories = CATEGORIES.find(c => c.name === category)?.subCategories || [];
+    const SECTIONS = ['Top Stories', 'Breaking News', 'Must Watch', 'Latest News', 'Regional', 'Other'];
 
     return (
         <div className="max-w-6xl mx-auto pb-20 px-4">
@@ -182,17 +190,10 @@ const AddNews: React.FC = () => {
                                 <div className="flex flex-wrap gap-3">
                                     <button
                                         type="button"
-                                        onClick={() => setShowPreview(!showPreview)}
-                                        className={`flex items-center gap-2 px-6 py-3 rounded-xl font-black uppercase tracking-widest text-[10px] transition-all ${showPreview ? 'bg-red-600 text-white' : 'bg-zinc-800 text-zinc-400 hover:text-white'}`}
-                                    >
-                                        {showPreview ? <><EyeOff size={14} /> Close Preview</> : <><Eye size={14} /> Open Preview</>}
-                                    </button>
-                                    <button
-                                        type="button"
                                         onClick={handleClearDraftClick}
                                         className="flex items-center gap-2 bg-zinc-800 text-zinc-500 hover:text-white px-6 py-3 rounded-xl font-black uppercase tracking-widest text-[10px] transition-all"
                                     >
-                                        <Trash2 size={14} /> Reset
+                                        <Trash2 size={14} /> Reset Desk
                                     </button>
                                 </div>
                             </div>
@@ -214,35 +215,94 @@ const AddNews: React.FC = () => {
                                 />
                             </div>
 
-                            {/* Categorization */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                            {/* Placement Strategy */}
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                {/* Section Selection */}
                                 <div className="space-y-4">
                                     <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
-                                        <Tag className="w-3.5 h-3.5 text-red-600" /> Primary Section
+                                        <Sparkles className="w-3.5 h-3.5 text-red-600" /> Page Section
                                     </label>
                                     <select
-                                        value={category}
-                                        onChange={(e) => handleCategoryChange(e.target.value)}
-                                        className="w-full p-5 rounded-2xl border border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800/50 focus:ring-4 focus:ring-red-600/10 outline-none transition-all dark:text-white font-bold text-sm h-16"
+                                        value={SECTIONS.includes(section) ? section : 'Other'}
+                                        onChange={(e) => {
+                                            const val = e.target.value;
+                                            if (val === 'Other') setSection('');
+                                            else setSection(val);
+                                        }}
+                                        className="w-full p-4 rounded-xl border border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800/50 focus:ring-4 focus:ring-red-600/10 outline-none transition-all dark:text-white font-bold text-xs h-14"
+                                    >
+                                        {SECTIONS.map(s => <option key={s} value={s}>{s}</option>)}
+                                    </select>
+                                    {!SECTIONS.includes(section) && (
+                                        <input
+                                            type="text"
+                                            placeholder="Enter Custom Section..."
+                                            value={section}
+                                            onChange={(e) => setSection(e.target.value)}
+                                            className="w-full p-3 mt-2 rounded-lg border border-red-600/20 bg-white dark:bg-zinc-800 outline-none focus:border-red-600 transition-all dark:text-white font-bold text-xs"
+                                        />
+                                    )}
+                                </div>
+
+                                {/* Category Selection */}
+                                <div className="space-y-4">
+                                    <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
+                                        <Tag className="w-3.5 h-3.5 text-red-600" /> News Category
+                                    </label>
+                                    <select
+                                        value={CATEGORIES.find(c => c.name === category) ? category : 'Other'}
+                                        onChange={(e) => {
+                                            const val = e.target.value;
+                                            if (val === 'Other') {
+                                                setCategory('');
+                                                setSubCategory('General');
+                                            } else {
+                                                handleCategoryChange(val);
+                                            }
+                                        }}
+                                        className="w-full p-4 rounded-xl border border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800/50 focus:ring-4 focus:ring-red-600/10 outline-none transition-all dark:text-white font-bold text-xs h-14"
                                     >
                                         {CATEGORIES.map(cat => (
                                             <option key={cat.name} value={cat.name}>{cat.name}</option>
                                         ))}
+                                        <option value="Other">Other (Custom)...</option>
                                     </select>
+                                    {(category === '' || !CATEGORIES.find(c => c.name === category)) && (
+                                        <input
+                                            type="text"
+                                            placeholder="Enter Custom Category..."
+                                            value={category}
+                                            onChange={(e) => setCategory(e.target.value)}
+                                            className="w-full p-3 mt-2 rounded-lg border border-red-600/20 bg-white dark:bg-zinc-800 outline-none focus:border-red-600 transition-all dark:text-white font-bold text-xs"
+                                        />
+                                    )}
                                 </div>
+
+                                {/* Subcategory Selection */}
                                 <div className="space-y-4">
                                     <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
-                                        <Layout className="w-3.5 h-3.5 text-red-600" /> Subsection
+                                        <Layout className="w-3.5 h-3.5 text-red-600" /> Sub-category
                                     </label>
-                                    <select
-                                        value={subCategory}
-                                        onChange={(e) => setSubCategory(e.target.value)}
-                                        className="w-full p-5 rounded-2xl border border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800/50 focus:ring-4 focus:ring-red-600/10 outline-none transition-all dark:text-white font-bold text-sm h-16"
-                                    >
-                                        {currentSubCategories.map(sub => (
-                                            <option key={sub} value={sub}>{sub}</option>
-                                        ))}
-                                    </select>
+                                    {CATEGORIES.find(c => c.name === category) ? (
+                                        <select
+                                            value={subCategory}
+                                            onChange={(e) => setSubCategory(e.target.value)}
+                                            className="w-full p-4 rounded-xl border border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800/50 focus:ring-4 focus:ring-red-600/10 outline-none transition-all dark:text-white font-bold text-xs h-14"
+                                        >
+                                            {currentSubCategories.map(sub => (
+                                                <option key={sub} value={sub}>{sub}</option>
+                                            ))}
+                                            <option value="Other">Other (Custom)...</option>
+                                        </select>
+                                    ) : (
+                                        <input
+                                            type="text"
+                                            placeholder="Enter Sub-category..."
+                                            value={subCategory}
+                                            onChange={(e) => setSubCategory(e.target.value)}
+                                            className="w-full p-4 rounded-xl border border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800/50 focus:ring-4 focus:ring-red-600/10 outline-none transition-all dark:text-white font-bold text-xs h-14"
+                                        />
+                                    )}
                                 </div>
                             </div>
 
@@ -281,20 +341,6 @@ const AddNews: React.FC = () => {
                                     )}
                                 </div>
                             </div>
-
-
-
-                            {/* Preview Section */}
-                            {showPreview && (
-                                <div className="mt-12 p-8 md:p-12 bg-gray-50 dark:bg-white/5 rounded-[3rem] border-2 border-red-600/10">
-                                    <h2 className="text-3xl md:text-5xl font-serif font-black text-gray-900 dark:text-white leading-tight mb-8 underline decoration-red-600 decoration-4">{title || 'Headline'}</h2>
-                                    {imagePreview && <img src={imagePreview} className="w-full aspect-video object-cover rounded-3xl shadow-xl mb-8" />}
-
-                                    <div className="prose prose-xl dark:prose-invert">
-                                        {content.split('\n').map((p, i) => <p key={i} className="text-gray-700 dark:text-zinc-400 text-lg leading-relaxed">{p}</p>)}
-                                    </div>
-                                </div>
-                            )}
 
                             {/* Submit Button */}
                             <button

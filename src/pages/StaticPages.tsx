@@ -1,4 +1,5 @@
 
+
 export function ContactPage() {
     return (
         <div className="max-w-4xl mx-auto px-4 py-16 font-serif">
@@ -12,7 +13,7 @@ export function ContactPage() {
 
                     <div>
                         <h3 className="font-bold uppercase tracking-widest text-sm text-red-700 mb-2 font-sans">Editorial Desk</h3>
-                        <p>Email: editor@asrehazir.com</p>
+                        <p>Email: <a href="mailto:asrehazir.web@gmail.com" className="text-red-600 hover:underline">asrehazir.web@gmail.com</a></p>
                         <p>Phone: +91 40 1234 5678</p>
                     </div>
 
@@ -25,22 +26,20 @@ export function ContactPage() {
                 </div>
 
                 <div className="bg-gray-50 dark:bg-zinc-900/50 p-8 rounded-xl border border-gray-100 dark:border-zinc-800">
-                    <h3 className="text-2xl font-black mb-6 uppercase tracking-tight text-gray-900 dark:text-white">Send a Message</h3>
-                    <form className="space-y-4 font-sans">
-                        <div>
-                            <label className="block text-[10px] font-bold uppercase tracking-widest mb-1">Name</label>
-                            <input type="text" className="w-full p-3 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg outline-none focus:ring-2 focus:ring-red-700/20" />
+                    <h3 className="text-2xl font-black mb-6 uppercase tracking-tight text-gray-900 dark:text-white">Our Presence</h3>
+                    <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-6 font-sans">
+                        You can find us across multiple platforms. For urgent news tips, please use our editorial email or phone number listed. Our desk is active 24/7 to bring you the latest verified reports.
+                    </p>
+                    <div className="space-y-4 font-sans">
+                        <div className="p-4 bg-white dark:bg-zinc-800 rounded-lg border border-gray-100 dark:border-zinc-700">
+                            <h4 className="text-[10px] font-black uppercase tracking-widest text-red-600 mb-1">WhatsApp Broadcast</h4>
+                            <p className="text-sm font-bold">+91 40 1234 5678</p>
                         </div>
-                        <div>
-                            <label className="block text-[10px] font-bold uppercase tracking-widest mb-1">Email</label>
-                            <input type="email" className="w-full p-3 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg outline-none focus:ring-2 focus:ring-red-700/20" />
+                        <div className="p-4 bg-white dark:bg-zinc-800 rounded-lg border border-gray-100 dark:border-zinc-700">
+                            <h4 className="text-[10px] font-black uppercase tracking-widest text-red-600 mb-1">Office Hours</h4>
+                            <p className="text-sm font-bold">Mon - Sat: 10:00 AM - 08:00 PM</p>
                         </div>
-                        <div>
-                            <label className="block text-[10px] font-bold uppercase tracking-widest mb-1">Message</label>
-                            <textarea rows={4} className="w-full p-3 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg outline-none focus:ring-2 focus:ring-red-700/20"></textarea>
-                        </div>
-                        <button className="w-full bg-red-700 text-white font-bold py-4 rounded-lg uppercase tracking-[0.2em] text-xs hover:bg-black transition-colors shadow-lg">Send Dispatch</button>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -116,6 +115,69 @@ export function AdvertisementsPage() {
                     <p className="mb-6 font-sans text-sm tracking-widest uppercase opacity-80">Download our Media Kit or contact our sales team</p>
                     <a href="mailto:asrehazir.web@gmail.com" className="inline-block bg-white text-black font-black px-10 py-4 rounded-full uppercase tracking-widest text-[10px] hover:scale-105 transition-transform">Contact Sales Team</a>
                 </div>
+            </div>
+        </div>
+    );
+}
+
+export function GuestColumnsPage() {
+    return (
+        <div className="max-w-4xl mx-auto px-4 py-16 font-serif">
+            <h1 className="text-4xl md:text-5xl font-black mb-8 border-b-4 border-red-700 pb-4 text-gray-900 dark:text-white uppercase tracking-tight">Guest Columns</h1>
+            <div className="space-y-6 text-gray-700 dark:text-gray-300 text-lg leading-relaxed">
+                <p>
+                    Asre Hazir welcomes contributions from writers, scholars, and experts across various fields. Our Guest Columns provide a platform for diverse perspectives on contemporary issues.
+                </p>
+                <div className="bg-gray-50 dark:bg-zinc-900/50 p-8 rounded-2xl border border-gray-100 dark:border-zinc-800">
+                    <h3 className="text-xl font-black mb-4 uppercase tracking-tight text-gray-900 dark:text-white">Submission Guidelines</h3>
+                    <ul className="space-y-4 list-disc pl-5 font-sans text-sm">
+                        <li>Original and unpublished content.</li>
+                        <li>Articles should be between 800-1200 words.</li>
+                        <li>Include a brief author bio and a high-resolution headshot.</li>
+                        <li>Submissions should be sent in Word or Google Doc format.</li>
+                    </ul>
+                </div>
+                <p>
+                    Interested contributors can send their pitches to <a href="mailto:asrehazir.web@gmail.com" className="text-red-700 font-bold hover:underline">asrehazir.web@gmail.com</a>. Our editorial team will review your submission and get back to you.
+                </p>
+            </div>
+        </div>
+    );
+}
+
+export function PrivacyPolicyPage() {
+    return (
+        <div className="max-w-4xl mx-auto px-4 py-16 font-serif">
+            <h1 className="text-4xl md:text-5xl font-black mb-8 border-b-4 border-red-700 pb-4 text-gray-900 dark:text-white uppercase tracking-tight">Privacy Policy</h1>
+            <div className="space-y-6 text-gray-700 dark:text-gray-300 text-sm leading-relaxed font-sans">
+                <p>At Asre Hazir, we take your privacy seriously. This policy outlines how we collect, use, and protect your personal information.</p>
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white uppercase">1. Information Collection</h3>
+                <p>We may collect information you provide directly, such as when you subscribe to our newsletter or contact us. This may include your name, email address, and any messages you send.</p>
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white uppercase">2. Use of Information</h3>
+                <p>Your information is used to provide and improve our services, communicate with you, and personalize your experience on our website.</p>
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white uppercase">3. Data Security</h3>
+                <p>We implement industry-standard security measures to protect your data from unauthorized access or disclosure.</p>
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white uppercase">4. Cookies</h3>
+                <p>We use cookies to enhance site navigation, analyze site usage, and assist in our marketing efforts.</p>
+            </div>
+        </div>
+    );
+}
+
+export function TermsOfUsePage() {
+    return (
+        <div className="max-w-4xl mx-auto px-4 py-16 font-serif">
+            <h1 className="text-4xl md:text-5xl font-black mb-8 border-b-4 border-red-700 pb-4 text-gray-900 dark:text-white uppercase tracking-tight">Terms of Use</h1>
+            <div className="space-y-6 text-gray-700 dark:text-gray-300 text-sm leading-relaxed font-sans">
+                <p>By accessing or using Asre Hazir, you agree to comply with and be bound by these Terms of Use.</p>
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white uppercase">1. Accuracy of Content</h3>
+                <p>While we strive for accuracy, we do not warrant that all content on the site is complete, current, or error-free.</p>
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white uppercase">2. Intellectual Property</h3>
+                <p>All content on Asre Hazir is protected by copyright and other intellectual property laws. You may not reproduce or distribute any content without prior written permission.</p>
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white uppercase">3. User Conduct</h3>
+                <p>Users are prohibited from using the site for any unlawful purpose or in any way that could damage or interfere with its operation.</p>
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white uppercase">4. Limitation of Liability</h3>
+                <p>Asre Hazir will not be liable for any damages arising from the use of, or inability to use, our services.</p>
             </div>
         </div>
     );

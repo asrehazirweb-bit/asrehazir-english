@@ -1,6 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { FileText, Users, Eye, TrendingUp, Clock, BarChart3, ChevronRight, Zap } from 'lucide-react';
+import { FileText, Eye, TrendingUp, Clock, BarChart3, ChevronRight, Zap } from 'lucide-react';
 import { useNews } from '../../hooks/useNews';
 
 const AdminDashboard: React.FC = () => {
@@ -12,7 +13,6 @@ const AdminDashboard: React.FC = () => {
     const stats = [
         { label: 'Total News', value: allNews.length.toString(), icon: <FileText className="text-red-600" />, trend: '+Live', color: 'from-red-500/10 to-red-500/0' },
         { label: 'Total Views', value: '45.2k', icon: <Eye className="text-black" />, trend: '+5.4%', color: 'from-zinc-500/10 to-zinc-500/0' },
-        { label: 'Subscribers', value: '890', icon: <Users className="text-red-700" />, trend: '+2.1%', color: 'from-red-700/10 to-red-700/0' },
         { label: 'Engagement', value: '12.5%', icon: <TrendingUp className="text-black" />, trend: '+1.2%', color: 'from-zinc-400/10 to-zinc-400/0' },
     ];
 
@@ -45,12 +45,9 @@ const AdminDashboard: React.FC = () => {
                     </p>
 
                     <div className="mt-10 flex flex-wrap gap-4">
-                        <button className="bg-red-600 hover:bg-black text-white px-10 py-4 rounded-xl font-black uppercase tracking-widest text-[10px] transition-all flex items-center gap-3 shadow-2xl shadow-red-600/30 group active:scale-95">
-                            Broadcast New Desk <Zap size={14} className="group-hover:text-amber-400 transition-colors" />
-                        </button>
-                        <button className="bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-400 px-10 py-4 rounded-xl font-black uppercase tracking-widest text-[10px] transition-all hover:bg-zinc-200 dark:hover:bg-zinc-700 hover:text-white">
-                            Monitor Portal
-                        </button>
+                        <Link to="/admin/add-news" className="bg-red-600 hover:bg-black text-white px-10 py-4 rounded-xl font-black uppercase tracking-widest text-[10px] transition-all flex items-center gap-3 shadow-2xl shadow-red-600/30 group active:scale-95">
+                            Broadcast News Desk <Zap size={14} className="group-hover:text-amber-400 transition-colors" />
+                        </Link>
                     </div>
                 </div>
 
@@ -106,7 +103,7 @@ const AdminDashboard: React.FC = () => {
                             </div>
                         ) : news.length > 0 ? (
                             news.map((item) => (
-                                <div key={item.id} className="group flex items-center justify-between p-4 border border-transparent hover:border-red-600/10 hover:bg-red-50/5 dark:hover:bg-zinc-800/20 rounded-2xl transition-all duration-300">
+                                <Link to={`/news/${item.id}`} key={item.id} className="group flex items-center justify-between p-4 border border-transparent hover:border-red-600/10 hover:bg-red-50/5 dark:hover:bg-zinc-800/20 rounded-2xl transition-all duration-300">
                                     <div className="flex items-center space-x-5">
                                         <div className="relative">
                                             <div className="w-14 h-14 rounded-2xl bg-zinc-50 dark:bg-zinc-800/50 flex items-center justify-center border border-zinc-100 dark:border-zinc-700/30 overflow-hidden">
@@ -119,7 +116,7 @@ const AdminDashboard: React.FC = () => {
                                             <div className="absolute -top-1 -left-1 w-3 h-3 bg-red-600 rounded-full border-2 border-white dark:border-zinc-900 animate-pulse"></div>
                                         </div>
                                         <div>
-                                            <p className="text-sm font-bold text-gray-900 dark:text-zinc-100 leading-snug group-hover:text-red-600 transition-colors">
+                                            <p className="text-sm font-bold text-gray-900 dark:text-zinc-100 leading-snug group-hover:text-red-600 transition-colors text-left">
                                                 {item.title}
                                             </p>
                                             <div className="flex items-center gap-4 mt-2">
@@ -132,10 +129,10 @@ const AdminDashboard: React.FC = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <button className="w-10 h-10 rounded-xl bg-zinc-50 dark:bg-zinc-800/50 flex items-center justify-center text-zinc-400 group-hover:bg-red-600 group-hover:text-white transition-all shadow-sm">
+                                    <div className="w-10 h-10 rounded-xl bg-zinc-50 dark:bg-zinc-800/50 flex items-center justify-center text-zinc-400 group-hover:bg-red-600 group-hover:text-white transition-all shadow-sm">
                                         <ChevronRight size={18} />
-                                    </button>
-                                </div>
+                                    </div>
+                                </Link>
                             ))
                         ) : (
                             <div className="py-20 text-center text-gray-400 font-sans uppercase text-[10px] tracking-[0.3em] font-black italic">Station Offline. No broadcasts found.</div>

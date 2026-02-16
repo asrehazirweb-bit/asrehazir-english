@@ -12,6 +12,7 @@ export interface NewsArticle {
     createdAt: any;
     author: string;
     authorId: string;
+    section?: string;
 }
 
 export const useNews = (category?: string, maxItems: number = 20, subCategory?: string) => {

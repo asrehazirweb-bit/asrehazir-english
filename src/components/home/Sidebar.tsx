@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Facebook, Twitter, Youtube, ChevronRight } from 'lucide-react';
+import { AdBlock } from './AdBlock';
 
 interface NewsItem {
     id: number | string;
@@ -66,9 +67,11 @@ export function Sidebar({ offbeatItems = [], topStories = [] }: SidebarProps) {
                             </Link>
                         ))}
                     </div>
-                    <button className="w-full py-2 bg-[#004d99]/10 text-[#004d99] text-xs font-bold uppercase tracking-widest hover:bg-[#004d99]/20 transition-colors">
-                        View All
-                    </button>
+                    <Link to="/world">
+                        <button className="w-full py-2 bg-[#004d99]/10 text-[#004d99] text-xs font-bold uppercase tracking-widest hover:bg-[#004d99]/20 transition-colors">
+                            View All
+                        </button>
+                    </Link>
                 </div>
             )}
 
@@ -115,9 +118,7 @@ export function Sidebar({ offbeatItems = [], topStories = [] }: SidebarProps) {
                     </div>
                 </div>
 
-                <div className="text-center -mt-4">
-                    <span className="text-[10px] text-gray-300 uppercase tracking-widest">Advertisement</span>
-                </div>
+                <AdBlock placement="sidebar" className="h-[250px] !my-0" label="Premium Sidebar Ad" />
 
                 {/* 3. DISCOVER MORE CARD */}
                 <div className="border border-gray-100 dark:border-white/10 bg-white dark:bg-white/5 p-6">

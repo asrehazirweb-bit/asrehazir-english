@@ -62,35 +62,6 @@ export function Home() {
         image: item.imageUrl
     }));
 
-    const indiaNews = news.filter(n => n.category === 'National News' || n.category === 'India');
-    const indiaFeature = indiaNews[0] ? {
-        id: indiaNews[0].id,
-        title: indiaNews[0].title,
-        image: indiaNews[0].imageUrl,
-        time: formatTime(indiaNews[0].createdAt),
-        excerpt: indiaNews[0].content.substring(0, 150) + '...'
-    } : null;
-
-    const indiaList = indiaNews.slice(1, 5).map(item => ({
-        id: item.id,
-        title: item.title,
-        time: formatTime(item.createdAt),
-        image: item.imageUrl
-    }));
-
-    const techNews = news.filter(n => n.category === 'Articles & Essays' || n.category === 'Business' || n.category === 'Technology').slice(0, 4).map(item => ({
-        id: item.id,
-        title: item.title,
-        time: formatTime(item.createdAt),
-        image: item.imageUrl
-    }));
-
-    const entertainmentNews = news.filter(n => n.category === 'Sports & Entertainment' || n.category === 'Entertainment' || n.category === 'Sports').slice(0, 4).map(item => ({
-        id: item.id,
-        title: item.title,
-        time: formatTime(item.createdAt),
-        image: item.imageUrl
-    }));
 
     const regionalItems = news.slice(10, 16).map(item => ({
         id: item.id,
@@ -141,19 +112,17 @@ export function Home() {
                     <RegionalAndOffbeatSection regionalItems={regionalItems} />
 
                     {/* 4. India / Stats */}
-                    {indiaFeature && (
-                        <CategoryFeatureSection
-                            category="India"
-                            tabs={['National', 'International', 'Regional']}
-                            featuredItem={indiaFeature}
-                            listItems={indiaList}
-                        />
-                    )}
+                    <CategoryFeatureSection
+                        tabs={['National', 'International', 'Regional']}
+                        allNews={news}
+                        formatTime={formatTime}
+                    />
 
                     {/* 5. Articles & Essays */}
                     <CategoryGridSection
                         category="Articles & Essays"
-                        items={techNews.length > 0 ? techNews : []}
+                        items={news.filter(n => n.category === 'Articles & Essays' || n.category === 'Business' || n.category === 'Technology')}
+                        formatTime={formatTime}
                     />
 
                 </div>
@@ -173,7 +142,8 @@ export function Home() {
                 <div className="w-full mx-auto px-4">
                     <CategoryGridSection
                         category="Sports & Entertainment"
-                        items={entertainmentNews}
+                        items={news.filter(n => n.category === 'Sports & Entertainment' || n.category === 'Entertainment' || n.category === 'Sports')}
+                        formatTime={formatTime}
                     />
                 </div>
             </div>
@@ -187,7 +157,13 @@ export function Home() {
                 </div>
             )}
 
-            <VideoSection items={[]} />
+            <VideoSection items={news.filter(n => n.section === 'Must Watch').slice(0, 3).map(item => ({
+                id: item.id,
+                title: item.title,
+                category: item.category,
+                image: item.imageUrl || '',
+                time: formatTime(item.createdAt)
+            }))} />
         </div>
     );
 }
