@@ -133,8 +133,8 @@ export function Header() {
 
                 {/* Header Ad Slot */}
                 {!isScrolled && (
-                    <div className="w-full max-w-7xl mx-auto px-4 md:px-6 mb-4 hidden md:block">
-                        <AdBlock placement="header" className="h-24 !my-0" label="Premium Header Ad" />
+                    <div className="w-full max-w-7xl mx-auto px-4 md:px-6 mb-4">
+                        <AdBlock placement="header" className="h-20 sm:h-24 !my-0" label="Premium Header Ad" />
                     </div>
                 )}
 

@@ -128,12 +128,12 @@ export function Sidebar({ offbeatItems = [], topStories = [] }: SidebarProps) {
                     <h3 className="text-secondary dark:text-gray-200 font-serif font-bold text-lg mb-6 border-b border-gray-100 dark:border-white/10 pb-2">Discover more</h3>
                     <ul className="flex flex-col gap-4">
                         {[
-                            { name: 'India news updates', path: '/national' },
-                            { name: 'Hyderabad travel guides', path: '/deccan' },
-                            { name: 'Telangana tour packages', path: '/deccan' },
-                            { name: 'World wide report', path: '/world' },
-                            { name: 'Sports & Cinema', path: '/sports-entertainment' },
-                            { name: 'Crime reports', path: '/crime-accidents' }
+                            { name: 'World News', path: '/world' },
+                            { name: 'National News', path: '/national' },
+                            { name: 'Deccan News', path: '/deccan' },
+                            { name: 'Articles & Essays', path: '/articles-essays' },
+                            { name: 'Sports & Entertainment', path: '/sports-entertainment' },
+                            { name: 'Crime & Accidents', path: '/crime-accidents' }
                         ].map((item, idx) => (
                             <li key={idx}>
                                 <Link to={item.path} className="flex items-center justify-between group cursor-pointer">

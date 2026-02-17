@@ -92,12 +92,12 @@ export function ContactPage() {
                                 Join our inner circle of readers. Get breaking news alerts delivered directly to your inbox or WhatsApp before anyone else.
                             </p>
                             <div className="flex flex-col gap-4">
-                                <button className="w-full py-4 rounded-2xl bg-white text-black font-black uppercase text-[10px] tracking-widest hover:bg-red-600 hover:text-white transition-all shadow-xl">
-                                    Subscribe to Newsletter
-                                </button>
-                                <button className="w-full py-4 rounded-2xl border border-white/10 hover:border-red-600 font-black uppercase text-[10px] tracking-widest transition-all">
-                                    WhatsApp Broadcast
-                                </button>
+                                <a
+                                    href="mailto:asrehazir.web@gmail.com"
+                                    className="w-full py-4 rounded-2xl bg-white text-black font-black uppercase text-[10px] tracking-widest hover:bg-red-600 hover:text-white transition-all shadow-xl text-center flex items-center justify-center gap-2"
+                                >
+                                    <Mail size={16} /> Contact Editorial Desk
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -340,7 +340,7 @@ export function PrivacyPolicyPage() {
                             <div className="w-6 h-1 bg-red-600"></div> User Data Integrity
                         </h3>
                         <p>At Asre Hazir, your numeric and personal identity is treated with the highest level of encryption. We collect essential information such as email addresses for newsletter subscriptions & basic browsing telemetry to improve your aesthetic and functional experience.</p>
-                    </section> section
+                    </section>
 
                     <section className="space-y-4 p-8 bg-zinc-50 dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-100 dark:border-zinc-800">
                         <h3 className="text-xl font-black text-zinc-900 dark:text-white uppercase tracking-tight">Information Application</h3>
