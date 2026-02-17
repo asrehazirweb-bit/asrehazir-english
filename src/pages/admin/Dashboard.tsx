@@ -181,7 +181,10 @@ const AdminDashboard: React.FC = () => {
                                 )) : <div className="text-sm text-zinc-500 text-center py-4">No data available</div>}
                             </div>
 
-                            <button className="w-full mt-8 py-4 rounded-xl border border-zinc-800 text-[12px] font-bold hover:bg-white hover:text-black transition-all">
+                            <button
+                                onClick={() => navigate('/admin/manage')}
+                                className="w-full mt-8 py-4 rounded-xl border border-zinc-800 text-[12px] font-bold hover:bg-white hover:text-black transition-all"
+                            >
                                 View Detailed Analysis
                             </button>
                         </div>
