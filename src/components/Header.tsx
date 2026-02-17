@@ -27,6 +27,8 @@ export function Header() {
         { label: 'Articles & Essays', path: '/articles-essays' },
         { label: 'Sports & Entertainment', path: '/sports-entertainment' },
         { label: 'Crime & Accidents', path: '/crime-accidents' },
+        { label: 'About Us', path: '/about-us' },
+        { label: 'Contact Us', path: '/contact' },
     ];
 
     // Lock background scroll when menu is open
