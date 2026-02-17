@@ -44,11 +44,11 @@ export function HeroSection({ leadStory, className = "" }: HeroSectionProps) {
                 <p className={`text-base md:text-xl text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-2 mt-1 md:mt-2 opacity-80 font-medium ${leadStory.contentFont || 'font-sans'}`}>
                     {leadStory.excerpt}
                 </p>
-                <div className="mt-2 flex items-center gap-5 text-[11px] text-gray-400 font-bold uppercase tracking-[0.15em]">
+                <div className="mt-2 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-5 text-[11px] text-gray-400 font-bold uppercase tracking-[0.15em]">
                     <span className="flex items-center gap-2 hover:text-red-700 transition-colors">
                         By <span className="font-black text-gray-900 dark:text-white border-b border-red-700/30">Asre Hazir Desk</span>
                     </span>
-                    <span className="w-1 h-1 bg-gray-300 dark:bg-gray-700 rounded-full"></span>
+                    <span className="hidden sm:block w-1 h-1 bg-gray-300 dark:bg-gray-700 rounded-full"></span>
                     <span>{leadStory.time}</span>
                 </div>
             </div>
