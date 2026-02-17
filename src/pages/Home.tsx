@@ -8,6 +8,11 @@ import { RegionalAndOffbeatSection } from '../components/home/RegionalAndOffbeat
 import { CategoryFeatureSection, CategoryGridSection } from '../components/home/CategoryFeatureSection';
 import { useNews } from '../hooks/useNews';
 
+const stripHtml = (html: string) => {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    return doc.body.textContent || "";
+};
+
 export function Home() {
     const { news, loading, formatTime } = useNews('All', 50);
 
@@ -27,7 +32,7 @@ export function Home() {
         category: heroNews[0].category,
         image: heroNews[0].imageUrl,
         time: formatTime(heroNews[0].createdAt),
-        excerpt: heroNews[0].content.substring(0, 200) + '...',
+        excerpt: stripHtml(heroNews[0].content).substring(0, 200) + '...',
         titleFont: heroNews[0].titleFont,
         contentFont: heroNews[0].contentFont
     } : null;
@@ -45,7 +50,7 @@ export function Home() {
         id: item.id,
         location: item.category,
         title: item.title,
-        excerpt: item.content.substring(0, 120) + '...',
+        excerpt: stripHtml(item.content).substring(0, 120) + '...',
         titleFont: item.titleFont
     }));
 
@@ -56,7 +61,7 @@ export function Home() {
         image: telanganaNews[0].imageUrl,
         category: telanganaNews[0].category,
         time: formatTime(telanganaNews[0].createdAt),
-        excerpt: telanganaNews[0].content.substring(0, 150) + '...',
+        excerpt: stripHtml(telanganaNews[0].content).substring(0, 150) + '...',
         titleFont: telanganaNews[0].titleFont
     } : null;
 

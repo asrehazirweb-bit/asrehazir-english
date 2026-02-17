@@ -7,6 +7,7 @@ import type { NewsArticle } from '../hooks/useNews';
 import Toast from '../components/ui/Toast';
 import { useAuth } from '../context/AuthContext';
 import { saveNewsArticle, unsaveNewsArticle, isNewsSaved } from '../lib/savedNews';
+import DOMPurify from 'dompurify';
 
 const ArticleDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -271,12 +272,10 @@ const ArticleDetail: React.FC = () => {
                     {/* Main Content */}
                     <div className="lg:col-span-12">
                         <div className="prose prose-lg dark:prose-invert max-w-none">
-                            {/* Rendering content with paragraph breaks */}
-                            {article.content.split('\n').filter(p => p.trim() !== '').map((para, index) => (
-                                <p key={index} className={`text-gray-800 dark:text-gray-200 leading-relaxed mb-6 text-lg md:text-xl ${article.contentFont || 'font-sans'}`}>
-                                    {para}
-                                </p>
-                            ))}
+                            <div
+                                className={`article-content text-gray-800 dark:text-gray-200 leading-relaxed mb-6 text-lg md:text-xl ${article.contentFont || 'font-sans'}`}
+                                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(article.content) }}
+                            />
                         </div>
 
                         {/* Article Footer */}

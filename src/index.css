@@ -90,3 +90,55 @@
     @apply bg-white/80 dark:bg-black/80 backdrop-blur-md;
   }
 }
+
+/* Quill Dark Mode & Premium Styling */
+.dark .ql-toolbar {
+  @apply bg-zinc-800 border-zinc-700 !important;
+}
+
+.dark .ql-container {
+  @apply border-zinc-700 !important;
+}
+
+.dark .ql-editor {
+  @apply text-zinc-200 !important;
+}
+
+.dark .ql-stroke {
+  stroke: #a1a1aa !important;
+}
+
+.dark .ql-fill {
+  fill: #a1a1aa !important;
+}
+
+.dark .ql-picker {
+  color: #a1a1aa !important;
+}
+
+.dark .ql-picker-options {
+  @apply bg-zinc-800 border-zinc-700 !important;
+}
+
+.ql-editor,
+.article-content {
+  @apply text-lg leading-relaxed;
+}
+
+.ql-editor {
+  @apply min-h-[300px];
+}
+
+.quill-wrapper .ql-toolbar {
+  @apply rounded-t-3xl border-gray-100 dark:border-zinc-800 !important;
+}
+
+.quill-wrapper .ql-container {
+  @apply rounded-b-3xl border-gray-100 dark:border-zinc-800 !important;
+}
+
+/* RTL Support for Quill */
+.ql-rtl .ql-editor {
+  text-align: right;
+  direction: rtl;
+}

@@ -3,6 +3,8 @@ import { db, storage } from '../../lib/firebase';
 import { doc, updateDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { X, Save, Image as ImageIcon, Layout, Type, FileText, Tag, Loader2 } from 'lucide-react';
+import ReactQuill from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
 import { type NewsArticle } from '../../hooks/useNews';
 
 interface EditNewsModalProps {
@@ -219,13 +221,23 @@ const EditNewsModal: React.FC<EditNewsModalProps> = ({ article, onClose, onSucce
                         <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
                             <FileText className="w-3.5 h-3.5 text-red-600" /> Narrative Content
                         </label>
-                        <textarea
-                            value={content}
-                            onChange={(e) => setContent(e.target.value)}
-                            rows={8}
-                            className={`w-full p-6 rounded-3xl border border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800/50 focus:ring-4 focus:ring-red-500/10 outline-none transition-all dark:text-white leading-relaxed text-lg ${contentFont}`}
-                            required
-                        />
+                        <div className={`quill-wrapper ${contentFont}`}>
+                            <ReactQuill
+                                theme="snow"
+                                value={content}
+                                onChange={setContent}
+                                modules={{
+                                    toolbar: [
+                                        [{ 'header': [1, 2, 3, false] }],
+                                        ['bold', 'italic', 'underline', 'strike'],
+                                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                                        ['link', 'clean'],
+                                    ],
+                                }}
+                                className="bg-gray-50 dark:bg-zinc-800/50 rounded-3xl overflow-hidden border border-gray-100 dark:border-zinc-800 shadow-sm"
+                                placeholder="Edit narrative content..."
+                            />
+                        </div>
                     </div>
 
                     {/* Image Update */}
