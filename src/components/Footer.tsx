@@ -65,7 +65,7 @@ export function Footer() {
             </div>
 
             <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500 font-sans uppercase tracking-wide">
-                <div className="flex gap-6">
+                <div className="flex flex-wrap justify-center md:justify-start gap-4 md:gap-6">
                     <Link to="/about-us" className="hover:text-white transition-colors">About Us</Link>
                     <Link to="/contact" className="hover:text-white transition-colors">Contact Us</Link>
                     <Link to="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>

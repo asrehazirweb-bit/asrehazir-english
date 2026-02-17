@@ -23,7 +23,7 @@ export function IndiaNewsFeed({ items }: IndiaNewsFeedProps) {
             {/* 1. PAGE HEADER */}
             <div className="w-full mb-8 border-b border-gray-200 pb-6">
                 {/* Breadcrumb */}
-                <div className="flex items-center gap-2 text-xs font-sans font-bold uppercase tracking-wider text-gray-500 mb-4">
+                <div className="flex flex-wrap items-center gap-2 text-xs font-sans font-bold uppercase tracking-wider text-gray-500 mb-4">
                     <Link to="/" className="hover:text-accent transition-colors">Home</Link>
                     <ChevronRight size={10} />
                     <span className="text-gray-400">News</span>
