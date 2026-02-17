@@ -55,14 +55,14 @@ export function CategoryFeatureSection({ tabs, allNews, formatTime }: CategoryFe
     return (
         <div className="w-full mb-12">
             {/* Header with Tabs */}
-            <div className="border-b border-gray-200 dark:border-white/10 flex items-center justify-between mb-6">
-                <div className="flex items-center gap-8">
+            <div className="border-b border-gray-200 dark:border-white/10 flex items-center justify-between mb-6 overflow-x-auto no-scrollbar scroll-smooth">
+                <div className="flex items-center gap-4 md:gap-8 min-w-max">
                     {tabs.map((tab) => (
                         <div
                             key={tab}
                             onClick={() => setActiveTab(tab)}
                             className={`
-                                py-2 border-b-2 font-sans text-sm font-semibold tracking-wide cursor-pointer uppercase transition-all
+                                py-2 border-b-2 font-sans text-[11px] md:text-sm font-semibold tracking-wide cursor-pointer uppercase transition-all whitespace-nowrap
                                 ${activeTab === tab ? 'border-red-700 text-secondary dark:text-gray-100' : 'border-transparent text-gray-500 hover:text-gray-800 dark:hover:text-gray-300'}
                             `}
                         >
@@ -88,7 +88,7 @@ export function CategoryFeatureSection({ tabs, allNews, formatTime }: CategoryFe
                                 </span>
                             </div>
                             <span className="text-[10px] text-gray-400 font-sans block mb-1">{formatTime(featuredItem.createdAt)}</span>
-                            <h3 className={`font-black text-lg md:text-xl leading-tight text-gray-900 dark:text-gray-100 mb-2 group-hover:text-accent transition-colors ${featuredItem.titleFont || 'font-serif'}`}>
+                            <h3 className={`font-black text-lg md:text-xl leading-snug md:leading-tight text-gray-900 dark:text-gray-100 mb-2 group-hover:text-accent transition-colors ${featuredItem.titleFont || 'font-serif'}`}>
                                 {featuredItem.title}
                             </h3>
                             <p className="text-gray-500 dark:text-gray-400 font-sans text-xs leading-relaxed line-clamp-2">

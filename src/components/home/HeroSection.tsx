@@ -27,7 +27,7 @@ export function HeroSection({ leadStory, className = "" }: HeroSectionProps) {
                     className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-[1.03]"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60"></div>
-                <div className="absolute top-6 left-6 bg-red-700 text-white px-6 py-2.5 text-[11px] font-black uppercase tracking-[0.25em] shadow-2xl backdrop-blur-sm bg-opacity-90 rounded-sm">
+                <div className="absolute top-4 left-4 sm:top-6 sm:left-6 bg-red-700 text-white px-4 py-1.5 sm:px-6 sm:py-2.5 text-[9px] sm:text-[11px] font-black uppercase tracking-[0.25em] shadow-2xl backdrop-blur-sm bg-opacity-90 rounded-sm">
                     {leadStory.category}
                 </div>
             </div>
@@ -38,10 +38,10 @@ export function HeroSection({ leadStory, className = "" }: HeroSectionProps) {
                     <span className="w-2.5 h-2.5 rounded-full bg-red-600 animate-pulse shadow-[0_0_10px_rgba(220,38,38,0.5)]"></span>
                     <span className="text-[11px] font-black text-red-600 uppercase tracking-[0.3em]">Lead Story</span>
                 </div>
-                <h1 className={`font-black text-3xl md:text-6xl lg:text-7xl leading-[1.05] text-gray-900 dark:text-gray-50 group-hover:text-red-700 transition-colors duration-400 tracking-tight ${leadStory.titleFont || 'font-serif'}`}>
+                <h1 className={`font-black text-2xl sm:text-3xl md:text-6xl lg:text-7xl leading-[1.05] text-gray-900 dark:text-gray-50 group-hover:text-red-700 transition-colors duration-400 tracking-tight ${leadStory.titleFont || 'font-serif'}`}>
                     {leadStory.title}
                 </h1>
-                <p className={`text-lg md:text-xl text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-2 mt-2 opacity-80 font-medium ${leadStory.contentFont || 'font-sans'}`}>
+                <p className={`text-base md:text-xl text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-2 mt-1 md:mt-2 opacity-80 font-medium ${leadStory.contentFont || 'font-sans'}`}>
                     {leadStory.excerpt}
                 </p>
                 <div className="mt-2 flex items-center gap-5 text-[11px] text-gray-400 font-bold uppercase tracking-[0.15em]">

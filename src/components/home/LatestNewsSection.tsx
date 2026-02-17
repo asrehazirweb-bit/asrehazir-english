@@ -37,11 +37,11 @@ export function LatestNewsSection({ items = [] }: LatestNewsSectionProps) {
 
                 {/* HEADLINE WITH LINES */}
                 <div className="flex items-center justify-center gap-4 mb-8">
-                    <div className="w-24 h-[1px] bg-gray-300 dark:bg-white/10"></div>
-                    <h2 className="text-secondary dark:text-gray-400 font-sans font-semibold uppercase tracking-wider text-sm">
+                    <div className="w-12 md:w-24 h-[1px] bg-gray-300 dark:bg-white/10"></div>
+                    <h2 className="text-secondary dark:text-gray-400 font-sans font-semibold uppercase tracking-wider text-[11px] md:text-sm whitespace-nowrap">
                         Latest News
                     </h2>
-                    <div className="w-24 h-[1px] bg-gray-300 dark:bg-white/10"></div>
+                    <div className="w-12 md:w-24 h-[1px] bg-gray-300 dark:bg-white/10"></div>
                 </div>
 
                 {/* 3x3 GRID */}

@@ -197,7 +197,7 @@ const ArticleDetail: React.FC = () => {
                     <span className="text-gray-400 truncate max-w-[150px]">{article.subCategory || 'Latest'}</span>
                 </div>
 
-                <h1 className={`text-3xl md:text-5xl lg:text-6xl font-black text-gray-900 dark:text-white leading-[1.1] mb-8 tracking-tight ${article.titleFont || 'font-serif'}`}>
+                <h1 className={`text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-black text-gray-900 dark:text-white leading-[1.15] mb-6 md:mb-8 tracking-tight ${article.titleFont || 'font-serif'}`}>
                     {article.title}
                 </h1>
 
@@ -284,7 +284,7 @@ const ArticleDetail: React.FC = () => {
                     <div className="lg:col-span-12">
                         <div className="prose prose-lg dark:prose-invert max-w-none">
                             <div
-                                className={`article-content text-gray-800 dark:text-gray-200 leading-relaxed mb-6 text-lg md:text-xl ${article.contentFont || 'font-sans'}`}
+                                className={`article-content text-gray-800 dark:text-gray-200 leading-relaxed mb-6 text-base md:text-xl ${article.contentFont || 'font-sans'}`}
                                 dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(article.content) }}
                             />
                         </div>

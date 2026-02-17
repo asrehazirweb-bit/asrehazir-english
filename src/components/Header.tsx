@@ -105,14 +105,14 @@ export function Header() {
                 )}
 
                 {/* Main Branding */}
-                <div className={`w-full mx-auto px-4 md:px-6 transition-all duration-300 ${isScrolled ? 'py-2' : 'py-4 md:py-10'}`}>
+                <div className={`w-full mx-auto px-4 md:px-6 transition-all duration-300 ${isScrolled ? 'py-1.5 md:py-2' : 'py-3 md:py-10'}`}>
                     <div className="flex justify-between items-center relative">
-                        <button className="md:hidden p-2 -ml-2 text-gray-900 dark:text-white" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-                            <Menu size={24} />
+                        <button className="md:hidden p-1.5 -ml-1 text-gray-900 dark:text-white" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                            <Menu size={22} />
                         </button>
 
                         <Link to="/" className="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 group transition-transform duration-300 active:scale-95">
-                            <h1 className={`${isScrolled ? 'text-2xl md:text-3xl' : 'text-3xl sm:text-4xl md:text-7xl'} font-serif font-black tracking-[-0.04em] leading-none text-gray-900 dark:text-white transition-all duration-300 whitespace-nowrap`}>
+                            <h1 className={`${isScrolled ? 'text-xl md:text-3xl' : 'text-3xl sm:text-4xl md:text-7xl'} font-serif font-black tracking-[-0.04em] leading-none text-gray-900 dark:text-white transition-all duration-300 whitespace-nowrap`}>
                                 asre<span className="text-red-700">hazir</span>
                             </h1>
                         </Link>
