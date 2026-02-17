@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { FileText, Users, Eye, TrendingUp, Clock, BarChart3, ChevronRight, Zap } from 'lucide-react';
 import { useNews } from '../../hooks/useNews';
