@@ -32,7 +32,7 @@ const AdminLayout: React.FC = () => {
     ];
 
     return (
-        <div className="flex h-screen bg-[#f8f9fa] dark:bg-zinc-950 transition-colors duration-500 overflow-hidden">
+        <div className="flex h-screen bg-[#f8f9fa] dark:bg-zinc-950 transition-colors duration-500 overflow-hidden" dir="ltr">
             {/* Mobile Header */}
             <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-white dark:bg-zinc-900 border-b border-gray-100 dark:border-zinc-800 flex items-center justify-between px-6 z-30">
                 <div className="flex items-center gap-3">
@@ -51,10 +51,10 @@ const AdminLayout: React.FC = () => {
 
             {/* Sidebar Desktop & Mobile */}
             <aside className={`
-                fixed inset - y - 0 left - 0 z - 40 w - 72 bg - white dark: bg - zinc - 900 border - r border - gray - 100 dark: border - zinc - 800 flex flex - col shadow - xl transition - transform duration - 300 transform
-lg: translate - x - 0 lg:static lg: inset - 0
+                fixed inset-y-0 left-0 z-40 w-72 bg-white dark:bg-zinc-900 border-r border-gray-100 dark:border-zinc-800 flex flex-col shadow-xl transition-transform duration-300 transform
+                lg:translate-x-0 lg:static lg:inset-0
                 ${isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-`}>
+            `}>
                 <div className="p-8 border-b border-gray-50 dark:border-zinc-800 flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-red-600 rounded-xl flex items-center justify-center shadow-lg shadow-red-600/20">
@@ -79,12 +79,12 @@ lg: translate - x - 0 lg:static lg: inset - 0
                                     key={item.path}
                                     to={item.path}
                                     onClick={() => setIsMobileSidebarOpen(false)}
-                                    className={`flex items - center space - x - 3 px - 4 py - 3.5 rounded - 2xl transition - all duration - 300 group ${isActive(item.path)
+                                    className={`flex items-center space-x-3 px-4 py-3.5 rounded-2xl transition-all duration-300 group ${isActive(item.path)
                                         ? 'bg-red-600 text-white shadow-lg shadow-red-600/20'
                                         : 'text-gray-500 hover:bg-gray-50 dark:hover:bg-zinc-800 hover:text-gray-900 dark:hover:text-white'
-                                        } `}
+                                        }`}
                                 >
-                                    <span className={`${isActive(item.path) ? 'text-white' : 'group-hover:text-red-600'} transition - colors`}>
+                                    <span className={`${isActive(item.path) ? 'text-white' : 'group-hover:text-red-600'} transition-colors`}>
                                         {item.icon}
                                     </span>
                                     <span className="text-sm font-bold tracking-tight">{item.label}</span>
@@ -105,7 +105,6 @@ lg: translate - x - 0 lg:static lg: inset - 0
                                 <span className="text-sm font-bold tracking-tight">Main Portal</span>
                             </Link>
                         </nav>
-
                     </div>
                 </div>
 
@@ -143,7 +142,7 @@ lg: translate - x - 0 lg:static lg: inset - 0
 
             {/* Main Content */}
             <main className="flex-1 overflow-y-auto relative z-10 transition-all duration-500 pt-20 lg:pt-8 px-4 lg:px-8 pb-12">
-                <div className="max-w-6xl mx-auto">
+                <div className="max-w-6xl" style={{ marginInline: 'auto' }}>
                     {/* Breadcrumbs / Top Bar Placeholder */}
                     <div className="flex items-center justify-between mb-8 pb-6 border-b border-gray-200/50 dark:border-zinc-800/50">
                         <div className="flex items-center gap-2 text-[10px] uppercase font-black tracking-[0.2em] text-gray-400">
