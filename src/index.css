@@ -142,3 +142,55 @@
   text-align: right;
   direction: rtl;
 }
+
+/* Explicit News Content Formatting */
+.article-content b,
+.article-content strong,
+.ql-editor b,
+.ql-editor strong {
+  @apply font-bold !important;
+}
+
+.article-content i,
+.article-content em,
+.ql-editor i,
+.ql-editor em {
+  @apply italic !important;
+}
+
+.article-content u,
+.ql-editor u {
+  @apply underline !important;
+}
+
+.article-content ul,
+.ql-editor ul {
+  list-style-type: disc !important;
+  @apply pl-6 my-4 !important;
+}
+
+.article-content ol,
+.ql-editor ol {
+  list-style-type: decimal !important;
+  @apply pl-6 my-4 !important;
+}
+
+.article-content a,
+.ql-editor a {
+  @apply text-red-600 underline hover:text-black dark:hover:text-white transition-colors !important;
+}
+
+.article-content h1,
+.ql-editor h1 {
+  @apply text-4xl font-black mb-4 !important;
+}
+
+.article-content h2,
+.ql-editor h2 {
+  @apply text-3xl font-bold mb-3 !important;
+}
+
+.article-content h3,
+.ql-editor h3 {
+  @apply text-2xl font-bold mb-2 !important;
+}
