@@ -8,6 +8,8 @@ interface NewsItem {
     time: string;
     category?: string;
     excerpt?: string;
+    titleFont?: string;
+    contentFont?: string;
 }
 
 interface TelanganaSectionProps {
@@ -52,10 +54,10 @@ export function TelanganaSection({ featured, items }: TelanganaSectionProps) {
 
                     {/* Content Container */}
                     <div className="flex-1 flex flex-col justify-center h-full pt-2">
-                        <h3 className="text-xl md:text-2xl font-bold leading-tight text-secondary dark:text-white mb-3 group-hover:underline decoration-accent decoration-2 underline-offset-4">
+                        <h3 className={`text-xl md:text-2xl font-bold leading-tight text-secondary dark:text-white mb-3 group-hover:underline decoration-accent decoration-2 underline-offset-4 ${featured.titleFont || ''}`}>
                             {featured.title}
                         </h3>
-                        <p className="text-gray-600 dark:text-gray-400 font-sans text-sm leading-relaxed mb-4 line-clamp-3">
+                        <p className={`text-gray-600 dark:text-gray-400 font-sans text-sm leading-relaxed mb-4 line-clamp-3 ${featured.contentFont || ''}`}>
                             {featured.excerpt || "No summary available for this story. Click to read the full article and get more details on this developing story."}
                         </p>
                         <div className="flex items-center text-xs text-gray-400 font-sans uppercase tracking-wide mt-auto">
@@ -80,7 +82,7 @@ export function TelanganaSection({ featured, items }: TelanganaSectionProps) {
 
                             {/* Content */}
                             <div className="flex flex-col justify-between h-full py-0.5">
-                                <h4 className="text-sm font-bold text-secondary dark:text-gray-200 leading-snug line-clamp-3 group-hover:text-accent transition-colors">
+                                <h4 className={`text-sm font-bold text-secondary dark:text-gray-200 leading-snug line-clamp-3 group-hover:text-accent transition-colors ${item.titleFont || ''}`}>
                                     {item.title}
                                 </h4>
                                 <div className="text-[10px] text-gray-400 font-sans uppercase tracking-wider flex items-center mt-auto">

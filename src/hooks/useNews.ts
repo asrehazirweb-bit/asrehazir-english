@@ -13,6 +13,8 @@ export interface NewsArticle {
     author: string;
     authorId: string;
     section?: string;
+    titleFont?: string;
+    contentFont?: string;
 }
 
 export const useNews = (category?: string, maxItems: number = 20, subCategory?: string) => {

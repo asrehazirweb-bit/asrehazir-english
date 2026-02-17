@@ -8,6 +8,8 @@ interface NewsItem {
     imageUrl?: string;
     content: string;
     createdAt: any;
+    titleFont?: string;
+    contentFont?: string;
 }
 
 interface CategoryFeatureSectionProps {
@@ -86,7 +88,7 @@ export function CategoryFeatureSection({ tabs, allNews, formatTime }: CategoryFe
                                 </span>
                             </div>
                             <span className="text-[10px] text-gray-400 font-sans block mb-1">{formatTime(featuredItem.createdAt)}</span>
-                            <h3 className="font-serif font-black text-lg md:text-xl leading-tight text-gray-900 dark:text-gray-100 mb-2 group-hover:text-accent transition-colors">
+                            <h3 className={`font-black text-lg md:text-xl leading-tight text-gray-900 dark:text-gray-100 mb-2 group-hover:text-accent transition-colors ${featuredItem.titleFont || 'font-serif'}`}>
                                 {featuredItem.title}
                             </h3>
                             <p className="text-gray-500 dark:text-gray-400 font-sans text-xs leading-relaxed line-clamp-2">
@@ -108,7 +110,7 @@ export function CategoryFeatureSection({ tabs, allNews, formatTime }: CategoryFe
                                 </div>
                                 <div className="flex flex-col py-0.5">
                                     <span className="text-[10px] text-gray-400 font-sans mb-1">{formatTime(item.createdAt)}</span>
-                                    <h4 className="font-serif font-bold text-sm leading-snug text-gray-800 dark:text-gray-200 line-clamp-3 group-hover:text-accent transition-colors">
+                                    <h4 className={`font-bold text-sm leading-snug text-gray-800 dark:text-gray-200 line-clamp-3 group-hover:text-accent transition-colors ${(item as any).titleFont || 'font-serif'}`}>
                                         {item.title}
                                     </h4>
                                 </div>
@@ -163,7 +165,7 @@ export function CategoryGridSection({ category, items, formatTime }: CategoryGri
                             <span className="text-[10px] text-gray-400 font-sans mb-1">
                                 {item.createdAt ? formatTime(item.createdAt) : item.time}
                             </span>
-                            <h4 className="font-serif font-bold text-xs md:text-sm leading-snug text-gray-800 dark:text-gray-200 line-clamp-2 group-hover:text-accent transition-colors">
+                            <h4 className={`font-bold text-xs md:text-sm leading-snug text-gray-800 dark:text-gray-200 line-clamp-2 group-hover:text-accent transition-colors ${item.titleFont || 'font-serif'}`}>
                                 {item.title}
                             </h4>
                         </div>

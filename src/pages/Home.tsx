@@ -27,7 +27,9 @@ export function Home() {
         category: heroNews[0].category,
         image: heroNews[0].imageUrl,
         time: formatTime(heroNews[0].createdAt),
-        excerpt: heroNews[0].content.substring(0, 200) + '...'
+        excerpt: heroNews[0].content.substring(0, 200) + '...',
+        titleFont: heroNews[0].titleFont,
+        contentFont: heroNews[0].contentFont
     } : null;
 
     const heroTopStories = heroNews.slice(1).map(item => ({
@@ -35,14 +37,16 @@ export function Home() {
         title: item.title,
         category: item.category,
         image: item.imageUrl,
-        time: formatTime(item.createdAt)
+        time: formatTime(item.createdAt),
+        titleFont: item.titleFont
     }));
 
     const latestNewsItems = news.slice(0, 10).map(item => ({
         id: item.id,
         location: item.category,
         title: item.title,
-        excerpt: item.content.substring(0, 120) + '...'
+        excerpt: item.content.substring(0, 120) + '...',
+        titleFont: item.titleFont
     }));
 
     const telanganaNews = news.filter(n => n.category === 'Deccan News' || n.category === 'Hyderabad' || n.category === 'Telangana');
@@ -52,14 +56,16 @@ export function Home() {
         image: telanganaNews[0].imageUrl,
         category: telanganaNews[0].category,
         time: formatTime(telanganaNews[0].createdAt),
-        excerpt: telanganaNews[0].content.substring(0, 150) + '...'
+        excerpt: telanganaNews[0].content.substring(0, 150) + '...',
+        titleFont: telanganaNews[0].titleFont
     } : null;
 
     const telanganaList = telanganaNews.slice(1, 7).map(item => ({
         id: item.id,
         title: item.title,
         time: formatTime(item.createdAt),
-        image: item.imageUrl
+        image: item.imageUrl,
+        titleFont: item.titleFont
     }));
 
 
@@ -67,13 +73,15 @@ export function Home() {
         id: item.id,
         time: formatTime(item.createdAt),
         title: item.title,
-        image: item.imageUrl
+        image: item.imageUrl,
+        titleFont: item.titleFont
     }));
 
     const offbeatItems = news.slice(16, 18).map(item => ({
         id: item.id,
         time: formatTime(item.createdAt),
-        title: item.title
+        title: item.title,
+        titleFont: item.titleFont
     }));
 
     const worldNews = news.filter(n => n.category === 'World News' || n.category === 'International').slice(0, 2).map(item => ({
@@ -81,7 +89,8 @@ export function Home() {
         title: item.title,
         category: item.category,
         image: item.imageUrl,
-        time: formatTime(item.createdAt)
+        time: formatTime(item.createdAt),
+        titleFont: item.titleFont
     }));
 
     return (

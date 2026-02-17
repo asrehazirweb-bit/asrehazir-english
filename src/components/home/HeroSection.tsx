@@ -7,6 +7,8 @@ interface NewsItem {
     image: string;
     time: string;
     excerpt?: string;
+    titleFont?: string;
+    contentFont?: string;
 }
 
 interface HeroSectionProps {
@@ -36,10 +38,10 @@ export function HeroSection({ leadStory, className = "" }: HeroSectionProps) {
                     <span className="w-2.5 h-2.5 rounded-full bg-red-600 animate-pulse shadow-[0_0_10px_rgba(220,38,38,0.5)]"></span>
                     <span className="text-[11px] font-black text-red-600 uppercase tracking-[0.3em]">Lead Story</span>
                 </div>
-                <h1 className="font-serif font-black text-3xl md:text-6xl lg:text-7xl leading-[1.05] text-gray-900 dark:text-gray-50 group-hover:text-red-700 transition-colors duration-400 tracking-tight">
+                <h1 className={`font-black text-3xl md:text-6xl lg:text-7xl leading-[1.05] text-gray-900 dark:text-gray-50 group-hover:text-red-700 transition-colors duration-400 tracking-tight ${leadStory.titleFont || 'font-serif'}`}>
                     {leadStory.title}
                 </h1>
-                <p className="font-sans text-lg md:text-xl text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-2 mt-2 opacity-80 font-medium">
+                <p className={`text-lg md:text-xl text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-2 mt-2 opacity-80 font-medium ${leadStory.contentFont || 'font-sans'}`}>
                     {leadStory.excerpt}
                 </p>
                 <div className="mt-2 flex items-center gap-5 text-[11px] text-gray-400 font-bold uppercase tracking-[0.15em]">

@@ -15,6 +15,32 @@ const CATEGORIES = [
     { name: 'Crime & Accidents', subCategories: ['Local Crime', 'Investigation', 'Security', 'Accidents'] }
 ];
 
+const FONTS_TITLE = [
+    { id: 'font-playfair', name: 'Playfair Display (Newsroom)' },
+    { id: 'font-lora', name: 'Lora (Elegant)' },
+    { id: 'font-oswald', name: 'Oswald (Bold)' },
+    { id: 'font-montserrat', name: 'Montserrat (Modern)' },
+    { id: 'font-merriweather', name: 'Merriweather (Classic)' },
+    { id: 'font-ubuntu', name: 'Ubuntu (Soft)' },
+    { id: 'font-raleway', name: 'Raleway (Stylish)' },
+    { id: 'font-roboto-slab', name: 'Roboto Slab (Traditional)' },
+    { id: 'font-inter', name: 'Inter (Standard)' },
+    { id: 'font-georgia', name: 'Georgia (Serif)' }
+];
+
+const FONTS_CONTENT = [
+    { id: 'font-merriweather', name: 'Merriweather (Clear)' },
+    { id: 'font-lora', name: 'Lora (Classic)' },
+    { id: 'font-inter', name: 'Inter (Sharp)' },
+    { id: 'font-roboto-slab', name: 'Roboto Slab (Soft)' },
+    { id: 'font-montserrat', name: 'Montserrat (Modern)' },
+    { id: 'font-playfair', name: 'Playfair Display' },
+    { id: 'font-ubuntu', name: 'Ubuntu' },
+    { id: 'font-raleway', name: 'Raleway' },
+    { id: 'font-georgia', name: 'Georgia' },
+    { id: 'font-sans', name: 'Default Sans' }
+];
+
 const AddNews: React.FC = () => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
@@ -25,6 +51,8 @@ const AddNews: React.FC = () => {
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [successMessage, setSuccessMessage] = useState(false);
+    const [titleFont, setTitleFont] = useState('font-playfair');
+    const [contentFont, setContentFont] = useState('font-merriweather');
 
     // New state for modal and toast
     const [isClearModalOpen, setIsClearModalOpen] = useState(false);
@@ -34,12 +62,14 @@ const AddNews: React.FC = () => {
     useEffect(() => {
         const draft = localStorage.getItem('asre-hazir-draft');
         if (draft) {
-            const { title: dTitle, content: dContent, category: dCategory, subCategory: dSubCategory, section: dSection } = JSON.parse(draft);
+            const { title: dTitle, content: dContent, category: dCategory, subCategory: dSubCategory, section: dSection, titleFont: dTitleFont, contentFont: dContentFont } = JSON.parse(draft);
             setTitle(dTitle || '');
             setContent(dContent || '');
             setCategory(dCategory || 'World News');
             setSubCategory(dSubCategory || 'Top Stories');
             setSection(dSection || 'Top Stories');
+            setTitleFont(dTitleFont || 'font-playfair');
+            setContentFont(dContentFont || 'font-merriweather');
         }
     }, []);
 
@@ -47,11 +77,11 @@ const AddNews: React.FC = () => {
     useEffect(() => {
         const timer = setTimeout(() => {
             if (title || content) {
-                localStorage.setItem('asre-hazir-draft', JSON.stringify({ title, content, category, subCategory, section }));
+                localStorage.setItem('asre-hazir-draft', JSON.stringify({ title, content, category, subCategory, section, titleFont, contentFont }));
             }
         }, 2000);
         return () => clearTimeout(timer);
-    }, [title, content, category, subCategory, section]);
+    }, [title, content, category, subCategory, section, titleFont, contentFont]);
 
     const handleClearDraftClick = () => {
         setIsClearModalOpen(true);
@@ -125,6 +155,8 @@ const AddNews: React.FC = () => {
                 section,
                 category,
                 subCategory,
+                titleFont,
+                contentFont,
                 imageUrl: imageUrl,  // Single image field
                 createdAt: serverTimestamp(),
                 author: auth.currentUser?.displayName || 'Asre Hazir Desk',
@@ -209,10 +241,38 @@ const AddNews: React.FC = () => {
                                     type="text"
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
-                                    className="w-full text-3xl md:text-5xl font-serif font-black border-b-2 border-gray-100 dark:border-zinc-800 bg-transparent py-4 focus:border-red-600 outline-none transition-all dark:text-white"
+                                    className={`w-full text-3xl md:text-5xl font-black border-b-2 border-gray-100 dark:border-zinc-800 bg-transparent py-4 focus:border-red-600 outline-none transition-all dark:text-white ${titleFont}`}
                                     placeholder="Enter Headline..."
                                     required
                                 />
+                            </div>
+
+                            {/* Font Strategy Selection */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-zinc-50 dark:bg-zinc-800/30 p-8 rounded-3xl border border-gray-100 dark:border-zinc-800">
+                                <div className="space-y-4">
+                                    <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
+                                        <Sparkles className="w-3.5 h-3.5 text-red-600" /> Headline Font
+                                    </label>
+                                    <select
+                                        value={titleFont}
+                                        onChange={(e) => setTitleFont(e.target.value)}
+                                        className="w-full p-4 rounded-xl border border-gray-100 dark:border-zinc-800 bg-white dark:bg-zinc-800 focus:ring-4 focus:ring-red-600/10 outline-none transition-all dark:text-white font-bold text-xs h-14"
+                                    >
+                                        {FONTS_TITLE.map(f => <option key={f.id} value={f.id} className={f.id}>{f.name}</option>)}
+                                    </select>
+                                </div>
+                                <div className="space-y-4">
+                                    <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
+                                        <FileText className="w-3.5 h-3.5 text-red-600" /> story Content Font
+                                    </label>
+                                    <select
+                                        value={contentFont}
+                                        onChange={(e) => setContentFont(e.target.value)}
+                                        className="w-full p-4 rounded-xl border border-gray-100 dark:border-zinc-800 bg-white dark:bg-zinc-800 focus:ring-4 focus:ring-red-600/10 outline-none transition-all dark:text-white font-bold text-xs h-14"
+                                    >
+                                        {FONTS_CONTENT.map(f => <option key={f.id} value={f.id} className={f.id}>{f.name}</option>)}
+                                    </select>
+                                </div>
                             </div>
 
                             {/* Placement Strategy */}
@@ -315,7 +375,7 @@ const AddNews: React.FC = () => {
                                     value={content}
                                     onChange={(e) => setContent(e.target.value)}
                                     rows={10}
-                                    className="w-full p-8 rounded-3xl border border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800/50 focus:ring-4 focus:ring-red-600/10 outline-none transition-all dark:text-white font-sans leading-relaxed text-xl"
+                                    className={`w-full p-8 rounded-3xl border border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800/50 focus:ring-4 focus:ring-red-600/10 outline-none transition-all dark:text-white leading-relaxed text-xl ${contentFont}`}
                                     placeholder="Report the details here..."
                                     required
                                 />

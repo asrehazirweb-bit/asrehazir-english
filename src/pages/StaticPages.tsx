@@ -1,43 +1,104 @@
-
+import { Mail, Phone, MapPin, Clock, Shield, Scale, Info, Megaphone, PenTool, Globe, Zap, CheckCircle2 } from 'lucide-react';
 
 export function ContactPage() {
     return (
-        <div className="max-w-4xl mx-auto px-4 py-16 font-serif">
-            <h1 className="text-4xl md:text-5xl font-black mb-8 border-b-4 border-red-700 pb-4 text-gray-900 dark:text-white uppercase tracking-tight">Contact Us</h1>
-
-            <div className="grid md:grid-cols-2 gap-12 text-gray-700 dark:text-gray-300">
-                <div className="space-y-6">
-                    <p className="text-lg leading-relaxed">
-                        Have a story to share or a query? Reach out to our editorial desk. We value our readers' feedback and contributions.
+        <div className="min-h-screen bg-white dark:bg-zinc-950 font-sans selection:bg-red-600 selection:text-white pb-20">
+            {/* Hero Section */}
+            <div className="relative pt-32 pb-20 px-4 overflow-hidden bg-zinc-900 border-b border-white/5">
+                <div className="absolute top-0 left-0 w-full h-full opacity-10">
+                    <div className="absolute top-0 right-0 w-96 h-96 bg-red-600 rounded-full blur-[120px] -mr-32 -mt-32"></div>
+                </div>
+                <div className="max-w-6xl mx-auto relative z-10 text-center">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-red-500 text-[10px] font-black uppercase tracking-[0.2em] mb-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+                        <Zap size={14} className="animate-pulse" /> Get In Touch
+                    </div>
+                    <h1 className="text-5xl md:text-7xl font-serif font-black text-white mb-6 uppercase tracking-tighter leading-none animate-in fade-in slide-in-from-bottom-6 duration-1000">
+                        Global <span className="text-red-600 italic">News Desk</span>
+                    </h1>
+                    <p className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto font-medium leading-relaxed">
+                        Have a breaking story, feedback, or a partnership inquiry? Our international newsroom is active 24/7 to listen and respond.
                     </p>
+                </div>
+            </div>
 
-                    <div>
-                        <h3 className="font-bold uppercase tracking-widest text-sm text-red-700 mb-2 font-sans">Editorial Desk</h3>
-                        <p>Email: <a href="mailto:asrehazir.web@gmail.com" className="text-red-600 hover:underline">asrehazir.web@gmail.com</a></p>
-                        <p>Phone: +91 40 1234 5678</p>
+            <div className="max-w-6xl mx-auto px-4 -mt-10 relative z-20">
+                <div className="grid lg:grid-cols-3 gap-8">
+                    {/* Contact Cards */}
+                    <div className="bg-white dark:bg-zinc-900 p-10 rounded-[2.5rem] shadow-2xl shadow-black/5 border border-gray-100 dark:border-zinc-800 flex flex-col items-center text-center group hover:border-red-600 transition-all duration-500">
+                        <div className="w-16 h-16 bg-red-50 dark:bg-red-900/10 rounded-2xl flex items-center justify-center text-red-600 mb-6 group-hover:scale-110 transition-transform">
+                            <Mail size={28} />
+                        </div>
+                        <h3 className="text-xl font-serif font-black text-zinc-900 dark:text-white uppercase mb-2">Email Desk</h3>
+                        <p className="text-zinc-500 text-sm mb-6 font-medium">For official inquiries and press releases</p>
+                        <a href="mailto:asrehazir.web@gmail.com" className="text-lg font-bold text-red-600 hover:black transition-colors">asrehazir.web@gmail.com</a>
                     </div>
 
-                    <div>
-                        <h3 className="font-bold uppercase tracking-widest text-sm text-red-700 mb-2 font-sans">Main Office</h3>
-                        <p>Asre Hazir Media Groups</p>
-                        <p>Banjara Hills, Road No. 12</p>
-                        <p>Hyderabad, Telangana - 500034</p>
+                    <div className="bg-white dark:bg-zinc-900 p-10 rounded-[2.5rem] shadow-2xl shadow-black/5 border border-gray-100 dark:border-zinc-800 flex flex-col items-center text-center group hover:border-red-600 transition-all duration-500">
+                        <div className="w-16 h-16 bg-red-50 dark:bg-red-900/10 rounded-2xl flex items-center justify-center text-red-600 mb-6 group-hover:scale-110 transition-transform">
+                            <Phone size={28} />
+                        </div>
+                        <h3 className="text-xl font-serif font-black text-zinc-900 dark:text-white uppercase mb-2">Hotline</h3>
+                        <p className="text-zinc-500 text-sm mb-6 font-medium">Report breaking news or news tips</p>
+                        <span className="text-lg font-bold text-zinc-900 dark:text-white">+91 40 1234 5678</span>
+                    </div>
+
+                    <div className="bg-white dark:bg-zinc-900 p-10 rounded-[2.5rem] shadow-2xl shadow-black/5 border border-gray-100 dark:border-zinc-800 flex flex-col items-center text-center group hover:border-red-600 transition-all duration-500">
+                        <div className="w-16 h-16 bg-red-50 dark:bg-red-900/10 rounded-2xl flex items-center justify-center text-red-600 mb-6 group-hover:scale-110 transition-transform">
+                            <MapPin size={28} />
+                        </div>
+                        <h3 className="text-xl font-serif font-black text-zinc-900 dark:text-white uppercase mb-2">Location</h3>
+                        <p className="text-zinc-500 text-sm mb-6 font-medium">Banjara Hills, Road No. 12</p>
+                        <span className="text-lg font-bold text-zinc-900 dark:text-white">Hyderabad, India</span>
                     </div>
                 </div>
 
-                <div className="bg-gray-50 dark:bg-zinc-900/50 p-8 rounded-xl border border-gray-100 dark:border-zinc-800">
-                    <h3 className="text-2xl font-black mb-6 uppercase tracking-tight text-gray-900 dark:text-white">Our Presence</h3>
-                    <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-6 font-sans">
-                        You can find us across multiple platforms. For urgent news tips, please use our editorial email or phone number listed. Our desk is active 24/7 to bring you the latest verified reports.
-                    </p>
-                    <div className="space-y-4 font-sans">
-                        <div className="p-4 bg-white dark:bg-zinc-800 rounded-lg border border-gray-100 dark:border-zinc-700">
-                            <h4 className="text-[10px] font-black uppercase tracking-widest text-red-600 mb-1">WhatsApp Broadcast</h4>
-                            <p className="text-sm font-bold">+91 40 1234 5678</p>
+                {/* Additional Info */}
+                <div className="mt-20 grid md:grid-cols-2 gap-12 items-center">
+                    <div className="space-y-8">
+                        <div>
+                            <h2 className="text-4xl font-serif font-black text-zinc-900 dark:text-white uppercase tracking-tighter mb-4 leading-tight">
+                                Our Presence in the <br /><span className="text-red-600 italic">Global Market</span>
+                            </h2>
+                            <p className="text-zinc-500 text-lg leading-relaxed">
+                                Asre Hazir is not just a portal; it's a movement in modern journalism. We bridge the gap between local events and global perspectives.
+                            </p>
                         </div>
-                        <div className="p-4 bg-white dark:bg-zinc-800 rounded-lg border border-gray-100 dark:border-zinc-700">
-                            <h4 className="text-[10px] font-black uppercase tracking-widest text-red-600 mb-1">Office Hours</h4>
-                            <p className="text-sm font-bold">Mon - Sat: 10:00 AM - 08:00 PM</p>
+                        <div className="space-y-4">
+                            {[
+                                { icon: <Clock className="text-red-600" />, title: "24/7 Operations", desc: "Our newsroom never sleeps." },
+                                { icon: <Globe className="text-red-600" />, title: "Global Reach", desc: "Read in over 50 countries." },
+                                { icon: <Shield className="text-red-600" />, title: "Verified Reports", desc: "Fact-checked by expert editors." }
+                            ].map((item, idx) => (
+                                <div key={idx} className="flex gap-4 p-4 rounded-2xl hover:bg-zinc-50 dark:hover:bg-zinc-900/50 transition-colors">
+                                    <div className="mt-1">{item.icon}</div>
+                                    <div>
+                                        <h4 className="font-bold text-zinc-900 dark:text-white text-sm uppercase tracking-wide">{item.title}</h4>
+                                        <p className="text-zinc-500 text-xs font-medium">{item.desc}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="bg-zinc-900 p-8 rounded-[3rem] shadow-3xl text-white relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-red-600/20 rounded-full blur-[80px] -mr-32 -mt-32 transition-colors group-hover:bg-red-600/30"></div>
+                        <div className="relative z-10 space-y-6">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-xl bg-red-600 flex items-center justify-center shadow-lg shadow-red-600/20">
+                                    <Zap size={20} fill="currentColor" />
+                                </div>
+                                <h3 className="font-serif font-black text-xl uppercase italic">Quick Connect</h3>
+                            </div>
+                            <p className="text-zinc-400 text-sm leading-relaxed">
+                                Join our inner circle of readers. Get breaking news alerts delivered directly to your inbox or WhatsApp before anyone else.
+                            </p>
+                            <div className="flex flex-col gap-4">
+                                <button className="w-full py-4 rounded-2xl bg-white text-black font-black uppercase text-[10px] tracking-widest hover:bg-red-600 hover:text-white transition-all shadow-xl">
+                                    Subscribe to Newsletter
+                                </button>
+                                <button className="w-full py-4 rounded-2xl border border-white/10 hover:border-red-600 font-black uppercase text-[10px] tracking-widest transition-all">
+                                    WhatsApp Broadcast
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -48,32 +109,71 @@ export function ContactPage() {
 
 export function AboutPage() {
     return (
-        <div className="max-w-4xl mx-auto px-4 py-16 font-serif text-center">
-            <h1 className="text-4xl md:text-5xl font-black mb-8 border-b-4 border-red-700 pb-4 inline-block mx-auto text-gray-900 dark:text-white uppercase tracking-tight">About Asre Hazir</h1>
+        <div className="min-h-screen bg-white dark:bg-zinc-950 font-sans pb-20">
+            {/* Hero Section */}
+            <div className="pt-32 pb-24 text-center px-4 relative overflow-hidden">
+                <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-red-600/5 via-transparent to-transparent opacity-50"></div>
+                <div className="max-w-4xl mx-auto relative z-10">
+                    <h2 className="text-red-600 text-[10px] font-black uppercase tracking-[0.4em] mb-4">The Legacy</h2>
+                    <h1 className="text-6xl md:text-8xl font-serif font-black text-zinc-900 dark:text-white uppercase tracking-tighter leading-[0.85] mb-8">
+                        The Voice of <br /><span className="text-red-600 italic underline decoration-zinc-900/10 dark:decoration-white/10 decoration-8 underline-offset-[12px]">Journalism</span>
+                    </h1>
+                    <p className="text-zinc-500 text-lg md:text-2xl max-w-2xl mx-auto font-serif italic py-4 border-y border-zinc-100 dark:border-zinc-800">
+                        "Empowering the community with truth, one story at a time."
+                    </p>
+                </div>
+            </div>
 
-            <div className="space-y-8 text-gray-700 dark:text-gray-300 text-lg leading-relaxed max-w-3xl mx-auto">
-                <p className="italic font-bold text-2xl text-red-700">"The Voice Of Modern Journalism"</p>
-
-                <p>
-                    Established with a vision to provide authentic and unbiased news, Asre Hazir has grown into a leading digital news portal. We focus on delivering real-time updates while maintaining the highest editorial standards.
-                </p>
-
-                <p>
-                    From the streets of Hyderabad to the corridors of world power, our network of reporters works tirelessly to bring you stories that matter. We believe in journalism that informs, inspires, and empowers the community.
-                </p>
-
-                <div className="pt-8 grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div className="p-6 bg-gray-50 dark:bg-zinc-900/50 rounded-xl">
-                        <h4 className="font-black text-gray-900 dark:text-white uppercase mb-2">Authentic</h4>
-                        <p className="text-sm">Verified news from trusted sources.</p>
+            <div className="max-w-5xl mx-auto px-4 grid lg:grid-cols-2 gap-20 items-center mt-10">
+                <div className="space-y-8">
+                    <div className="space-y-4">
+                        <div className="inline-block p-3 bg-zinc-900 dark:bg-red-700 rounded-2xl text-white shadow-xl">
+                            <Info size={32} />
+                        </div>
+                        <h3 className="text-3xl font-serif font-black text-zinc-900 dark:text-white uppercase leading-tight">
+                            Our Journey <span className="text-red-600">&</span> Vision
+                        </h3>
                     </div>
-                    <div className="p-6 bg-gray-50 dark:bg-zinc-900/50 rounded-xl">
-                        <h4 className="font-black text-gray-900 dark:text-white uppercase mb-2">Global</h4>
-                        <p className="text-sm">World news through an Indian lens.</p>
+                    <div className="text-zinc-500 text-lg leading-relaxed space-y-6 font-medium">
+                        <p>
+                            Founded on the pillars of integrity, transparency, and fearlessness, <span className="text-zinc-900 dark:text-white font-black underline decoration-red-600 decoration-2">Asre Hazir</span> has evolved from a local news desk to a global digital powerhouse.
+                        </p>
+                        <p>
+                            In an era of misinformation, we serve as a beacon of verified truth. Our mission is to provide journalism that doesn't just report events, but explains the <span className="italic text-red-600 font-serif">why</span> and the <span className="italic text-red-600 font-serif">how</span>.
+                        </p>
                     </div>
-                    <div className="p-6 bg-gray-50 dark:bg-zinc-900/50 rounded-xl">
-                        <h4 className="font-black text-gray-900 dark:text-white uppercase mb-2">Fearless</h4>
-                        <p className="text-sm">Unbiased reporting without compromise.</p>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                    {[
+                        { num: "5M+", label: "Monthly Readers" },
+                        { num: "24/7", label: "Active Reporting" },
+                        { num: "50+", label: "Target Countries" },
+                        { num: "100%", label: "Fact Checked" },
+                    ].map((stat, idx) => (
+                        <div key={idx} className="bg-zinc-50 dark:bg-zinc-900 p-8 rounded-[2rem] border border-zinc-100 dark:border-zinc-800 group hover:bg-black hover:text-white transition-all duration-500 flex flex-col justify-end min-h-[160px]">
+                            <h4 className="text-4xl font-serif font-black group-hover:scale-110 transition-transform origin-left">{stat.num}</h4>
+                            <p className="text-[10px] font-black uppercase tracking-widest text-red-600 group-hover:text-white transition-colors">{stat.label}</p>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* Values Section */}
+            <div className="mt-32 max-w-6xl mx-auto px-4">
+                <div className="bg-zinc-900 rounded-[4rem] p-12 md:p-20 text-white relative overflow-hidden">
+                    <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-red-600 to-zinc-900"></div>
+                    <div className="grid md:grid-cols-3 gap-12 relative z-10">
+                        {[
+                            { title: "Authenticity", desc: "Every source is cross-verified by our elite editorial panel." },
+                            { title: "Inclusion", desc: "Representing diverse voices from every corner of society." },
+                            { title: "Innovation", desc: "Using cutting-edge tech to deliver news faster and cleaner." }
+                        ].map((v, i) => (
+                            <div key={i} className="space-y-4 border-l border-white/10 pl-8">
+                                <span className="text-red-500 font-serif font-black italic text-4xl opacity-50">0{i + 1}</span>
+                                <h4 className="text-xl font-black uppercase tracking-tight">{v.title}</h4>
+                                <p className="text-zinc-500 text-sm leading-relaxed">{v.desc}</p>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
@@ -83,37 +183,70 @@ export function AboutPage() {
 
 export function AdvertisementsPage() {
     return (
-        <div className="max-w-4xl mx-auto px-4 py-16 font-serif text-center">
-            <h1 className="text-4xl md:text-5xl font-black mb-8 border-b-4 border-red-700 pb-4 inline-block mx-auto text-gray-900 dark:text-white uppercase tracking-tight">Advertise With Us</h1>
+        <div className="min-h-screen bg-white dark:bg-zinc-950 font-sans pb-20">
+            {/* Hero Section */}
+            <div className="pt-32 pb-24 bg-red-600 rounded-b-[4rem] px-4 text-center relative overflow-hidden">
+                <div className="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
+                <div className="max-w-4xl mx-auto relative z-10">
+                    <Megaphone size={48} className="text-white mx-auto mb-6 animate-bounce" />
+                    <h1 className="text-6xl md:text-8xl font-serif font-black text-white uppercase tracking-tighter leading-none mb-6">
+                        Scale Your <span className="italic underline decoration-white/20 decoration-8 underline-offset-[14px]">Growth</span>
+                    </h1>
+                    <p className="text-red-100 text-lg md:text-xl font-medium max-w-2xl mx-auto opacity-90">
+                        Leverage the most trusted digital platform to reach millions of high-value readers globally.
+                    </p>
+                </div>
+            </div>
 
-            <div className="space-y-8 text-gray-700 dark:text-gray-300 text-lg leading-relaxed">
-                <p>
-                    Reach a diverse and engaged audience through our premium advertising solutions. Asre Hazir offers multiple platforms for brands to connect with readers.
-                </p>
-
-                <div className="grid md:grid-cols-2 gap-6 pt-8 text-left">
-                    <div className="p-8 border border-gray-200 dark:border-zinc-800 rounded-2xl hover:border-red-700 transition-colors">
-                        <h3 className="text-xl font-bold mb-4 uppercase text-gray-900 dark:text-white underline decoration-red-700 decoration-2">Digital Display</h3>
-                        <ul className="space-y-2 text-sm font-sans">
-                            <li>• Homepage Banner (970x90)</li>
-                            <li>• Sidebar In-Article (300x250)</li>
-                            <li>• Mobile Sticky Footer</li>
+            <div className="max-w-6xl mx-auto px-4 -mt-10 relative z-20">
+                <div className="grid md:grid-cols-2 gap-8">
+                    <div className="bg-white dark:bg-zinc-900 p-12 rounded-[3.5rem] shadow-2xl border border-zinc-100 dark:border-zinc-800 hover:border-red-600 transition-colors group">
+                        <div className="w-16 h-16 bg-red-50 dark:bg-red-900/10 rounded-[2rem] flex items-center justify-center text-red-600 mb-8 border border-red-100 dark:border-red-900/20 group-hover:rotate-12 transition-transform">
+                            <Globe size={32} />
+                        </div>
+                        <h3 className="text-3xl font-serif font-black text-zinc-900 dark:text-white uppercase tracking-tight mb-4">Digital Real Estate</h3>
+                        <p className="text-zinc-500 mb-8 font-medium">High-visibility banner slots and native integration across our web and mobile apps.</p>
+                        <ul className="space-y-4 mb-10">
+                            {[
+                                "Premium Header Banners (970x90)",
+                                "Sidebar High-CTR Slots (300x250)",
+                                "Mobile Application Sticky Ads",
+                                "In-Article Native Placements"
+                            ].map((item, i) => (
+                                <li key={i} className="flex gap-3 text-sm font-bold text-zinc-700 dark:text-zinc-300 items-baseline">
+                                    <CheckCircle2 size={14} className="text-green-500 shrink-0" /> {item}
+                                </li>
+                            ))}
                         </ul>
                     </div>
-                    <div className="p-8 border border-gray-200 dark:border-zinc-800 rounded-2xl hover:border-red-700 transition-colors">
-                        <h3 className="text-xl font-bold mb-4 uppercase text-gray-900 dark:text-white underline decoration-red-700 decoration-2">Sponsored Content</h3>
-                        <ul className="space-y-2 text-sm font-sans">
-                            <li>• Branded Articles</li>
-                            <li>• Press Release Distribution</li>
-                            <li>• Event Coverage</li>
+                    <div className="bg-zinc-900 p-12 rounded-[3.5rem] shadow-2xl border border-white/5 group relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-red-600/10 rounded-full blur-[80px] -mr-32 -mt-32"></div>
+                        <div className="w-16 h-16 bg-white/5 rounded-[2rem] flex items-center justify-center text-red-600 mb-8 border border-white/10 group-hover:rotate-12 transition-transform">
+                            <PenTool size={32} />
+                        </div>
+                        <h3 className="text-3xl font-serif font-black text-white uppercase tracking-tight mb-4 text-white">Content Synergy</h3>
+                        <p className="text-zinc-500 mb-8 font-medium">Directly engage with our readers through professionally crafted sponsored narratives.</p>
+                        <ul className="space-y-4 mb-10">
+                            {[
+                                "Featured Brand Stories",
+                                "Exclusive Press Coverage",
+                                "Product Reviews & Launch Spotlights",
+                                "Newsletter Sponsor Sections"
+                            ].map((item, i) => (
+                                <li key={i} className="flex gap-3 text-sm font-bold text-zinc-400 items-baseline">
+                                    <CheckCircle2 size={14} className="text-red-600 shrink-0" /> {item}
+                                </li>
+                            ))}
                         </ul>
                     </div>
                 </div>
 
-                <div className="mt-12 bg-black dark:bg-red-700 text-white p-10 rounded-3xl">
-                    <h2 className="text-3xl font-black mb-4 uppercase tracking-tighter">Ready to Scale?</h2>
-                    <p className="mb-6 font-sans text-sm tracking-widest uppercase opacity-80">Download our Media Kit or contact our sales team</p>
-                    <a href="mailto:asrehazir.web@gmail.com" className="inline-block bg-white text-black font-black px-10 py-4 rounded-full uppercase tracking-widest text-[10px] hover:scale-105 transition-transform">Contact Sales Team</a>
+                <div className="mt-20 p-12 md:p-20 bg-zinc-50 dark:bg-zinc-900 rounded-[4rem] text-center border-2 border-dashed border-gray-200 dark:border-zinc-800">
+                    <h2 className="text-4xl md:text-5xl font-serif font-black text-zinc-900 dark:text-white uppercase tracking-tighter mb-6">Partner <span className="text-red-600 italic">With Us</span></h2>
+                    <p className="text-zinc-500 max-w-xl mx-auto mb-10 text-lg font-medium">Ready to showcase your brand to the world? Contact our sales desk for a customized media kit and pricing plan.</p>
+                    <a href="mailto:asrehazir.web@gmail.com" className="inline-flex items-center gap-3 bg-red-600 text-white font-black px-12 py-5 rounded-2xl uppercase tracking-widest text-xs hover:bg-black transition-all shadow-xl shadow-red-600/20 active:scale-95">
+                        <Mail size={18} /> Get Media Kit & Pricing
+                    </a>
                 </div>
             </div>
         </div>
@@ -122,24 +255,69 @@ export function AdvertisementsPage() {
 
 export function GuestColumnsPage() {
     return (
-        <div className="max-w-4xl mx-auto px-4 py-16 font-serif">
-            <h1 className="text-4xl md:text-5xl font-black mb-8 border-b-4 border-red-700 pb-4 text-gray-900 dark:text-white uppercase tracking-tight">Guest Columns</h1>
-            <div className="space-y-6 text-gray-700 dark:text-gray-300 text-lg leading-relaxed">
-                <p>
-                    Asre Hazir welcomes contributions from writers, scholars, and experts across various fields. Our Guest Columns provide a platform for diverse perspectives on contemporary issues.
-                </p>
-                <div className="bg-gray-50 dark:bg-zinc-900/50 p-8 rounded-2xl border border-gray-100 dark:border-zinc-800">
-                    <h3 className="text-xl font-black mb-4 uppercase tracking-tight text-gray-900 dark:text-white">Submission Guidelines</h3>
-                    <ul className="space-y-4 list-disc pl-5 font-sans text-sm">
-                        <li>Original and unpublished content.</li>
-                        <li>Articles should be between 800-1200 words.</li>
-                        <li>Include a brief author bio and a high-resolution headshot.</li>
-                        <li>Submissions should be sent in Word or Google Doc format.</li>
-                    </ul>
+        <div className="min-h-screen bg-white dark:bg-zinc-950 font-sans pb-20">
+            <div className="pt-32 pb-20 px-4 max-w-6xl mx-auto">
+                <div className="grid lg:grid-cols-12 gap-16 items-start">
+                    <div className="lg:col-span-7 space-y-10">
+                        <div className="space-y-4">
+                            <span className="text-red-600 font-black uppercase tracking-[0.3em] text-[10px] flex items-center gap-2">
+                                <div className="w-10 h-0.5 bg-red-600"></div> Submit Your Art
+                            </span>
+                            <h1 className="text-6xl font-serif font-black text-zinc-900 dark:text-white uppercase leading-none tracking-tighter">
+                                Write for the <br /> <span className="text-red-600 italic underline decoration-zinc-100 dark:decoration-zinc-800 decoration-8 underline-offset-8">Global Archive</span>
+                            </h1>
+                        </div>
+                        <div className="prose prose-zinc dark:prose-invert lg:prose-xl font-serif italic text-zinc-500">
+                            "Thinking is easy, acting is difficult, and to put one's thoughts into action is the most difficult thing in the world."
+                        </div>
+                        <p className="text-lg text-zinc-600 dark:text-zinc-400 font-medium leading-relaxed">
+                            Asre Hazir is looking for fresh perspectives, bold investigative pieces, and deep analytical essays. If you have a story that needs to be told, our desk is open for submissions.
+                        </p>
+
+                        <div className="p-8 bg-zinc-50 dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-100 dark:border-zinc-800 space-y-6">
+                            <h3 className="text-xl font-black uppercase tracking-tight text-zinc-900 dark:text-white">Submission Requirements</h3>
+                            <div className="grid sm:grid-cols-2 gap-4">
+                                {[
+                                    { icon: <CheckCircle2 size={20} className="text-red-600" />, t: "Word Count", d: "800 - 1500 words" },
+                                    { icon: <CheckCircle2 size={20} className="text-red-600" />, t: "Originality", d: "100% Unique content" },
+                                    { icon: <CheckCircle2 size={20} className="text-red-600" />, t: "Media", d: "High-res author photo" },
+                                    { icon: <CheckCircle2 size={20} className="text-red-600" />, t: "Format", d: "Word or Google Doc" }
+                                ].map((item, i) => (
+                                    <div key={i} className="flex gap-3 items-center">
+                                        {item.icon}
+                                        <div>
+                                            <p className="text-[10px] font-black uppercase text-zinc-400">{item.t}</p>
+                                            <p className="text-sm font-bold text-zinc-900 dark:text-white">{item.d}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                    <div className="lg:col-span-5 w-full sticky top-32">
+                        <div className="bg-zinc-900 rounded-[3rem] p-10 text-white shadow-3xl relative overflow-hidden">
+                            <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-red-600/10 rounded-full blur-3xl"></div>
+                            <h3 className="text-2xl font-serif font-black uppercase italic mb-8 border-b border-white/5 pb-4">Send Your Pitch</h3>
+                            <div className="space-y-6">
+                                <p className="text-zinc-400 text-sm leading-relaxed">
+                                    Our editorial team reviews every pitch carefully. Please allow 3-5 business days for a response from the desk.
+                                </p>
+                                <div className="p-6 bg-white/5 rounded-2xl border border-white/10 text-center">
+                                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-red-500 mb-2">Editor's Inbox</p>
+                                    <a href="mailto:asrehazir.web@gmail.com" className="text-lg font-bold hover:text-red-500 transition-colors">asrehazir.web@gmail.com</a>
+                                </div>
+                                <div className="pt-4">
+                                    <h4 className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-4">Popular Topics</h4>
+                                    <div className="flex flex-wrap gap-2">
+                                        {["Geopolitics", "Economy", "Tech Ethics", "Social Reform", "Middle East", "Innovation"].map(t => (
+                                            <span key={t} className="px-3 py-1.5 bg-white/5 rounded-lg text-xs font-bold border border-white/5">{t}</span>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <p>
-                    Interested contributors can send their pitches to <a href="mailto:asrehazir.web@gmail.com" className="text-red-700 font-bold hover:underline">asrehazir.web@gmail.com</a>. Our editorial team will review your submission and get back to you.
-                </p>
             </div>
         </div>
     );
@@ -147,18 +325,46 @@ export function GuestColumnsPage() {
 
 export function PrivacyPolicyPage() {
     return (
-        <div className="max-w-4xl mx-auto px-4 py-16 font-serif">
-            <h1 className="text-4xl md:text-5xl font-black mb-8 border-b-4 border-red-700 pb-4 text-gray-900 dark:text-white uppercase tracking-tight">Privacy Policy</h1>
-            <div className="space-y-6 text-gray-700 dark:text-gray-300 text-sm leading-relaxed font-sans">
-                <p>At Asre Hazir, we take your privacy seriously. This policy outlines how we collect, use, and protect your personal information.</p>
-                <h3 className="text-lg font-bold text-gray-900 dark:text-white uppercase">1. Information Collection</h3>
-                <p>We may collect information you provide directly, such as when you subscribe to our newsletter or contact us. This may include your name, email address, and any messages you send.</p>
-                <h3 className="text-lg font-bold text-gray-900 dark:text-white uppercase">2. Use of Information</h3>
-                <p>Your information is used to provide and improve our services, communicate with you, and personalize your experience on our website.</p>
-                <h3 className="text-lg font-bold text-gray-900 dark:text-white uppercase">3. Data Security</h3>
-                <p>We implement industry-standard security measures to protect your data from unauthorized access or disclosure.</p>
-                <h3 className="text-lg font-bold text-gray-900 dark:text-white uppercase">4. Cookies</h3>
-                <p>We use cookies to enhance site navigation, analyze site usage, and assist in our marketing efforts.</p>
+        <div className="min-h-screen bg-white dark:bg-zinc-950 font-sans pb-20">
+            <div className="pt-32 pb-16 px-4 max-w-4xl mx-auto">
+                <div className="flex items-center gap-4 mb-8">
+                    <div className="w-12 h-12 bg-zinc-900 dark:bg-red-700 rounded-2xl flex items-center justify-center text-white shadow-lg">
+                        <Shield size={24} />
+                    </div>
+                    <h1 className="text-4xl md:text-5xl font-serif font-black text-zinc-900 dark:text-white uppercase tracking-tighter">Privacy <span className="text-red-600">Charter</span></h1>
+                </div>
+
+                <div className="prose prose-zinc dark:prose-invert max-w-none space-y-12 text-zinc-600 dark:text-zinc-400 leading-relaxed font-medium">
+                    <section className="space-y-4">
+                        <h3 className="text-2xl font-black text-zinc-900 dark:text-white uppercase tracking-tight flex items-center gap-3">
+                            <div className="w-6 h-1 bg-red-600"></div> User Data Integrity
+                        </h3>
+                        <p>At Asre Hazir, your numeric and personal identity is treated with the highest level of encryption. We collect essential information such as email addresses for newsletter subscriptions & basic browsing telemetry to improve your aesthetic and functional experience.</p>
+                    </section> section
+
+                    <section className="space-y-4 p-8 bg-zinc-50 dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-100 dark:border-zinc-800">
+                        <h3 className="text-xl font-black text-zinc-900 dark:text-white uppercase tracking-tight">Information Application</h3>
+                        <ul className="space-y-3 list-none p-0">
+                            {[
+                                "Synchronizing personalized news feeds.",
+                                "Analytical research for portal optimization.",
+                                "Critical communication for security alerts.",
+                                "Verified advertisement personalization."
+                            ].map((li, i) => (
+                                <li key={i} className="flex gap-3 items-center text-sm">
+                                    <CheckCircle2 size={16} className="text-red-600 shrink-0" /> {li}
+                                </li>
+                            ))}
+                        </ul>
+                    </section>
+
+                    <section className="space-y-4">
+                        <h3 className="text-2xl font-black text-zinc-900 dark:text-white uppercase tracking-tight flex items-center gap-3">
+                            <div className="w-6 h-1 bg-red-600"></div> Cybersecurity & Protection
+                        </h3>
+                        <p>Our server architecture utilizes multi-layer firewalls and industry-leading SSL certificates. We never monetize or sell individual user profiles to third-party data brokers. Your privacy is not a feature; it's a fundamental broadcast right.</p>
+                    </section>
+                </div>
             </div>
         </div>
     );
@@ -166,18 +372,32 @@ export function PrivacyPolicyPage() {
 
 export function TermsOfUsePage() {
     return (
-        <div className="max-w-4xl mx-auto px-4 py-16 font-serif">
-            <h1 className="text-4xl md:text-5xl font-black mb-8 border-b-4 border-red-700 pb-4 text-gray-900 dark:text-white uppercase tracking-tight">Terms of Use</h1>
-            <div className="space-y-6 text-gray-700 dark:text-gray-300 text-sm leading-relaxed font-sans">
-                <p>By accessing or using Asre Hazir, you agree to comply with and be bound by these Terms of Use.</p>
-                <h3 className="text-lg font-bold text-gray-900 dark:text-white uppercase">1. Accuracy of Content</h3>
-                <p>While we strive for accuracy, we do not warrant that all content on the site is complete, current, or error-free.</p>
-                <h3 className="text-lg font-bold text-gray-900 dark:text-white uppercase">2. Intellectual Property</h3>
-                <p>All content on Asre Hazir is protected by copyright and other intellectual property laws. You may not reproduce or distribute any content without prior written permission.</p>
-                <h3 className="text-lg font-bold text-gray-900 dark:text-white uppercase">3. User Conduct</h3>
-                <p>Users are prohibited from using the site for any unlawful purpose or in any way that could damage or interfere with its operation.</p>
-                <h3 className="text-lg font-bold text-gray-900 dark:text-white uppercase">4. Limitation of Liability</h3>
-                <p>Asre Hazir will not be liable for any damages arising from the use of, or inability to use, our services.</p>
+        <div className="min-h-screen bg-white dark:bg-zinc-950 font-sans pb-20">
+            <div className="pt-32 pb-16 px-4 max-w-4xl mx-auto">
+                <div className="flex items-center gap-4 mb-8">
+                    <div className="w-12 h-12 bg-zinc-900 dark:bg-red-700 rounded-2xl flex items-center justify-center text-white shadow-lg">
+                        <Scale size={24} />
+                    </div>
+                    <h1 className="text-4xl md:text-5xl font-serif font-black text-zinc-900 dark:text-white uppercase tracking-tighter">Usage <span className="text-red-600">Protocols</span></h1>
+                </div>
+
+                <div className="space-y-12">
+                    {[
+                        { t: "01. Content Jurisdiction", d: "All broadcasts, media recordings, and narratives displayed on Asre Hazir are protected by international copyright laws. Unauthorized scraping or mirroring is strictly monitored." },
+                        { t: "02. Narrative Accuracy", d: "While our newsroom operates on real-time pulses, we aim for absolute precision. However, news is dynamic; we reserve the right to update narratives as verification cycles complete." },
+                        { t: "03. Ethical Conduct", d: "Engagement on our platform (via comments or forums) must adhere to our zero-tolerance policy for hate speech, defamation, or malicious misinformation." },
+                        { t: "04. Limitation of Claims", d: "Asre Hazir serves as an informational portal. We are not liable for individual interpretations or independent actions taken based on our news analysis." }
+                    ].map((item, idx) => (
+                        <div key={idx} className="group p-10 rounded-[3rem] border border-zinc-100 dark:border-zinc-800 hover:border-red-600 transition-all duration-500">
+                            <h3 className="text-xl font-black text-zinc-900 dark:text-white uppercase mb-4 group-hover:text-red-600 transition-colors tracking-tight">{item.t}</h3>
+                            <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">{item.d}</p>
+                        </div>
+                    ))}
+                </div>
+
+                <div className="mt-20 p-8 bg-zinc-900 rounded-3xl text-center text-white/50 text-[10px] font-black uppercase tracking-[0.2em]">
+                    Effective Cycle: February 2026 — Present
+                </div>
             </div>
         </div>
     );

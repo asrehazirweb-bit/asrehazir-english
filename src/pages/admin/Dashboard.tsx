@@ -1,12 +1,14 @@
 import React from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { FileText, Users, Eye, TrendingUp, Clock, BarChart3, ChevronRight, Zap } from 'lucide-react';
-import { useNews } from '../../hooks/useNews';
+import { useNews, type NewsArticle } from '../../hooks/useNews';
+import EditNewsModal from '../../components/admin/EditNewsModal';
 
 const AdminDashboard: React.FC = () => {
     const { user } = useAuth();
     const { news, loading, formatTime } = useNews('All', 5);
     const { news: allNews } = useNews('All', 1000);
+    const [editingArticle, setEditingArticle] = React.useState<NewsArticle | null>(null);
 
     const stats = [
         { label: 'Total News', value: allNews.length.toString(), icon: <FileText className="text-red-600" />, trend: '+Live', color: 'from-red-500/10 to-red-500/0' },
@@ -119,8 +121,16 @@ const AdminDashboard: React.FC = () => {
                                     </div>
                                     <div className="hidden sm:block">
                                         <div className="flex items-center gap-4">
-                                            <span className="text-[12px] font-bold text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity">Edit</span>
-                                            <div className="w-10 h-10 rounded-full border border-gray-100 dark:border-zinc-800 flex items-center justify-center text-gray-400 group-hover:text-red-600 group-hover:border-red-600 transition-all cursor-pointer">
+                                            <button
+                                                onClick={() => setEditingArticle(item)}
+                                                className="text-[12px] font-bold text-gray-400 hover:text-red-600 transition-all"
+                                            >
+                                                Edit
+                                            </button>
+                                            <div
+                                                onClick={() => window.open(`/news/${item.id}`, '_blank')}
+                                                className="w-10 h-10 rounded-full border border-gray-100 dark:border-zinc-800 flex items-center justify-center text-gray-400 group-hover:text-red-600 group-hover:border-red-600 transition-all cursor-pointer"
+                                            >
                                                 <ChevronRight size={18} />
                                             </div>
                                         </div>
@@ -194,6 +204,17 @@ const AdminDashboard: React.FC = () => {
                     </div>
                 </div>
             </div>
+
+            {editingArticle && (
+                <EditNewsModal
+                    article={editingArticle}
+                    onClose={() => setEditingArticle(null)}
+                    onSuccess={() => {
+                        setEditingArticle(null);
+                        window.location.reload(); // Refresh to see changes
+                    }}
+                />
+            )}
         </div>
     );
 };

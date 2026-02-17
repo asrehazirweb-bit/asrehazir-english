@@ -5,6 +5,8 @@ interface NewsItem {
     title: string;
     excerpt: string;
     location: string;
+    titleFont?: string;
+    contentFont?: string;
 }
 
 interface LatestNewsSectionProps {
@@ -51,7 +53,7 @@ export function LatestNewsSection({ items = [] }: LatestNewsSectionProps) {
                             className="bg-white dark:bg-[#1a1614] border border-gray-100 dark:border-white/5 p-6 h-auto flex flex-col justify-between hover:border-accent dark:hover:border-accent hover:premium-shadow transition-all duration-300 cursor-pointer overflow-hidden group rounded-sm"
                         >
                             <div>
-                                <h3 className="font-serif font-black text-lg text-secondary dark:text-gray-100 leading-snug mb-3 group-hover:text-accent transition-colors decoration-accent/30 decoration-2 underline-offset-8 group-hover:underline">
+                                <h3 className={`font-black text-lg text-secondary dark:text-gray-100 leading-snug mb-3 group-hover:text-accent transition-colors decoration-accent/30 decoration-2 underline-offset-8 group-hover:underline ${item.titleFont || 'font-serif'}`}>
                                     {item.title}
                                 </h3>
                                 <p className="font-sans text-xs text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-2 opacity-80">

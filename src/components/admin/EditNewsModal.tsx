@@ -20,6 +20,32 @@ const CATEGORIES = [
     { name: 'Crime & Accidents', subCategories: ['Local Crime', 'Investigation', 'Security', 'Accidents'] }
 ];
 
+const FONTS_TITLE = [
+    { id: 'font-playfair', name: 'Playfair Display (Newsroom)' },
+    { id: 'font-lora', name: 'Lora (Elegant)' },
+    { id: 'font-oswald', name: 'Oswald (Bold)' },
+    { id: 'font-montserrat', name: 'Montserrat (Modern)' },
+    { id: 'font-merriweather', name: 'Merriweather (Classic)' },
+    { id: 'font-ubuntu', name: 'Ubuntu (Soft)' },
+    { id: 'font-raleway', name: 'Raleway (Stylish)' },
+    { id: 'font-roboto-slab', name: 'Roboto Slab (Traditional)' },
+    { id: 'font-inter', name: 'Inter (Standard)' },
+    { id: 'font-georgia', name: 'Georgia (Serif)' }
+];
+
+const FONTS_CONTENT = [
+    { id: 'font-merriweather', name: 'Merriweather (Clear)' },
+    { id: 'font-lora', name: 'Lora (Classic)' },
+    { id: 'font-inter', name: 'Inter (Sharp)' },
+    { id: 'font-roboto-slab', name: 'Roboto Slab (Soft)' },
+    { id: 'font-montserrat', name: 'Montserrat (Modern)' },
+    { id: 'font-playfair', name: 'Playfair Display' },
+    { id: 'font-ubuntu', name: 'Ubuntu' },
+    { id: 'font-raleway', name: 'Raleway' },
+    { id: 'font-georgia', name: 'Georgia' },
+    { id: 'font-sans', name: 'Default Sans' }
+];
+
 const EditNewsModal: React.FC<EditNewsModalProps> = ({ article, onClose, onSuccess }) => {
     const [title, setTitle] = useState(article.title);
     const [content, setContent] = useState(article.content);
@@ -28,6 +54,8 @@ const EditNewsModal: React.FC<EditNewsModalProps> = ({ article, onClose, onSucce
     const [image, setImage] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(article.imageUrl);
     const [loading, setLoading] = useState(false);
+    const [titleFont, setTitleFont] = useState(article.titleFont || 'font-playfair');
+    const [contentFont, setContentFont] = useState(article.contentFont || 'font-merriweather');
 
     const handleCategoryChange = (val: string) => {
         setCategory(val);
@@ -73,6 +101,8 @@ const EditNewsModal: React.FC<EditNewsModalProps> = ({ article, onClose, onSucce
                 content,
                 category,
                 subCategory,
+                titleFont,
+                contentFont,
                 imageUrl,
                 updatedAt: new Date()
             });
@@ -123,9 +153,37 @@ const EditNewsModal: React.FC<EditNewsModalProps> = ({ article, onClose, onSucce
                             type="text"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
-                            className="w-full text-2xl md:text-3xl font-serif font-black border-b-2 border-gray-100 dark:border-zinc-800 bg-transparent py-4 focus:border-red-600 outline-none transition-all dark:text-white"
+                            className={`w-full text-2xl md:text-3xl font-black border-b-2 border-gray-100 dark:border-zinc-800 bg-transparent py-4 focus:border-red-600 outline-none transition-all dark:text-white ${titleFont}`}
                             required
                         />
+                    </div>
+
+                    {/* Font Configuration */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-6 bg-zinc-50 dark:bg-zinc-800/50 rounded-3xl border border-gray-100 dark:border-zinc-800">
+                        <div className="space-y-4">
+                            <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
+                                <Save size={14} className="text-red-600" /> Title Font
+                            </label>
+                            <select
+                                value={titleFont}
+                                onChange={(e) => setTitleFont(e.target.value)}
+                                className="w-full p-3 rounded-xl border border-gray-100 dark:border-zinc-800 bg-white dark:bg-zinc-800 focus:ring-4 focus:ring-red-500/10 outline-none dark:text-white text-xs font-bold"
+                            >
+                                {FONTS_TITLE.map(f => <option key={f.id} value={f.id} className={f.id}>{f.name}</option>)}
+                            </select>
+                        </div>
+                        <div className="space-y-4">
+                            <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
+                                <FileText size={14} className="text-red-600" /> Content Font
+                            </label>
+                            <select
+                                value={contentFont}
+                                onChange={(e) => setContentFont(e.target.value)}
+                                className="w-full p-3 rounded-xl border border-gray-100 dark:border-zinc-800 bg-white dark:bg-zinc-800 focus:ring-4 focus:ring-red-500/10 outline-none dark:text-white text-xs font-bold"
+                            >
+                                {FONTS_CONTENT.map(f => <option key={f.id} value={f.id} className={f.id}>{f.name}</option>)}
+                            </select>
+                        </div>
                     </div>
 
                     {/* Meta Selects */}
@@ -165,7 +223,7 @@ const EditNewsModal: React.FC<EditNewsModalProps> = ({ article, onClose, onSucce
                             value={content}
                             onChange={(e) => setContent(e.target.value)}
                             rows={8}
-                            className="w-full p-6 rounded-3xl border border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800/50 focus:ring-4 focus:ring-red-500/10 outline-none transition-all dark:text-white font-sans leading-relaxed text-lg"
+                            className={`w-full p-6 rounded-3xl border border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800/50 focus:ring-4 focus:ring-red-500/10 outline-none transition-all dark:text-white leading-relaxed text-lg ${contentFont}`}
                             required
                         />
                     </div>
