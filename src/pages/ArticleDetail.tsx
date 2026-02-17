@@ -9,6 +9,17 @@ import { useAuth } from '../context/AuthContext';
 import { saveNewsArticle, unsaveNewsArticle, isNewsSaved } from '../lib/savedNews';
 import DOMPurify from 'dompurify';
 
+const getCategoryPath = (category: string) => {
+    const cat = category.toLowerCase();
+    if (cat.includes('world') || cat.includes('international')) return '/world';
+    if (cat.includes('national') || cat.includes('india')) return '/national';
+    if (cat.includes('deccan') || cat.includes('hyderabad') || cat.includes('telangana')) return '/deccan';
+    if (cat.includes('essays') || cat.includes('article') || cat.includes('business')) return '/articles-essays';
+    if (cat.includes('sports') || cat.includes('entertainment')) return '/sports-entertainment';
+    if (cat.includes('crime') || cat.includes('accident')) return '/crime-accidents';
+    return '/';
+};
+
 const ArticleDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const { user } = useAuth();
@@ -181,7 +192,7 @@ const ArticleDetail: React.FC = () => {
                 <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] font-black text-red-600 mb-6">
                     <Link to="/" className="hover:text-black dark:hover:text-white transition-colors">Home</Link>
                     <span>/</span>
-                    <Link to={`/${article.category.toLowerCase()}`} className="hover:text-black dark:hover:text-white transition-colors">{article.category}</Link>
+                    <Link to={getCategoryPath(article.category)} className="hover:text-black dark:hover:text-white transition-colors">{article.category}</Link>
                     <span>/</span>
                     <span className="text-gray-400 truncate max-w-[150px]">{article.subCategory || 'Latest'}</span>
                 </div>
@@ -308,7 +319,7 @@ const ArticleDetail: React.FC = () => {
                         <h2 className="text-2xl font-serif font-black text-gray-900 dark:text-white uppercase tracking-tight italic underline decoration-red-600 decoration-4 underline-offset-8">
                             More from {article.category}
                         </h2>
-                        <Link to={`/${article.category.toLowerCase()}`} className="text-xs font-black uppercase tracking-[0.2em] text-red-600 hover:text-black dark:hover:text-white transition-colors">
+                        <Link to={getCategoryPath(article.category)} className="text-xs font-black uppercase tracking-[0.2em] text-red-600 hover:text-black dark:hover:text-white transition-colors">
                             View All Stories
                         </Link>
                     </div>

@@ -15,23 +15,24 @@ export function CategoryPage({ category, title }: CategoryPageProps) {
 
     // Legacy mapping logic
     const filteredNews = allNews.filter(item => {
+        const cat = item.category?.toLowerCase() || '';
         if (category === 'Deccan News') {
-            return item.category === 'Deccan News' || item.category === 'Hyderabad' || item.category === 'Telangana';
+            return cat.includes('deccan') || cat.includes('hyderabad') || cat.includes('telangana') || cat.includes('دکن');
         }
         if (category === 'National News') {
-            return item.category === 'National News' || item.category === 'India';
+            return cat.includes('national') || cat.includes('india') || cat.includes('قومی');
         }
         if (category === 'World News') {
-            return item.category === 'World News' || item.category === 'International' || item.category === 'Middle East';
+            return cat.includes('world') || cat.includes('international') || cat.includes('middle east') || cat.includes('عالمی');
         }
         if (category === 'Articles & Essays') {
-            return item.category === 'Articles & Essays' || item.category === 'Business';
+            return cat.includes('articles') || cat.includes('essays') || cat.includes('business') || cat.includes('مضامین');
         }
         if (category === 'Sports & Entertainment') {
-            return item.category === 'Sports & Entertainment' || item.category === 'Entertainment' || item.category === 'Sports';
+            return cat.includes('sports') || cat.includes('entertainment') || cat.includes('کھیل');
         }
         if (category === 'Crime & Accidents') {
-            return item.category === 'Crime & Accidents' || item.category === 'Crime';
+            return cat.includes('crime') || cat.includes('accident') || cat.includes('جرائم');
         }
         return item.category === category;
     });

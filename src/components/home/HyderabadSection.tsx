@@ -29,7 +29,7 @@ export function HyderabadSection({ featured, items }: HyderabadSectionProps) {
                         Hyderabad
                     </h2>
                 </div>
-                <Link to="/hyderabad" className="flex items-center gap-1 text-sm font-bold text-accent hover:text-secondary dark:hover:text-gray-100 transition-colors uppercase tracking-wide">
+                <Link to="/deccan" className="flex items-center gap-1 text-sm font-bold text-accent hover:text-secondary dark:hover:text-gray-200 transition-colors uppercase tracking-wide">
                     More Hyderabad News <ChevronRight size={14} />
                 </Link>
             </div>
