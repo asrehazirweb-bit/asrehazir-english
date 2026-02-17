@@ -69,10 +69,11 @@ export function Sidebar({ offbeatItems = [], topStories = [] }: SidebarProps) {
                             </Link>
                         ))}
                     </div>
-                    <Link to="/world">
-                        <button className="w-full py-2 bg-[#004d99]/10 text-[#004d99] text-xs font-bold uppercase tracking-widest hover:bg-[#004d99]/20 transition-colors">
-                            View All
-                        </button>
+                    <Link
+                        to="/world"
+                        className="w-full py-4 bg-[#004d99]/10 text-[#004d99] text-xs font-black uppercase tracking-[0.2em] hover:bg-[#004d99]/20 transition-all text-center block"
+                    >
+                        View All
                     </Link>
                 </div>
             )}
