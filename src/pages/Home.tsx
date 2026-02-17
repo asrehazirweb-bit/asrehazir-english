@@ -111,6 +111,7 @@ export function Home() {
 
                     {/* 2. Latest News */}
                     <div className="mb-12">
+                        <AdBlock placement="between_news" className="h-24 md:hidden mb-12" label="Breaking News Ad" />
                         <LatestNewsSection items={latestNewsItems} />
                     </div>
 
@@ -138,6 +139,8 @@ export function Home() {
                         items={news.filter(n => n.category === 'Articles & Essays' || n.category === 'Business' || n.category === 'Technology')}
                         formatTime={formatTime}
                     />
+
+                    <AdBlock placement="between_news" className="h-32 md:hidden mb-12" label="Inside Story Ad" />
 
                 </div>
 

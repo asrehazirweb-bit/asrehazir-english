@@ -71,7 +71,7 @@ export function Sidebar({ offbeatItems = [], topStories = [] }: SidebarProps) {
                     </div>
                     <Link
                         to="/world"
-                        className="w-full py-4 bg-[#004d99]/10 text-[#004d99] text-xs font-black uppercase tracking-[0.2em] hover:bg-[#004d99]/20 transition-all text-center block"
+                        className="w-full py-4 bg-red-700 text-white text-[11px] font-black uppercase tracking-[0.2em] hover:bg-black transition-all text-center block cursor-pointer relative z-10"
                     >
                         View All
                     </Link>
