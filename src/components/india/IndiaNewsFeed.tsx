@@ -9,6 +9,7 @@ export interface FeedItem {
     image?: string;
     location?: string;
     subCategory?: string;
+    videoUrl?: string;
     date: string;
 }
 
@@ -41,56 +42,93 @@ export function IndiaNewsFeed({ items }: IndiaNewsFeedProps) {
             </div>
             {/* 2. NEWS LIST (VERTICAL FEED) */}
             <div className="flex flex-col gap-8">
-                {items.map((article) => (
-                    <Link key={article.id} to={`/news/${article.id}`} className="group flex flex-col md:flex-row gap-6 border-b border-gray-100 dark:border-zinc-800 pb-8 last:border-0 last:pb-0 block cursor-pointer">
-                        {/* LEFT: Article Image (Fixed Container) */}
-                        <div className="w-full md:w-[260px] h-[160px] flex-shrink-0 bg-gray-100 dark:bg-zinc-900 relative overflow-hidden rounded-lg">
-                            {article.image ? (
-                                <img
-                                    src={article.image}
-                                    alt={article.title}
-                                    className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-90"
-                                />
-                            ) : (
-                                /* Empty Neutral Container - Layout stability */
-                                <div className="w-full h-full bg-gray-100 dark:bg-zinc-900 flex items-center justify-center">
-                                    <span className="text-gray-300 dark:text-gray-700 font-sans text-xs uppercase tracking-widest">No Image</span>
-                                </div>
-                            )}
-                        </div>
+                {items.map((article) => {
+                    const isVideo = !!article.videoUrl;
 
-                        {/* RIGHT: Content */}
-                        <div className="flex flex-col py-1">
-                            <div className="flex items-center gap-2 mb-2">
-                                {article.subCategory && (
-                                    <span className="bg-red-50 text-red-700 text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded">
-                                        {article.subCategory}
-                                    </span>
-                                )}
-                            </div>
-                            <h2 className="text-xl font-bold leading-tight text-secondary dark:text-gray-100 mb-3 group-hover:text-accent transition-colors line-clamp-2">
-                                {article.title}
-                            </h2>
-                            <p className="text-gray-600 dark:text-gray-400 font-sans text-sm leading-relaxed mb-3 line-clamp-3">
-                                {article.excerpt}
-                            </p>
-
-                            {/* Metadata */}
-                            <div className="flex items-center gap-4 text-xs text-gray-400 font-sans uppercase tracking-wide mt-auto">
-                                {article.location && (
-                                    <div className="flex items-center gap-1">
-                                        <MapPin size={12} />
-                                        <span>{article.location}</span>
+                    const Content = (
+                        <>
+                            {/* LEFT: Article Image (Fixed Container) */}
+                            <div className="w-full md:w-[260px] h-[160px] flex-shrink-0 bg-gray-100 dark:bg-zinc-900 relative overflow-hidden rounded-lg">
+                                {article.image ? (
+                                    <>
+                                        <img
+                                            src={article.image}
+                                            alt={article.title}
+                                            className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-90"
+                                        />
+                                        {isVideo && (
+                                            <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-all">
+                                                <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center text-white shadow-xl scale-90 group-hover:scale-100 transition-transform">
+                                                    <ChevronRight size={24} />
+                                                </div>
+                                            </div>
+                                        )}
+                                    </>
+                                ) : (
+                                    /* Empty Neutral Container - Layout stability */
+                                    <div className="w-full h-full bg-gray-100 dark:bg-zinc-900 flex items-center justify-center">
+                                        <span className="text-gray-300 dark:text-gray-700 font-sans text-xs uppercase tracking-widest">No Image</span>
                                     </div>
                                 )}
-                                <div className="flex items-center gap-1">
-                                    <Clock size={12} />
-                                    <span>{article.date}</span>
+                            </div>
+
+                            {/* RIGHT: Content */}
+                            <div className="flex flex-col py-1">
+                                <div className="flex items-center gap-2 mb-2">
+                                    {article.subCategory && (
+                                        <span className="bg-red-50 text-red-700 text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded">
+                                            {article.subCategory}
+                                        </span>
+                                    )}
+                                </div>
+                                <h2 className="text-xl font-bold leading-tight text-secondary dark:text-gray-100 mb-3 group-hover:text-accent transition-colors line-clamp-2">
+                                    {article.title}
+                                </h2>
+                                <p className="text-gray-600 dark:text-gray-400 font-sans text-sm leading-relaxed mb-3 line-clamp-3">
+                                    {article.excerpt}
+                                </p>
+
+                                {/* Metadata */}
+                                <div className="flex items-center gap-4 text-xs text-gray-400 font-sans uppercase tracking-wide mt-auto">
+                                    {article.location && (
+                                        <div className="flex items-center gap-1">
+                                            <MapPin size={12} />
+                                            <span>{article.location}</span>
+                                        </div>
+                                    )}
+                                    <div className="flex items-center gap-1">
+                                        <Clock size={12} />
+                                        <span>{article.date}</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </Link>
-                ))}
+                        </>
+                    );
+
+                    if (isVideo) {
+                        return (
+                            <a
+                                key={article.id}
+                                href={article.videoUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="group flex flex-col md:flex-row gap-6 border-b border-gray-100 dark:border-zinc-800 pb-8 last:border-0 last:pb-0 block cursor-pointer"
+                            >
+                                {Content}
+                            </a>
+                        );
+                    }
+
+                    return (
+                        <Link
+                            key={article.id}
+                            to={`/news/${article.id}`}
+                            className="group flex flex-col md:flex-row gap-6 border-b border-gray-100 dark:border-zinc-800 pb-8 last:border-0 last:pb-0 block cursor-pointer"
+                        >
+                            {Content}
+                        </Link>
+                    );
+                })}
             </div>
 
         </div>

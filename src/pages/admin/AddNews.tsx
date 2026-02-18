@@ -14,7 +14,9 @@ const CATEGORIES = [
     { name: 'Deccan News', subCategories: ['Hyderabad', 'Telangana', 'Andhra Pradesh', 'South India'] },
     { name: 'Articles & Essays', subCategories: ['Editorial', 'Analysis', 'Opinion', 'Special Reports'] },
     { name: 'Sports & Entertainment', subCategories: ['Cricket', 'Cinema', 'OTT', 'Lifestyle'] },
-    { name: 'Crime & Accidents', subCategories: ['Local Crime', 'Investigation', 'Security', 'Accidents'] }
+    { name: 'Crime & Accidents', subCategories: ['Local Crime', 'Investigation', 'Security', 'Accidents'] },
+    { name: 'Photos', subCategories: ['Top Stories', 'Politics', 'Sports', 'Entertainment', 'Events'] },
+    { name: 'Videos', subCategories: ['News', 'Events', 'Interviews', 'Viral'] }
 ];
 
 const FONTS_TITLE = [
@@ -55,6 +57,7 @@ const AddNews: React.FC = () => {
     const [successMessage, setSuccessMessage] = useState(false);
     const [titleFont, setTitleFont] = useState('font-playfair');
     const [contentFont, setContentFont] = useState('font-merriweather');
+    const [videoUrl, setVideoUrl] = useState('');
 
     // New state for modal and toast
     const [isClearModalOpen, setIsClearModalOpen] = useState(false);
@@ -72,6 +75,7 @@ const AddNews: React.FC = () => {
             setSection(dSection || 'Top Stories');
             setTitleFont(dTitleFont || 'font-playfair');
             setContentFont(dContentFont || 'font-merriweather');
+            setVideoUrl(JSON.parse(draft).videoUrl || '');
         }
     }, []);
 
@@ -79,11 +83,11 @@ const AddNews: React.FC = () => {
     useEffect(() => {
         const timer = setTimeout(() => {
             if (title || content) {
-                localStorage.setItem('asre-hazir-draft', JSON.stringify({ title, content, category, subCategory, section, titleFont, contentFont }));
+                localStorage.setItem('asre-hazir-draft', JSON.stringify({ title, content, category, subCategory, section, titleFont, contentFont, videoUrl }));
             }
         }, 2000);
         return () => clearTimeout(timer);
-    }, [title, content, category, subCategory, section, titleFont, contentFont]);
+    }, [title, content, category, subCategory, section, titleFont, contentFont, videoUrl]);
 
     const handleClearDraftClick = () => {
         setIsClearModalOpen(true);
@@ -97,6 +101,7 @@ const AddNews: React.FC = () => {
         setSection('Top Stories');
         setCategory('World News');
         setSubCategory('Top Stories');
+        setVideoUrl('');
         localStorage.removeItem('asre-hazir-draft');
         setIsClearModalOpen(false);
         setToast({ message: 'Draft cleared successfully', type: 'success' });
@@ -159,6 +164,7 @@ const AddNews: React.FC = () => {
                 subCategory,
                 titleFont,
                 contentFont,
+                videoUrl,
                 imageUrl: imageUrl,  // Single image field
                 createdAt: serverTimestamp(),
                 author: auth.currentUser?.displayName || 'Asre Hazir Desk',
@@ -367,6 +373,23 @@ const AddNews: React.FC = () => {
                                     )}
                                 </div>
                             </div>
+
+                            {/* Video URL (Conditional) */}
+                            {category === 'Videos' && (
+                                <div className="space-y-4 animate-in slide-in-from-top duration-500">
+                                    <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
+                                        <Tag className="w-3.5 h-3.5 text-red-600" /> External Video Link (Twitter/YT/FB/Insta)
+                                    </label>
+                                    <input
+                                        type="url"
+                                        value={videoUrl}
+                                        onChange={(e) => setVideoUrl(e.target.value)}
+                                        className="w-full p-6 rounded-[2rem] border border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800/50 focus:ring-4 focus:ring-red-600/10 outline-none transition-all dark:text-white font-bold"
+                                        placeholder="Paste video link here (e.g., https://twitter.com/... or https://youtube.com/...)"
+                                        required={category === 'Videos'}
+                                    />
+                                </div>
+                            )}
 
                             {/* Body */}
                             <div className="space-y-4">

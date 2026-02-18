@@ -21,9 +21,12 @@ export function Header() {
     }, []);
 
     const menuItems = [
+        { label: 'Home', path: '/' },
         { label: 'World', path: '/world' },
         { label: 'National', path: '/national' },
         { label: 'Deccan', path: '/deccan' },
+        { label: 'Photos', path: '/photos' },
+        { label: 'Videos', path: '/videos' },
         { label: 'Articles & Essays', path: '/articles-essays' },
         { label: 'Sports & Entertainment', path: '/sports-entertainment' },
         { label: 'Crime & Accidents', path: '/crime-accidents' },

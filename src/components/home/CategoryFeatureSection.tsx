@@ -18,6 +18,11 @@ interface CategoryFeatureSectionProps {
     formatTime: (date: any) => string;
 }
 
+const stripHtml = (html: string) => {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    return doc.body.textContent || "";
+};
+
 export function CategoryFeatureSection({ tabs, allNews, formatTime }: CategoryFeatureSectionProps) {
     const [activeTab, setActiveTab] = useState(tabs[0]);
 
@@ -92,7 +97,7 @@ export function CategoryFeatureSection({ tabs, allNews, formatTime }: CategoryFe
                                 {featuredItem.title}
                             </h3>
                             <p className="text-gray-500 dark:text-gray-400 font-sans text-xs leading-relaxed line-clamp-2">
-                                {featuredItem.content.substring(0, 150)}...
+                                {stripHtml(featuredItem.content).substring(0, 150)}...
                             </p>
                         </Link>
                     )}

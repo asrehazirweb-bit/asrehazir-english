@@ -268,13 +268,7 @@ const ArticleDetail: React.FC = () => {
                         </div>
                     )}
                 </div>
-                {article.subCategory && (
-                    <div className="mt-4 px-4 md:px-0">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-gray-400 border-l-2 border-red-600 pl-3">
-                            Photo: Asre Hazir Archives / {article.category} {article.subCategory}
-                        </span>
-                    </div>
-                )}
+
             </div>
 
             {/* Content Body */}

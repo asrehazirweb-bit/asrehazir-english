@@ -27,6 +27,8 @@ function App() {
         <Route element={<Layout><CategoryPage category="World News" title="World News" /></Layout>} path="/world" />
         <Route element={<Layout><CategoryPage category="National News" title="National News" /></Layout>} path="/national" />
         <Route element={<Layout><CategoryPage category="Deccan News" title="Deccan News" /></Layout>} path="/deccan" />
+        <Route element={<Layout><CategoryPage category="Photos" title="Photos" /></Layout>} path="/photos" />
+        <Route element={<Layout><CategoryPage category="Videos" title="Videos" /></Layout>} path="/videos" />
         <Route element={<Layout><CategoryPage category="Articles & Essays" title="Articles & Essays" /></Layout>} path="/articles-essays" />
         <Route element={<Layout><CategoryPage category="Sports & Entertainment" title="Sports & Entertainment" /></Layout>} path="/sports-entertainment" />
         <Route element={<Layout><CategoryPage category="Crime & Accidents" title="Crime & Accidents" /></Layout>} path="/crime-accidents" />

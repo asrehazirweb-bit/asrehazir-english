@@ -8,6 +8,11 @@ interface CategoryPageProps {
     title: string;
 }
 
+const stripHtml = (html: string) => {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    return doc.body.textContent || "";
+};
+
 export function CategoryPage({ category, title }: CategoryPageProps) {
     // Fetch more to allow for client-side filtering of legacy categories
     const { news: allNews, loading, formatTime } = useNews('All', 100);
@@ -34,16 +39,23 @@ export function CategoryPage({ category, title }: CategoryPageProps) {
         if (category === 'Crime & Accidents') {
             return cat.includes('crime') || cat.includes('accident') || cat.includes('جرائم');
         }
+        if (category === 'Photos' || category === 'تصویریں') {
+            return cat.includes('photo') || cat.includes('gallery') || cat.includes('تصویر');
+        }
+        if (category === 'Videos' || category === 'ویڈیوز') {
+            return cat.includes('video') || cat.includes('ویڈیو') || cat.includes('ویڈیوز');
+        }
         return item.category === category;
     });
 
     const mappedNews = filteredNews.map(item => ({
         id: item.id,
         title: item.title,
-        excerpt: item.content.substring(0, 150) + '...',
+        excerpt: stripHtml(item.content).substring(0, 150) + '...',
         image: item.imageUrl,
         location: category,
         subCategory: item.subCategory,
+        videoUrl: (item as any).videoUrl,
         date: formatTime(item.createdAt)
     }));
 
