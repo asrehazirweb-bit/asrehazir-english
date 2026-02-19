@@ -57,7 +57,7 @@ export function Header() {
         <>
             <header className={`sticky top-0 z-50 transition-all duration-300 ${isScrolled
                 ? 'glass-effect border-b border-gray-200/50 shadow-lg'
-                : 'bg-white border-b border-gray-100'
+                : 'bg-stone-50 border-b border-gray-100'
                 }`}>
                 {/* Search Overlay */}
                 {isSearchOpen && (
@@ -109,9 +109,9 @@ export function Header() {
                             <Menu size={22} />
                         </button>
 
-                        <Link to="/" className="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 group transition-transform duration-300 active:scale-95">
+                        <Link to="/" className="absolute left-1/2 -translate-x-1/2 group transition-transform duration-300 active:scale-95">
                             <h1 className={`${isScrolled ? 'text-xl md:text-3xl' : 'text-3xl sm:text-4xl md:text-7xl'} font-serif font-black tracking-[-0.04em] leading-none text-gray-900 transition-all duration-300 whitespace-nowrap`}>
-                                asre<span className="text-primary">hazir</span>
+                                Asre<span className="text-primary">hazir</span>
                             </h1>
                         </Link>
 
