@@ -29,21 +29,21 @@ const PHOTO_GALLERIES: PhotoItem[] = [
 
 export function PhotosPage() {
     return (
-        <div className="flex flex-col w-full font-serif pt-6 pb-12 bg-white dark:bg-transparent transition-colors">
+        <div className="flex flex-col w-full font-serif pt-6 pb-12 bg-white transition-colors">
 
             {/* PAGE HEADER */}
-            <div className="w-full px-4 mb-8 border-b border-gray-200 dark:border-white/10 pb-6 text-center">
+            <div className="w-full px-4 mb-8 border-b border-gray-200 pb-6 text-center">
                 <div className="flex items-center justify-center gap-2 text-xs font-sans font-bold uppercase tracking-wider text-gray-500 mb-4">
                     <Link to="/" className="hover:text-accent transition-colors">Home</Link>
                     <ChevronRight size={10} />
                     <span className="text-accent">Photos</span>
                 </div>
 
-                <h1 className="text-4xl md:text-6xl font-black text-secondary dark:text-gray-100 uppercase tracking-tight mb-4 flex items-center justify-center gap-3">
+                <h1 className="text-4xl md:text-6xl font-black text-secondary uppercase tracking-tight mb-4 flex items-center justify-center gap-3">
                     <Camera size={40} className="text-accent" />
                     Photos
                 </h1>
-                <p className="text-gray-600 dark:text-gray-400 font-sans text-base leading-relaxed max-w-2xl mx-auto">
+                <p className="text-gray-600 font-sans text-base leading-relaxed max-w-2xl mx-auto">
                     Explore our visual stories capturing the most significant moments in politics, culture, events, and daily life from around the globe.
                 </p>
             </div>
@@ -54,7 +54,7 @@ export function PhotosPage() {
                     {PHOTO_GALLERIES.map((item) => (
                         <article key={item.id} className="group cursor-pointer flex flex-col gap-3">
                             {/* Image Container with Count Badge */}
-                            <div className="w-full h-56 bg-gray-100 dark:bg-white/5 relative overflow-hidden rounded-sm">
+                            <div className="w-full h-56 bg-gray-100 relative overflow-hidden rounded-sm">
                                 {item.image ? (
                                     <img
                                         src={item.image}
@@ -86,7 +86,7 @@ export function PhotosPage() {
 
                             {/* Content */}
                             <div className="flex flex-col">
-                                <h2 className="text-base font-bold leading-snug text-secondary dark:text-gray-200 group-hover:text-accent transition-colors line-clamp-2">
+                                <h2 className="text-base font-bold leading-snug text-secondary group-hover:text-accent transition-colors line-clamp-2">
                                     {item.title}
                                 </h2>
                                 <div className="flex items-center justify-between mt-2 text-[10px] text-gray-400 font-sans uppercase tracking-wide">
@@ -101,7 +101,7 @@ export function PhotosPage() {
 
             {/* Pagination Placeholder */}
             <div className="flex justify-center mt-12">
-                <button className="px-6 py-2 border border-gray-300 dark:border-white/10 text-sm font-bold text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 uppercase tracking-wide transition-colors">
+                <button className="px-6 py-2 border border-gray-300 text-sm font-bold text-gray-500 hover:bg-gray-50 uppercase tracking-wide transition-colors">
                     Load More Photos
                 </button>
             </div>

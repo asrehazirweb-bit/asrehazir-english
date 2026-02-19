@@ -8,8 +8,8 @@ export function EntertainmentPage() {
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center h-screen bg-white dark:bg-zinc-950">
-                <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-red-600"></div>
+            <div className="flex justify-center items-center h-screen bg-white">
+                <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div>
             </div>
         );
     }
@@ -42,7 +42,7 @@ export function EntertainmentPage() {
         <div className="flex flex-col w-full font-serif pt-6 pb-12">
 
             {/* 1. PAGE HEADER */}
-            <div className="w-full px-4 mb-8 border-b border-gray-200 dark:border-white/10 pb-6 text-center">
+            <div className="w-full px-4 mb-8 border-b border-gray-200 pb-6 text-center">
                 {/* Breadcrumb */}
                 <div className="flex items-center justify-center gap-2 text-xs font-sans font-bold uppercase tracking-wider text-gray-500 mb-4">
                     <Link to="/" className="hover:text-accent transition-colors">Home</Link>
@@ -50,10 +50,10 @@ export function EntertainmentPage() {
                     <span className="text-accent">Entertainment</span>
                 </div>
 
-                <h1 className="text-4xl md:text-6xl font-black text-secondary dark:text-gray-100 uppercase tracking-tight mb-4">
+                <h1 className="text-4xl md:text-6xl font-black text-secondary uppercase tracking-tight mb-4">
                     Entertainment
                 </h1>
-                <p className="text-gray-600 dark:text-gray-400 font-sans text-base leading-relaxed max-w-2xl mx-auto">
+                <p className="text-gray-600 font-sans text-base leading-relaxed max-w-2xl mx-auto">
                     Your daily dose of cinema, celebrity gossip, music, OTT reviews, and cultural events. From Tollywood to Hollywood, we cover it all.
                 </p>
             </div>
@@ -61,9 +61,9 @@ export function EntertainmentPage() {
             <div className="w-full px-4 flex flex-col gap-12">
                 {/* 2. FEATURED STORY */}
                 {featured ? (
-                    <Link to={`/news/${featured.id}`} className="w-full grid grid-cols-1 md:grid-cols-12 gap-0 md:gap-8 bg-gray-50 dark:bg-white/5 md:bg-transparent group cursor-pointer border border-gray-100 dark:border-white/10 md:border-none block">
+                    <Link to={`/news/${featured.id}`} className="w-full grid grid-cols-1 md:grid-cols-12 gap-0 md:gap-8 bg-gray-50 md:bg-transparent group cursor-pointer border border-gray-100 md:border-none block">
                         {/* Image - 8 Cols */}
-                        <div className="md:col-span-8 h-[300px] md:h-[500px] relative overflow-hidden bg-gray-200 dark:bg-white/5">
+                        <div className="md:col-span-8 h-[300px] md:h-[500px] relative overflow-hidden bg-gray-200">
                             {featured.image ? (
                                 <img
                                     src={featured.image}
@@ -84,10 +84,10 @@ export function EntertainmentPage() {
 
                         {/* Content - 4 Cols */}
                         <div className="md:col-span-4 flex flex-col justify-center p-6 md:p-0">
-                            <h2 className="text-3xl font-bold leading-tight text-secondary dark:text-gray-100 mb-4 group-hover:text-accent transition-colors">
+                            <h2 className="text-3xl font-bold leading-tight text-secondary mb-4 group-hover:text-accent transition-colors">
                                 {featured.title}
                             </h2>
-                            <p className="text-gray-600 dark:text-gray-400 font-sans text-sm md:text-base leading-relaxed mb-6 line-clamp-4">
+                            <p className="text-gray-600 font-sans text-sm md:text-base leading-relaxed mb-6 line-clamp-4">
                                 {featured.excerpt}
                             </p>
                             <div className="flex items-center gap-2 text-xs text-gray-400 font-sans uppercase tracking-wide mt-auto">
@@ -104,17 +104,17 @@ export function EntertainmentPage() {
 
                 {/* 3. MAIN GRID (4 Cols) */}
                 {gridItems.length > 0 && (
-                    <div className="border-t border-gray-100 dark:border-white/10 pt-8">
+                    <div className="border-t border-gray-100 pt-8">
                         <div className="flex items-center gap-2 mb-6">
                             <Film className="text-accent" size={20} />
-                            <h3 className="text-xl font-bold text-secondary dark:text-gray-100 uppercase tracking-wide">Latest Hits</h3>
+                            <h3 className="text-xl font-bold text-secondary uppercase tracking-wide">Latest Hits</h3>
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                             {gridItems.map((item) => (
                                 <Link key={item.id} to={`/news/${item.id}`} className="group flex flex-col gap-3 cursor-pointer block">
                                     {/* Image Container (Fixed Height) */}
-                                    <div className="w-full h-48 bg-gray-100 dark:bg-white/5 relative overflow-hidden">
+                                    <div className="w-full h-48 bg-gray-100 relative overflow-hidden">
                                         {item.image ? (
                                             <img
                                                 src={item.image}
@@ -134,7 +134,7 @@ export function EntertainmentPage() {
 
                                     {/* Content */}
                                     <div className="flex flex-col">
-                                        <h4 className="text-base font-bold leading-tight text-secondary dark:text-gray-100 mb-2 line-clamp-2 group-hover:text-accent transition-colors">
+                                        <h4 className="text-base font-bold leading-tight text-secondary mb-2 line-clamp-2 group-hover:text-accent transition-colors">
                                             {item.title}
                                         </h4>
                                         <div className="flex items-center text-[10px] text-gray-400 font-sans uppercase tracking-wide">
@@ -150,19 +150,19 @@ export function EntertainmentPage() {
 
                 {/* 4. SECONDARY FEED (Vertical List - Wide) */}
                 {listItems.length > 0 && (
-                    <div className="border-t border-gray-100 dark:border-white/10 pt-8 grid grid-cols-1 md:grid-cols-12 gap-8">
+                    <div className="border-t border-gray-100 pt-8 grid grid-cols-1 md:grid-cols-12 gap-8">
                         <div className="md:col-span-12">
                             <div className="flex items-center gap-2 mb-6">
                                 <Music className="text-accent" size={20} />
-                                <h3 className="text-xl font-bold text-secondary dark:text-gray-100 uppercase tracking-wide">More News</h3>
+                                <h3 className="text-xl font-bold text-secondary uppercase tracking-wide">More News</h3>
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4">
                                 {listItems.map((item) => (
-                                    <Link key={item.id} to={`/news/${item.id}`} className="flex items-center gap-3 border-b border-gray-50 dark:border-white/5 pb-3 last:border-0 hover:bg-gray-50 dark:hover:bg-white/5 p-2 -mx-2 rounded transition-colors group cursor-pointer block">
-                                        <PlayCircle size={16} className="text-gray-300 dark:text-gray-600 group-hover:text-accent flex-shrink-0" />
+                                    <Link key={item.id} to={`/news/${item.id}`} className="flex items-center gap-3 border-b border-gray-50 pb-3 last:border-0 hover:bg-gray-50 p-2 -mx-2 rounded transition-colors group cursor-pointer block">
+                                        <PlayCircle size={16} className="text-gray-300 group-hover:text-accent flex-shrink-0" />
                                         <div className="flex flex-col">
-                                            <h5 className="text-sm font-bold text-secondary dark:text-gray-200 leading-snug line-clamp-1 group-hover:text-accent transition-colors">
+                                            <h5 className="text-sm font-bold text-secondary leading-snug line-clamp-1 group-hover:text-accent transition-colors">
                                                 {item.title}
                                             </h5>
                                             <div className="flex gap-2 text-[10px] items-center mt-1">

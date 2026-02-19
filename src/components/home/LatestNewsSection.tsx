@@ -32,16 +32,16 @@ export function LatestNewsSection({ items = [] }: LatestNewsSectionProps) {
     const gridItems = displayItems.slice(0, 9);
 
     return (
-        <section className="w-full bg-white dark:bg-[#120f0e] py-8 border-t border-b border-gray-100 dark:border-white/5 mb-12 transition-colors text-center md:text-left">
+        <section className="w-full bg-white py-8 border-t border-b border-gray-100 mb-12 transition-colors text-center md:text-left">
             <div className="max-w-7xl mx-auto px-4">
 
                 {/* HEADLINE WITH LINES */}
                 <div className="flex items-center justify-center gap-4 mb-8">
-                    <div className="w-12 md:w-24 h-[1px] bg-gray-300 dark:bg-white/10"></div>
-                    <h2 className="text-secondary dark:text-gray-400 font-sans font-semibold uppercase tracking-wider text-[11px] md:text-sm whitespace-nowrap">
+                    <div className="w-12 md:w-24 h-[1px] bg-gray-300"></div>
+                    <h2 className="text-secondary font-sans font-semibold uppercase tracking-wider text-[11px] md:text-sm whitespace-nowrap">
                         Latest News
                     </h2>
-                    <div className="w-12 md:w-24 h-[1px] bg-gray-300 dark:bg-white/10"></div>
+                    <div className="w-12 md:w-24 h-[1px] bg-gray-300"></div>
                 </div>
 
                 {/* 3x3 GRID */}
@@ -50,17 +50,17 @@ export function LatestNewsSection({ items = [] }: LatestNewsSectionProps) {
                         <Link
                             key={`${item.id}-${idx}`}
                             to={`/news/${item.id}`}
-                            className="bg-white dark:bg-[#1a1614] border border-gray-100 dark:border-white/5 p-6 h-auto flex flex-col justify-between hover:border-accent dark:hover:border-accent hover:premium-shadow transition-all duration-300 cursor-pointer overflow-hidden group rounded-sm"
+                            className="bg-white border border-gray-100 p-6 h-auto flex flex-col justify-between hover:border-accent hover:premium-shadow transition-all duration-300 cursor-pointer overflow-hidden group rounded-sm"
                         >
                             <div>
-                                <h3 className={`font-black text-lg text-secondary dark:text-gray-100 leading-snug mb-3 group-hover:text-accent transition-colors decoration-accent/30 decoration-2 underline-offset-8 group-hover:underline ${item.titleFont || 'font-serif'}`}>
+                                <h3 className={`font-black text-lg text-secondary leading-snug mb-3 group-hover:text-accent transition-colors decoration-accent/30 decoration-2 underline-offset-8 group-hover:underline ${item.titleFont || 'font-serif'}`}>
                                     {item.title}
                                 </h3>
-                                <p className="font-sans text-xs text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-2 opacity-80">
+                                <p className="font-sans text-xs text-gray-500 leading-relaxed line-clamp-2 opacity-80">
                                     {item.excerpt}
                                 </p>
                             </div>
-                            <div className="flex items-center gap-2 mt-4 pt-4 border-t border-gray-50 dark:border-white/5">
+                            <div className="flex items-center gap-2 mt-4 pt-4 border-t border-gray-50">
                                 <span className="text-[10px] font-black text-accent uppercase tracking-[0.2em]">{item.location}</span>
                             </div>
                         </Link>

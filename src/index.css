@@ -70,7 +70,7 @@
   }
 
   body {
-    @apply text-secondary font-sans bg-[#f8f9fa] dark:bg-[#0f1115] dark:text-zinc-300 transition-colors duration-300 antialiased;
+    @apply text-secondary font-sans bg-white transition-colors duration-300 antialiased;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     --menu-bg: #ffffff;
@@ -106,12 +106,8 @@
     display: block;
   }
 
-  body.dark {
-    --menu-bg: #0f1115;
-  }
-
   ::selection {
-    @apply bg-red-600/30 text-black dark:text-white;
+    @apply bg-primary/30 text-black;
   }
 
 
@@ -125,7 +121,7 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-gray-300 dark:bg-white/10 rounded-full hover:bg-accent/50 transition-colors;
+    @apply bg-gray-300 rounded-full hover:bg-accent/50 transition-colors;
   }
 }
 
@@ -172,44 +168,12 @@
     box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
   }
 
-  .dark .premium-shadow {
-    box-shadow: 0 10px 40px -15px rgba(0, 0, 0, 0.4);
-  }
-
   .glass-effect {
-    @apply bg-white/80 dark:bg-black/80 backdrop-blur-md;
+    @apply bg-white/80 backdrop-blur-md;
   }
 }
 
-/* Quill Dark Mode & Premium Styling */
-.dark .ql-toolbar {
-  @apply bg-zinc-800 border-zinc-700 !important;
-}
-
-.dark .ql-container {
-  @apply border-zinc-700 !important;
-}
-
-.dark .ql-editor {
-  @apply text-zinc-200 !important;
-}
-
-.dark .ql-stroke {
-  stroke: #a1a1aa !important;
-}
-
-.dark .ql-fill {
-  fill: #a1a1aa !important;
-}
-
-.dark .ql-picker {
-  color: #a1a1aa !important;
-}
-
-.dark .ql-picker-options {
-  @apply bg-zinc-800 border-zinc-700 !important;
-}
-
+/* Quill Premium Styling */
 .ql-editor,
 .article-content {
   @apply text-lg leading-relaxed;
@@ -220,11 +184,11 @@
 }
 
 .quill-wrapper .ql-toolbar {
-  @apply rounded-t-3xl border-gray-100 dark:border-zinc-800 !important;
+  @apply rounded-t-3xl border-gray-100 !important;
 }
 
 .quill-wrapper .ql-container {
-  @apply rounded-b-3xl border-gray-100 dark:border-zinc-800 !important;
+  @apply rounded-b-3xl border-gray-100 !important;
 }
 
 /* RTL Support for Quill */
@@ -267,7 +231,7 @@
 
 .article-content a,
 .ql-editor a {
-  @apply text-red-600 underline hover:text-black dark:hover:text-white transition-colors !important;
+  @apply text-primary underline hover:text-black transition-colors !important;
 }
 
 .article-content h1,

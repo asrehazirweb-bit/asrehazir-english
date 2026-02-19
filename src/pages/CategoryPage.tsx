@@ -79,8 +79,8 @@ export function CategoryPage({ category, title }: CategoryPageProps) {
 
                 {/* Main Content - 8 Columns */}
                 <div className="lg:col-span-8 flex flex-col">
-                    <div className="mb-8 border-b-2 border-red-700 pb-2 flex justify-between items-end">
-                        <h1 className="text-3xl md:text-4xl font-black text-gray-900 dark:text-white uppercase tracking-tight">
+                    <div className="mb-8 border-b-2 border-primary pb-2 flex justify-between items-end">
+                        <h1 className="text-3xl md:text-4xl font-black text-gray-900 uppercase tracking-tight">
                             {title}
                         </h1>
                         <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-gray-500 hidden md:block">
@@ -90,14 +90,14 @@ export function CategoryPage({ category, title }: CategoryPageProps) {
 
                     {loading ? (
                         <div className="flex justify-center py-20">
-                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-700"></div>
+                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
                         </div>
                     ) : filteredNews.length > 0 ? (
                         <div className="space-y-0">
                             <IndiaNewsFeed items={mappedNews} />
                         </div>
                     ) : (
-                        <div className="text-center py-20 bg-gray-50 dark:bg-zinc-900/50 rounded-xl border border-dashed border-gray-200 dark:border-zinc-800">
+                        <div className="text-center py-20 bg-gray-50 rounded-xl border border-dashed border-gray-200">
                             <p className="text-gray-500 font-sans italic">No reports found in {title} at this time.</p>
                         </div>
                     )}

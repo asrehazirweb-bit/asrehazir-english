@@ -26,21 +26,21 @@ const VIDEO_FEED: VideoItem[] = [
 
 export function VideosPage() {
     return (
-        <div className="flex flex-col w-full font-serif pt-6 pb-12 bg-white dark:bg-[#120f0e] transition-colors">
+        <div className="flex flex-col w-full font-serif pt-6 pb-12 bg-white transition-colors">
 
             {/* PAGE HEADER */}
-            <div className="w-full px-4 mb-8 border-b border-gray-200 dark:border-white/10 pb-6 text-center">
-                <div className="flex items-center justify-center gap-2 text-xs font-sans font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-4">
+            <div className="w-full px-4 mb-8 border-b border-gray-200 pb-6 text-center">
+                <div className="flex items-center justify-center gap-2 text-xs font-sans font-bold uppercase tracking-wider text-gray-500 mb-4">
                     <Link to="/" className="hover:text-accent transition-colors">Home</Link>
                     <ChevronRight size={10} />
                     <span className="text-accent">Videos</span>
                 </div>
 
-                <h1 className="text-4xl md:text-6xl font-black text-secondary dark:text-gray-100 uppercase tracking-tight mb-4 flex items-center justify-center gap-3">
+                <h1 className="text-4xl md:text-6xl font-black text-secondary uppercase tracking-tight mb-4 flex items-center justify-center gap-3">
                     <Video size={40} className="text-accent" />
                     Videos
                 </h1>
-                <p className="text-gray-600 dark:text-gray-400 font-sans text-base leading-relaxed max-w-2xl mx-auto">
+                <p className="text-gray-600 font-sans text-base leading-relaxed max-w-2xl mx-auto">
                     Watch in-depth reports, exclusive interviews, ground realities, and explainer videos on trending topics.
                 </p>
             </div>
@@ -78,7 +78,7 @@ export function VideosPage() {
 
                                 {/* Category Badge */}
                                 <div className="absolute top-2 left-2">
-                                    <span className="bg-secondary/90 dark:bg-accent/90 text-white text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 shadow-sm">
+                                    <span className="bg-secondary/90 text-white text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 shadow-sm">
                                         {item.category}
                                     </span>
                                 </div>
@@ -86,7 +86,7 @@ export function VideosPage() {
 
                             {/* Content */}
                             <div className="flex flex-col">
-                                <h2 className="text-lg font-bold leading-tight text-secondary dark:text-gray-200 group-hover:text-accent transition-colors line-clamp-2">
+                                <h2 className="text-lg font-bold leading-tight text-secondary group-hover:text-accent transition-colors line-clamp-2">
                                     {item.title}
                                 </h2>
                                 <div className="flex items-center gap-2 mt-2 text-[10px] text-gray-400 font-sans uppercase tracking-wide">
@@ -101,7 +101,7 @@ export function VideosPage() {
 
             {/* Pagination Placeholder */}
             <div className="flex justify-center mt-12">
-                <button className="px-6 py-2 border border-gray-300 dark:border-white/10 text-sm font-bold text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 uppercase tracking-wide transition-colors">
+                <button className="px-6 py-2 border border-gray-300 text-sm font-bold text-gray-500 hover:bg-gray-50 uppercase tracking-wide transition-colors">
                     Load More Videos
                 </button>
             </div>

@@ -18,8 +18,8 @@ export function Home() {
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center h-screen bg-white dark:bg-zinc-950">
-                <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-red-600"></div>
+            <div className="flex justify-center items-center h-screen bg-white">
+                <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div>
             </div>
         );
     }
@@ -155,7 +155,7 @@ export function Home() {
             </div>
 
             {/* === SPORTS & ENTERTAINMENT SECTION (Full Width Layout) === */}
-            <div className="w-full bg-gray-50 dark:bg-[#1a1614] py-12 mb-12 transition-colors border-y border-gray-100 dark:border-white/5">
+            <div className="w-full bg-gray-50 py-12 mb-12 transition-colors border-y border-gray-100">
                 <div className="w-full mx-auto px-4">
                     <CategoryGridSection
                         category="Sports & Entertainment"

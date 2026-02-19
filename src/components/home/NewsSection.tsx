@@ -20,13 +20,13 @@ export function NewsSection({ title, items, variant = 'grid' }: NewsSectionProps
         <div className="mb-12">
             <div className="flex items-center mb-6 border-b border-accent/30 pb-2">
                 <h2 className="text-xl font-bold font-sans uppercase text-accent tracking-wider">{title}</h2>
-                <div className="flex-grow ml-4 h-[1px] bg-gray-100 dark:bg-white/10"></div>
+                <div className="flex-grow ml-4 h-[1px] bg-gray-100"></div>
             </div>
 
             <div className={variant === 'grid' ? "grid grid-cols-1 md:grid-cols-2 gap-6" : "flex flex-col gap-6"}>
                 {items.map((item) => (
                     <Link key={item.id} to={`/news/${item.id}`} className="group cursor-pointer block">
-                        <div className="relative overflow-hidden mb-3 aspect-video bg-gray-200 dark:bg-white/5 rounded-lg">
+                        <div className="relative overflow-hidden mb-3 aspect-video bg-gray-200 rounded-lg">
                             <img
                                 src={item.image}
                                 alt={item.title}
@@ -36,7 +36,7 @@ export function NewsSection({ title, items, variant = 'grid' }: NewsSectionProps
                                 {item.category}
                             </span>
                         </div>
-                        <h3 className="font-serif font-bold text-lg leading-snug text-gray-900 dark:text-gray-100 group-hover:text-accent transition-colors mb-2">
+                        <h3 className="font-serif font-bold text-lg leading-snug text-gray-900 group-hover:text-accent transition-colors mb-2">
                             {item.title}
                         </h3>
                         <span className="text-xs text-gray-400 font-sans">{item.time}</span>

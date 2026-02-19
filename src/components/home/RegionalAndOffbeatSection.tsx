@@ -26,15 +26,15 @@ export function RegionalAndOffbeatSection({ regionalItems = [] }: RegionalSectio
     const gridRegional = displayRegional.slice(0, 6);
 
     return (
-        <div className="w-full bg-white dark:bg-[#120f0e] mb-12 transition-colors">
+        <div className="w-full bg-white mb-12 transition-colors">
 
             {/* Header */}
-            <div className="flex items-center justify-between mb-6 border-b border-gray-100 dark:border-white/10 pb-2">
+            <div className="flex items-center justify-between mb-6 border-b border-gray-100 pb-2">
                 <div className="flex items-center gap-2">
                     <div className="w-1.5 h-4 bg-[#004d99]"></div>
-                    <h2 className="text-secondary dark:text-gray-100 font-sans font-bold uppercase tracking-wider text-sm">South India</h2>
+                    <h2 className="text-secondary font-sans font-bold uppercase tracking-wider text-sm">South India</h2>
                 </div>
-                <div className="hidden md:flex gap-4 text-xs font-sans text-gray-500 dark:text-gray-400 font-medium">
+                <div className="hidden md:flex gap-4 text-xs font-sans text-gray-500 font-medium">
                     {['Andhra Pradesh', 'Bangalore', 'Hyderabad', 'Telangana'].map((tab) => (
                         <span key={tab} className="cursor-pointer hover:text-accent transition-colors">{tab}</span>
                     ))}
@@ -45,7 +45,7 @@ export function RegionalAndOffbeatSection({ regionalItems = [] }: RegionalSectio
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-8">
                 {gridRegional.map((item, idx) => (
                     <Link key={`${item.id}-${idx}`} to={`/news/${item.id}`} className="flex gap-4 group cursor-pointer h-[80px]">
-                        <div className="w-[120px] h-full bg-gray-200 dark:bg-white/10 flex-shrink-0 rounded-sm overflow-hidden relative">
+                        <div className="w-[120px] h-full bg-gray-200 flex-shrink-0 rounded-sm overflow-hidden relative">
                             <img
                                 src={item.image || "/images/hero.png"}
                                 alt={item.title}
@@ -54,7 +54,7 @@ export function RegionalAndOffbeatSection({ regionalItems = [] }: RegionalSectio
                         </div>
                         <div className="flex flex-col justify-start py-0.5">
                             <span className="text-[10px] text-gray-400 font-sans mb-1 block">{item.time}</span>
-                            <h3 className="font-serif font-bold text-sm leading-snug text-gray-800 dark:text-gray-200 line-clamp-3 group-hover:text-accent transition-colors">
+                            <h3 className="font-serif font-bold text-sm leading-snug text-gray-800 line-clamp-3 group-hover:text-accent transition-colors">
                                 {item.title}
                             </h3>
                         </div>

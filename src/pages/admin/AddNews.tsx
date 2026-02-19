@@ -214,16 +214,16 @@ const AddNews: React.FC = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 <div className="lg:col-span-12">
-                    <div className="bg-white dark:bg-zinc-900 rounded-[2.5rem] shadow-2xl border border-gray-100 dark:border-zinc-800 overflow-hidden relative">
+                    <div className="bg-white rounded-[2.5rem] shadow-2xl border border-gray-100 overflow-hidden relative">
 
                         {/* News Desk Header */}
                         <div className="bg-zinc-900 p-8 md:p-12 text-white relative overflow-hidden">
-                            <div className="absolute top-0 right-0 w-64 h-64 bg-red-600/10 rounded-full -mr-32 -mt-32 blur-3xl"></div>
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full -mr-32 -mt-32 blur-3xl"></div>
                             <div className="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
                                 <div>
                                     <div className="flex items-center gap-2 mb-3">
-                                        <Sparkles className="text-red-600" size={20} />
-                                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-red-500">Live Newsroom Engine</span>
+                                        <Sparkles className="text-primary" size={20} />
+                                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary">Live Newsroom Engine</span>
                                     </div>
                                     <h1 className="text-4xl md:text-6xl font-serif font-black tracking-tight uppercase italic leading-none">Broadcast Desk</h1>
                                 </div>
@@ -243,40 +243,40 @@ const AddNews: React.FC = () => {
                             {/* Headline */}
                             <div className="space-y-4">
                                 <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
-                                    <Type className="w-3.5 h-3.5 text-red-600" /> Article Headline
+                                    <Type className="w-3.5 h-3.5 text-primary" /> Article Headline
                                 </label>
                                 <input
                                     type="text"
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
-                                    className={`w-full text-3xl md:text-5xl font-black border-b-2 border-gray-100 dark:border-zinc-800 bg-transparent py-4 focus:border-red-600 outline-none transition-all dark:text-white ${titleFont}`}
+                                    className={`w-full text-3xl md:text-5xl font-black border-b-2 border-gray-100 bg-transparent py-4 focus:border-primary outline-none transition-all ${titleFont}`}
                                     placeholder="Enter Headline..."
                                     required
                                 />
                             </div>
 
-                            {/* Font Strategy Selection */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-zinc-50 dark:bg-zinc-800/30 p-8 rounded-3xl border border-gray-100 dark:border-zinc-800">
+                            {/* Font Strategy Strategy Selection */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-zinc-50 p-8 rounded-3xl border border-gray-100">
                                 <div className="space-y-4">
                                     <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
-                                        <Sparkles className="w-3.5 h-3.5 text-red-600" /> Headline Font
+                                        <Sparkles className="w-3.5 h-3.5 text-primary" /> Headline Font
                                     </label>
                                     <select
                                         value={titleFont}
                                         onChange={(e) => setTitleFont(e.target.value)}
-                                        className="w-full p-4 rounded-xl border border-gray-100 dark:border-zinc-800 bg-white dark:bg-zinc-800 focus:ring-4 focus:ring-red-600/10 outline-none transition-all dark:text-white font-bold text-xs h-14"
+                                        className="w-full p-4 rounded-xl border border-gray-100 bg-white focus:ring-4 focus:ring-primary/10 outline-none transition-all font-bold text-xs h-14"
                                     >
                                         {FONTS_TITLE.map(f => <option key={f.id} value={f.id} className={f.id}>{f.name}</option>)}
                                     </select>
                                 </div>
                                 <div className="space-y-4">
                                     <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
-                                        <FileText className="w-3.5 h-3.5 text-red-600" /> story Content Font
+                                        <FileText className="w-3.5 h-3.5 text-primary" /> story Content Font
                                     </label>
                                     <select
                                         value={contentFont}
                                         onChange={(e) => setContentFont(e.target.value)}
-                                        className="w-full p-4 rounded-xl border border-gray-100 dark:border-zinc-800 bg-white dark:bg-zinc-800 focus:ring-4 focus:ring-red-600/10 outline-none transition-all dark:text-white font-bold text-xs h-14"
+                                        className="w-full p-4 rounded-xl border border-gray-100 bg-white focus:ring-4 focus:ring-primary/10 outline-none transition-all font-bold text-xs h-14"
                                     >
                                         {FONTS_CONTENT.map(f => <option key={f.id} value={f.id} className={f.id}>{f.name}</option>)}
                                     </select>
@@ -288,7 +288,7 @@ const AddNews: React.FC = () => {
                                 {/* Section Selection */}
                                 <div className="space-y-4">
                                     <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
-                                        <Sparkles className="w-3.5 h-3.5 text-red-600" /> Page Section
+                                        <Sparkles className="w-3.5 h-3.5 text-primary" /> Page Section
                                     </label>
                                     <select
                                         value={SECTIONS.includes(section) ? section : 'Other'}
@@ -297,7 +297,7 @@ const AddNews: React.FC = () => {
                                             if (val === 'Other') setSection('');
                                             else setSection(val);
                                         }}
-                                        className="w-full p-4 rounded-xl border border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800/50 focus:ring-4 focus:ring-red-600/10 outline-none transition-all dark:text-white font-bold text-xs h-14"
+                                        className="w-full p-4 rounded-xl border border-gray-100 bg-gray-50 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-bold text-xs h-14"
                                     >
                                         {SECTIONS.map(s => <option key={s} value={s}>{s}</option>)}
                                     </select>
@@ -307,7 +307,7 @@ const AddNews: React.FC = () => {
                                             placeholder="Enter Custom Section..."
                                             value={section}
                                             onChange={(e) => setSection(e.target.value)}
-                                            className="w-full p-3 mt-2 rounded-lg border border-red-600/20 bg-white dark:bg-zinc-800 outline-none focus:border-red-600 transition-all dark:text-white font-bold text-xs"
+                                            className="w-full p-3 mt-2 rounded-lg border border-primary/20 bg-white outline-none focus:border-primary transition-all font-bold text-xs"
                                         />
                                     )}
                                 </div>
@@ -315,7 +315,7 @@ const AddNews: React.FC = () => {
                                 {/* Category Selection */}
                                 <div className="space-y-4">
                                     <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
-                                        <Tag className="w-3.5 h-3.5 text-red-600" /> News Category
+                                        <Tag className="w-3.5 h-3.5 text-primary" /> News Category
                                     </label>
                                     <select
                                         value={CATEGORIES.find(c => c.name === category) ? category : 'Other'}
@@ -328,7 +328,7 @@ const AddNews: React.FC = () => {
                                                 handleCategoryChange(val);
                                             }
                                         }}
-                                        className="w-full p-4 rounded-xl border border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800/50 focus:ring-4 focus:ring-red-600/10 outline-none transition-all dark:text-white font-bold text-xs h-14"
+                                        className="w-full p-4 rounded-xl border border-gray-100 bg-gray-50 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-bold text-xs h-14"
                                     >
                                         {CATEGORIES.map(cat => (
                                             <option key={cat.name} value={cat.name}>{cat.name}</option>
@@ -341,7 +341,7 @@ const AddNews: React.FC = () => {
                                             placeholder="Enter Custom Category..."
                                             value={category}
                                             onChange={(e) => setCategory(e.target.value)}
-                                            className="w-full p-3 mt-2 rounded-lg border border-red-600/20 bg-white dark:bg-zinc-800 outline-none focus:border-red-600 transition-all dark:text-white font-bold text-xs"
+                                            className="w-full p-3 mt-2 rounded-lg border border-primary/20 bg-white outline-none focus:border-primary transition-all font-bold text-xs"
                                         />
                                     )}
                                 </div>
@@ -349,13 +349,13 @@ const AddNews: React.FC = () => {
                                 {/* Subcategory Selection */}
                                 <div className="space-y-4">
                                     <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
-                                        <Layout className="w-3.5 h-3.5 text-red-600" /> Sub-category
+                                        <Layout className="w-3.5 h-3.5 text-primary" /> Sub-category
                                     </label>
                                     {CATEGORIES.find(c => c.name === category) ? (
                                         <select
                                             value={subCategory}
                                             onChange={(e) => setSubCategory(e.target.value)}
-                                            className="w-full p-4 rounded-xl border border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800/50 focus:ring-4 focus:ring-red-600/10 outline-none transition-all dark:text-white font-bold text-xs h-14"
+                                            className="w-full p-4 rounded-xl border border-gray-100 bg-gray-50 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-bold text-xs h-14"
                                         >
                                             {currentSubCategories.map(sub => (
                                                 <option key={sub} value={sub}>{sub}</option>
@@ -368,7 +368,7 @@ const AddNews: React.FC = () => {
                                             placeholder="Enter Sub-category..."
                                             value={subCategory}
                                             onChange={(e) => setSubCategory(e.target.value)}
-                                            className="w-full p-4 rounded-xl border border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800/50 focus:ring-4 focus:ring-red-600/10 outline-none transition-all dark:text-white font-bold text-xs h-14"
+                                            className="w-full p-4 rounded-xl border border-gray-100 bg-gray-50 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-bold text-xs h-14"
                                         />
                                     )}
                                 </div>
@@ -378,13 +378,13 @@ const AddNews: React.FC = () => {
                             {category === 'Videos' && (
                                 <div className="space-y-4 animate-in slide-in-from-top duration-500">
                                     <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
-                                        <Tag className="w-3.5 h-3.5 text-red-600" /> External Video Link (Twitter/YT/FB/Insta)
+                                        <Tag className="w-3.5 h-3.5 text-primary" /> External Video Link (Twitter/YT/FB/Insta)
                                     </label>
                                     <input
                                         type="url"
                                         value={videoUrl}
                                         onChange={(e) => setVideoUrl(e.target.value)}
-                                        className="w-full p-6 rounded-[2rem] border border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800/50 focus:ring-4 focus:ring-red-600/10 outline-none transition-all dark:text-white font-bold"
+                                        className="w-full p-6 rounded-[2rem] border border-gray-100 bg-gray-50 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-bold"
                                         placeholder="Paste video link here (e.g., https://twitter.com/... or https://youtube.com/...)"
                                         required={category === 'Videos'}
                                     />
@@ -394,7 +394,7 @@ const AddNews: React.FC = () => {
                             {/* Body */}
                             <div className="space-y-4">
                                 <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
-                                    <FileText className="w-3.5 h-3.5 text-red-600" /> Story Body
+                                    <FileText className="w-3.5 h-3.5 text-primary" /> Story Body
                                 </label>
                                 <div className={`quill-wrapper ${contentFont}`}>
                                     <ReactQuill
@@ -409,7 +409,7 @@ const AddNews: React.FC = () => {
                                                 ['link', 'clean'],
                                             ],
                                         }}
-                                        className="bg-gray-50 dark:bg-zinc-800/50 rounded-3xl overflow-hidden border border-gray-100 dark:border-zinc-800"
+                                        className="bg-gray-50 rounded-3xl overflow-hidden border border-gray-100"
                                         placeholder="Report the details here..."
                                     />
                                 </div>
@@ -418,9 +418,9 @@ const AddNews: React.FC = () => {
                             {/* Image Upload */}
                             <div className="space-y-4">
                                 <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
-                                    <ImageIcon className="w-3.5 h-3.5 text-red-600" /> Media Asset
+                                    <ImageIcon className="w-3.5 h-3.5 text-primary" /> Media Asset
                                 </label>
-                                <div className={`relative border-2 border-dashed rounded-[2rem] p-6 transition-all duration-500 ${imagePreview ? 'border-red-600 bg-red-50/5' : 'border-gray-200 dark:border-zinc-800 hover:border-red-600'}`}>
+                                <div className={`relative border-2 border-dashed rounded-[2rem] p-6 transition-all duration-500 ${imagePreview ? 'border-primary bg-primary/5' : 'border-gray-200 hover:border-primary'}`}>
                                     {imagePreview ? (
                                         <div className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl">
                                             <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
@@ -429,7 +429,7 @@ const AddNews: React.FC = () => {
                                     ) : (
                                         <label className="flex flex-col items-center justify-center min-h-[16rem] cursor-pointer">
                                             <ImageIcon className="w-12 h-12 text-gray-300 mb-4" />
-                                            <span className="text-gray-900 dark:text-white font-bold">Select News Photo</span>
+                                            <span className="text-gray-900 font-bold">Select News Photo</span>
                                             <input type="file" onChange={handleImageChange} className="hidden" accept="image/*" />
                                         </label>
                                     )}
@@ -440,7 +440,7 @@ const AddNews: React.FC = () => {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="w-full group bg-red-600 hover:bg-black text-white font-black py-8 rounded-[2rem] transition-all duration-500 shadow-2xl shadow-red-600/30 flex items-center justify-center gap-4 active:scale-95"
+                                className="w-full group bg-primary hover:bg-black text-white font-black py-8 rounded-[2rem] transition-all duration-500 shadow-2xl shadow-primary/30 flex items-center justify-center gap-4 active:scale-95"
                             >
                                 {loading ? (
                                     <>

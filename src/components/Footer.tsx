@@ -3,7 +3,7 @@ import { Facebook, Twitter, Instagram } from 'lucide-react';
 
 export function Footer() {
     return (
-        <footer className="w-full bg-secondary dark:bg-[#0a0807] text-white pt-16 pb-8 mt-16 px-8 border-t-4 border-accent transition-colors">
+        <footer className="w-full bg-secondary text-white pt-16 pb-8 mt-16 px-8 border-t-4 border-accent transition-colors">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
                 <div className="col-span-1 md:col-span-1">
                     <h2 className="text-2xl font-serif font-bold mb-6 text-accent">ASRE HAZIR</h2>
@@ -40,18 +40,18 @@ export function Footer() {
                     </ul>
                 </div>
 
-                <div className="col-span-2 bg-gray-50 dark:bg-zinc-900/50 p-8 rounded-xl border border-gray-100 dark:border-zinc-800">
-                    <h3 className="text-2xl font-black mb-6 uppercase tracking-tight text-gray-900 dark:text-white">Our Presence</h3>
-                    <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-6 font-sans">
+                <div className="col-span-2 bg-gray-50 p-8 rounded-xl border border-gray-100">
+                    <h3 className="text-2xl font-black mb-6 uppercase tracking-tight text-gray-900">Our Presence</h3>
+                    <p className="text-gray-600 leading-relaxed mb-6 font-sans">
                         You can find us across multiple platforms. For urgent news tips, please use our editorial email or phone number listed. Our desk is active 24/7 to bring you the latest verified reports.
                     </p>
                     <div className="space-y-4 font-sans mb-8">
-                        <div className="p-4 bg-white dark:bg-zinc-800 rounded-lg border border-gray-100 dark:border-zinc-700">
-                            <h4 className="text-[10px] font-black uppercase tracking-widest text-red-600 mb-1">WhatsApp Broadcast</h4>
+                        <div className="p-4 bg-white rounded-lg border border-gray-100">
+                            <h4 className="text-[10px] font-black uppercase tracking-widest text-primary mb-1">WhatsApp Broadcast</h4>
                             <p className="text-sm font-bold">+91 40 1234 5678</p>
                         </div>
-                        <div className="p-4 bg-white dark:bg-zinc-800 rounded-lg border border-gray-100 dark:border-zinc-700">
-                            <h4 className="text-[10px] font-black uppercase tracking-widest text-red-600 mb-1">Office Hours</h4>
+                        <div className="p-4 bg-white rounded-lg border border-gray-100">
+                            <h4 className="text-[10px] font-black uppercase tracking-widest text-primary mb-1">Office Hours</h4>
                             <p className="text-sm font-bold">Mon - Sat: 10:00 AM - 08:00 PM</p>
                         </div>
                     </div>

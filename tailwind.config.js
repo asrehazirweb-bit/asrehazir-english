@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-    darkMode: 'class',
+    darkMode: 'light',
     content: [
         "./index.html",
         "./src/**/*.{js,ts,jsx,tsx}",
@@ -8,8 +8,8 @@ export default {
     theme: {
         extend: {
             colors: {
-                primary: "#B27B1E", // Keeping for backward compatibility if needed, but 'accent' is the focus now.
-                accent: "#B27B1E",  // The requested accent token
+                primary: "#AA792D",
+                accent: "#AA792D",
                 secondary: "#2B2523",
             },
             fontFamily: {

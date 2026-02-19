@@ -156,11 +156,11 @@ const AdsManagement: React.FC = () => {
         <div className="space-y-12">
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 bg-zinc-900 p-8 md:p-12 rounded-[2.5rem] text-white overflow-hidden relative shadow-2xl">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-red-600/10 rounded-full -mr-32 -mt-32 blur-3xl"></div>
+                <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full -mr-32 -mt-32 blur-3xl"></div>
                 <div className="relative z-10">
                     <div className="flex items-center gap-2 mb-3">
-                        <Megaphone className="text-red-600" size={20} />
-                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-red-500">Marketing Hub</span>
+                        <Megaphone className="text-primary" size={20} />
+                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary">Marketing Hub</span>
                     </div>
                     <h1 className="text-4xl md:text-6xl font-serif font-black tracking-tight uppercase italic leading-none">Ads Manager</h1>
                 </div>
@@ -169,16 +169,16 @@ const AdsManagement: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
                 {/* Ad Creation Form */}
                 <div className="lg:col-span-12">
-                    <form onSubmit={handleSubmit} className="bg-white dark:bg-zinc-900 p-8 md:p-12 rounded-[3rem] shadow-xl border border-gray-100 dark:border-zinc-800 space-y-8">
+                    <form onSubmit={handleSubmit} className="bg-white p-8 md:p-12 rounded-[3rem] shadow-xl border border-gray-100 space-y-8">
                         <div className="flex items-center justify-between">
-                            <h2 className="text-2xl font-black uppercase tracking-tight text-zinc-900 dark:text-white">
+                            <h2 className="text-2xl font-black uppercase tracking-tight text-zinc-900">
                                 {editingAd ? 'Modify Campaign' : 'New Campaign'}
                             </h2>
                             {editingAd && (
                                 <button
                                     type="button"
                                     onClick={cancelEdit}
-                                    className="text-[10px] font-black uppercase tracking-widest text-red-600 hover:text-black transition-colors"
+                                    className="text-[10px] font-black uppercase tracking-widest text-primary hover:text-black transition-colors"
                                 >
                                     Cancel & Exit Edit Mode
                                 </button>
@@ -188,21 +188,21 @@ const AdsManagement: React.FC = () => {
                             <div className="space-y-6">
                                 <div className="space-y-4">
                                     <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 flex items-center gap-2">
-                                        <ExternalLink size={14} className="text-red-600" /> Redirect URL
+                                        <ExternalLink size={14} className="text-primary" /> Redirect URL
                                     </label>
                                     <input
                                         type="url"
                                         value={link}
                                         onChange={(e) => setLink(e.target.value)}
                                         placeholder="https://example.com"
-                                        className="w-full p-4 rounded-2xl border border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-900 focus:border-red-600 outline-none transition-all dark:text-white font-bold"
+                                        className="w-full p-4 rounded-2xl border border-gray-100 bg-gray-50 focus:border-primary outline-none transition-all font-bold"
                                         required
                                     />
                                 </div>
 
                                 <div className="space-y-4">
                                     <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 flex items-center gap-2">
-                                        <Layout size={14} className="text-red-600" /> Ad Placement
+                                        <Layout size={14} className="text-primary" /> Ad Placement
                                     </label>
                                     <div className="grid grid-cols-2 gap-3">
                                         {PLACEMENTS.map((p) => (
@@ -211,8 +211,8 @@ const AdsManagement: React.FC = () => {
                                                 type="button"
                                                 onClick={() => setPlacement(p.id)}
                                                 className={`p-4 rounded-xl border font-black uppercase tracking-tighter text-[10px] transition-all ${placement === p.id
-                                                    ? 'bg-red-600 border-red-600 text-white shadow-lg shadow-red-600/20 scale-[1.02]'
-                                                    : 'bg-white dark:bg-zinc-800 border-gray-100 dark:border-zinc-700 text-gray-500 hover:border-red-600/30'}`}
+                                                    ? 'bg-primary border-primary text-white shadow-lg shadow-primary/20 scale-[1.02]'
+                                                    : 'bg-white border-gray-100 text-gray-500 hover:border-primary/30'}`}
                                             >
                                                 {p.label}
                                             </button>
@@ -223,11 +223,11 @@ const AdsManagement: React.FC = () => {
 
                             <div className="space-y-4">
                                 <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 flex items-center gap-2">
-                                    <ImageIcon size={14} className="text-red-600" /> Creative Asset
+                                    <ImageIcon size={14} className="text-primary" /> Creative Asset
                                 </label>
-                                <div className={`relative border-2 border-dashed rounded-[2rem] p-6 transition-all duration-500 h-[240px] flex flex-col items-center justify-center ${imagePreview ? 'border-red-600 bg-red-50/5' : 'border-gray-200 dark:border-zinc-800 hover:border-red-600'}`}>
+                                <div className={`relative border-2 border-dashed rounded-[2rem] p-6 transition-all duration-500 h-[240px] flex flex-col items-center justify-center ${imagePreview ? 'border-primary bg-primary/5' : 'border-gray-200 hover:border-primary'}`}>
                                     {imagePreview ? (
-                                        <div className="relative w-full h-full rounded-2xl overflow-hidden group bg-gray-50 dark:bg-zinc-950/50 flex items-center justify-center">
+                                        <div className="relative w-full h-full rounded-2xl overflow-hidden group bg-gray-50 flex items-center justify-center">
                                             <img src={imagePreview} alt="Preview" className="max-w-full max-h-full object-contain" />
                                             <button type="button" onClick={() => { setImage(null); setImagePreview(null); }} className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white font-black uppercase tracking-widest text-[10px]">Change Asset</button>
                                         </div>
@@ -245,7 +245,7 @@ const AdsManagement: React.FC = () => {
                         <button
                             type="submit"
                             disabled={uploading}
-                            className="w-full bg-red-600 hover:bg-black text-white py-6 rounded-[2rem] font-black uppercase tracking-[0.3em] shadow-2xl shadow-red-600/20 transition-all flex items-center justify-center gap-3 active:scale-[0.98]"
+                            className="w-full bg-primary hover:bg-black text-white py-6 rounded-[2rem] font-black uppercase tracking-[0.3em] shadow-2xl shadow-primary/20 transition-all flex items-center justify-center gap-3 active:scale-[0.98]"
                         >
                             {uploading ? <Loader2 size={24} className="animate-spin" /> : editingAd ? <Layout size={24} /> : <Plus size={24} />}
                             {uploading ? 'Processing Asset...' : editingAd ? 'Update Ad Creative' : 'Deploy Ad Creative'}
@@ -256,15 +256,15 @@ const AdsManagement: React.FC = () => {
                 {/* Ad Inventory */}
                 <div className="lg:col-span-12 space-y-6">
                     <div className="flex items-center gap-3 px-4">
-                        <div className="w-1.5 h-6 bg-red-600"></div>
-                        <h2 className="text-lg font-black uppercase tracking-tighter dark:text-white">Active Inventory</h2>
-                        <span className="text-[10px] font-black bg-gray-100 dark:bg-zinc-800 text-gray-400 px-3 py-1 rounded-full">{ads.length} Slots Filled</span>
+                        <div className="w-1.5 h-6 bg-primary"></div>
+                        <h2 className="text-lg font-black uppercase tracking-tighter">Active Inventory</h2>
+                        <span className="text-[10px] font-black bg-gray-100 text-gray-400 px-3 py-1 rounded-full">{ads.length} Slots Filled</span>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {ads.map((ad) => (
-                            <div key={ad.id} className="group bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-[2rem] overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500">
-                                <div className="relative aspect-[4/3] overflow-hidden bg-gray-50 dark:bg-zinc-950/50 flex items-center justify-center p-4">
+                            <div key={ad.id} className="group bg-white border border-gray-100 rounded-[2rem] overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500">
+                                <div className="relative aspect-[4/3] overflow-hidden bg-gray-50 flex items-center justify-center p-4">
                                     <img src={ad.imageUrl} alt="Ad" className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-700" />
                                     <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-[8px] font-black text-white uppercase tracking-widest">
                                         {ad.placement.replace('_', ' ')}
@@ -286,7 +286,7 @@ const AdsManagement: React.FC = () => {
                                         </button>
                                         <button
                                             onClick={() => deleteAd(ad.id)}
-                                            className="p-2 bg-red-600/80 backdrop-blur-md text-white rounded-xl hover:bg-red-600 transition-all"
+                                            className="p-2 bg-primary/80 backdrop-blur-md text-white rounded-xl hover:bg-primary transition-all"
                                             title="Delete Ad"
                                         >
                                             <Trash2 size={20} />
@@ -298,7 +298,7 @@ const AdsManagement: React.FC = () => {
                                         <span className={`text-[8px] font-black uppercase tracking-[0.2em] px-2 py-0.5 rounded-full ${ad.active ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-400'}`}>
                                             {ad.active ? 'Serving' : 'Pauced'}
                                         </span>
-                                        <a href={ad.link} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-red-600 transition-colors">
+                                        <a href={ad.link} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-primary transition-colors">
                                             <ExternalLink size={14} />
                                         </a>
                                     </div>
@@ -309,8 +309,8 @@ const AdsManagement: React.FC = () => {
                     </div>
 
                     {ads.length === 0 && !loading && (
-                        <div className="text-center py-20 bg-gray-50 dark:bg-zinc-900/50 rounded-[3rem] border border-dashed border-gray-200 dark:border-zinc-800">
-                            <Megaphone size={48} className="mx-auto text-gray-200 dark:text-zinc-800 mb-4" />
+                        <div className="text-center py-20 bg-gray-50 rounded-[3rem] border border-dashed border-gray-200">
+                            <Megaphone size={48} className="mx-auto text-gray-200 mb-4" />
                             <p className="text-gray-400 font-black uppercase tracking-widest text-[10px]">No active ad campaigns</p>
                         </div>
                     )}
