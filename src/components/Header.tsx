@@ -89,11 +89,11 @@ export function Header() {
                             <div className="flex gap-4 items-center text-gray-400">
                                 <span>{currentDate}</span>
                                 <span className="text-gray-300">|</span>
-                                <a href="https://asrehazir.com" target="_blank" rel="noreferrer" className="flex items-center gap-1.5 uppercase font-black hover:text-primary transition-all">
+                                <a href="https://asrehazir-urdu.vercel.app" target="_blank" rel="noreferrer" className="flex items-center gap-1.5 uppercase font-black hover:text-primary transition-all">
                                     Urdu Portal
                                 </a>
                                 <span className="text-gray-300">|</span>
-                                <a href="https://asrehazir-epaper.vercel.app" target="_blank" rel="noreferrer" className="flex items-center gap-1.5 uppercase font-black hover:text-primary transition-colors text-primary">
+                                <a href="https://asre-hazir-epaper.vercel.app" target="_blank" rel="noreferrer" className="flex items-center gap-1.5 uppercase font-black hover:text-primary transition-colors text-primary">
                                     <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
                                     Electronic Edition
                                 </a>
@@ -138,8 +138,8 @@ export function Header() {
 
                         <div className="flex items-center gap-1 md:gap-4 ml-auto md:ml-0">
                             <div className="hidden md:flex items-center gap-2 mr-4">
-                                <a href="https://asrehazir-epaper.vercel.app" target="_blank" rel="noreferrer" className="px-4 py-2 border-2 border-primary text-primary rounded-xl font-black uppercase text-[10px] hover:bg-primary hover:text-white transition-all shadow-lg shadow-primary/10">E-Paper</a>
-                                <a href="https://asrehazir.com" target="_blank" rel="noreferrer" className="px-4 py-2 bg-zinc-900 text-white rounded-xl font-black uppercase text-[10px] hover:bg-black transition-all shadow-xl shadow-zinc-900/10">اردو پورٹل</a>
+                                <a href="https://asre-hazir-epaper.vercel.app" target="_blank" rel="noreferrer" className="px-4 py-2 border-2 border-primary text-primary rounded-xl font-black uppercase text-[10px] hover:bg-primary hover:text-white transition-all shadow-lg shadow-primary/10">E-Paper</a>
+                                <a href="https://asrehazir-urdu.vercel.app" target="_blank" rel="noreferrer" className="px-4 py-2 bg-zinc-900 text-white rounded-xl font-black uppercase text-[10px] hover:bg-black transition-all shadow-xl shadow-zinc-900/10">اردو پورٹل</a>
                             </div>
                             <button
                                 onClick={() => setIsSearchOpen(true)}
@@ -255,6 +255,25 @@ export function Header() {
                             </div>
 
                             <div className="pt-6">
+                                {/* Portal Links for Mobile */}
+                                <div className="grid grid-cols-2 gap-3 mb-4">
+                                    <a
+                                        href="https://asre-hazir-epaper.vercel.app"
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="flex items-center justify-center gap-2 border-2 border-primary text-primary py-3 font-black uppercase text-xs rounded-xl hover:bg-primary hover:text-white transition-all"
+                                    >
+                                        📰 E-Paper
+                                    </a>
+                                    <a
+                                        href="https://asrehazir-urdu.vercel.app"
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="flex items-center justify-center gap-2 bg-zinc-900 text-white py-3 font-black text-sm rounded-xl hover:bg-black transition-all"
+                                    >
+                                        اردو پورٹل
+                                    </a>
+                                </div>
                                 <Link
                                     to="/login"
                                     onClick={() => setIsMenuOpen(false)}
@@ -263,6 +282,7 @@ export function Header() {
                                     Admin Login
                                 </Link>
                             </div>
+
                         </div>
 
                         {/* Footer in menu */}
