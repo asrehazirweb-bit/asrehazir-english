@@ -6,6 +6,7 @@ import { AdBlock } from '../components/home/AdBlock';
 import { LatestNewsSection } from '../components/home/LatestNewsSection';
 import { RegionalAndOffbeatSection } from '../components/home/RegionalAndOffbeatSection';
 import { CategoryFeatureSection, CategoryGridSection } from '../components/home/CategoryFeatureSection';
+import { NewsTicker } from '../components/NewsTicker';
 import { useNews } from '../hooks/useNews';
 
 const stripHtml = (html: string) => {
@@ -98,10 +99,34 @@ export function Home() {
         titleFont: item.titleFont
     }));
 
-    return (
-        <div className="pt-6">
+    // Separate live news articles
+    const liveNews = news.filter(n => n.isLive);
 
-            <div className="w-full mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
+    return (
+        <div className="pt-0">
+
+            {/* === NEWS TICKER === */}
+            <NewsTicker items={news.slice(0, 10).map(n => ({ id: n.id, title: n.title }))} />
+
+            {/* === LIVE NEWS STRIP === */}
+            {liveNews.length > 0 && (
+                <div className="w-full bg-red-600 text-white px-4 py-3 flex items-center gap-4 overflow-x-auto scrollbar-hide">
+                    <div className="flex-shrink-0 flex items-center gap-2 border-r border-red-400 pr-4">
+                        <span className="w-2.5 h-2.5 rounded-full bg-white animate-ping"></span>
+                        <span className="text-[11px] font-black uppercase tracking-[0.25em] whitespace-nowrap">🔴 Live</span>
+                    </div>
+                    <div className="flex items-center gap-6">
+                        {liveNews.slice(0, 5).map(item => (
+                            <a key={item.id} href={`/news/${item.id}`}
+                                className="text-sm font-bold whitespace-nowrap hover:text-red-200 transition-colors border-r border-red-400 pr-6 last:border-0 last:pr-0">
+                                {item.title}
+                            </a>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            <div className="w-full mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12 mt-6">
 
                 {/* === LEFT CONTENT COLUMN (8 Columns) === */}
                 <div className="lg:col-span-8 flex flex-col">

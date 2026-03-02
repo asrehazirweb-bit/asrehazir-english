@@ -1,81 +1,106 @@
 import React, { useState, useEffect } from 'react';
 import { db, auth } from '../../lib/firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, query, orderBy, limit, getDocs, onSnapshot } from 'firebase/firestore';
 import { uploadImage } from '../../lib/cloudinary';
-import { Image as ImageIcon, Send, Layout, Type, FileText, Tag, Trash2, Sparkles, CheckCircle2 } from 'lucide-react';
+import { Image as ImageIcon, Send, Layout, Type, FileText, Tag, Trash2, Sparkles, CheckCircle2, List, Activity, Hash, Loader } from 'lucide-react';
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import ConfirmationModal from '../../components/admin/ConfirmationModal';
 import Toast from '../../components/ui/Toast';
 
-const CATEGORIES = [
-    { name: 'World News', subCategories: ['Top Stories', 'Middle East', 'International', 'Diplomacy'] },
-    { name: 'National News', subCategories: ['Top Stories', 'Politics', 'Governance', 'States'] },
-    { name: 'Deccan News', subCategories: ['Hyderabad', 'Telangana', 'Andhra Pradesh', 'South India'] },
-    { name: 'Articles & Essays', subCategories: ['Editorial', 'Analysis', 'Opinion', 'Special Reports'] },
-    { name: 'Sports & Entertainment', subCategories: ['Cricket', 'Cinema', 'OTT', 'Lifestyle'] },
-    { name: 'Crime & Accidents', subCategories: ['Local Crime', 'Investigation', 'Security', 'Accidents'] },
-    { name: 'Photos', subCategories: ['Top Stories', 'Politics', 'Sports', 'Entertainment', 'Events'] },
-    { name: 'Videos', subCategories: ['News', 'Events', 'Interviews', 'Viral'] }
+interface CategoryDoc {
+    id: string;
+    name: string;
+    subCategories: string[];
+    order: number;
+}
+
+// Fallback categories — matches the navbar exactly.
+// Used when Firestore rules are not yet configured or collection is empty.
+const FALLBACK_CATEGORIES: CategoryDoc[] = [
+    { id: 'f1', name: 'World News', subCategories: ['Top Stories', 'Middle East', 'International', 'Diplomacy'], order: 1 },
+    { id: 'f2', name: 'National News', subCategories: ['Top Stories', 'Politics', 'Governance', 'States'], order: 2 },
+    { id: 'f3', name: 'Hyderabad', subCategories: ['Local News', 'Crime', 'Politics', 'Business', 'Events'], order: 3 },
+    { id: 'f4', name: 'Telangana', subCategories: ['Local News', 'Politics', 'Development', 'Agriculture'], order: 4 },
+    { id: 'f5', name: 'Andhra Pradesh', subCategories: ['Local News', 'Politics', 'Development', 'Business'], order: 5 },
+    { id: 'f6', name: 'Photos', subCategories: ['Top Stories', 'Politics', 'Sports', 'Entertainment', 'Events'], order: 6 },
+    { id: 'f7', name: 'Videos', subCategories: ['News', 'Events', 'Interviews', 'Viral'], order: 7 },
+    { id: 'f8', name: 'Articles & Essays', subCategories: ['Editorial', 'Analysis', 'Opinion', 'Special Reports'], order: 8 },
+    { id: 'f9', name: 'Sports & Entertainment', subCategories: ['Cricket', 'Cinema', 'OTT', 'Lifestyle'], order: 9 },
+    { id: 'f10', name: 'Crime & Accidents', subCategories: ['Local Crime', 'Investigation', 'Security', 'Accidents'], order: 10 },
 ];
 
-const FONTS_TITLE = [
-    { id: 'font-playfair', name: 'Playfair Display (Newsroom)' },
-    { id: 'font-lora', name: 'Lora (Elegant)' },
-    { id: 'font-oswald', name: 'Oswald (Bold)' },
-    { id: 'font-montserrat', name: 'Montserrat (Modern)' },
-    { id: 'font-merriweather', name: 'Merriweather (Classic)' },
-    { id: 'font-ubuntu', name: 'Ubuntu (Soft)' },
-    { id: 'font-raleway', name: 'Raleway (Stylish)' },
-    { id: 'font-roboto-slab', name: 'Roboto Slab (Traditional)' },
-    { id: 'font-inter', name: 'Inter (Standard)' },
-    { id: 'font-georgia', name: 'Georgia (Serif)' }
-];
-
-const FONTS_CONTENT = [
-    { id: 'font-merriweather', name: 'Merriweather (Clear)' },
-    { id: 'font-lora', name: 'Lora (Classic)' },
-    { id: 'font-inter', name: 'Inter (Sharp)' },
-    { id: 'font-roboto-slab', name: 'Roboto Slab (Soft)' },
-    { id: 'font-montserrat', name: 'Montserrat (Modern)' },
-    { id: 'font-playfair', name: 'Playfair Display' },
-    { id: 'font-ubuntu', name: 'Ubuntu' },
-    { id: 'font-raleway', name: 'Raleway' },
-    { id: 'font-georgia', name: 'Georgia' },
-    { id: 'font-sans', name: 'Default Sans' }
-];
 
 const AddNews: React.FC = () => {
     const [title, setTitle] = useState('');
+    const [subHeadline, setSubHeadline] = useState('');
     const [content, setContent] = useState('');
     const [section, setSection] = useState('Top Stories');
-    const [category, setCategory] = useState('World News');
-    const [subCategory, setSubCategory] = useState('Top Stories');
+    const [category, setCategory] = useState('');
+    const [subCategory, setSubCategory] = useState('');
+    const [hashtags, setHashtags] = useState('');
+    const [isLive, setIsLive] = useState(false);
     const [image, setImage] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [existingImageUrl, setExistingImageUrl] = useState<string | null>(null);
+    const [sendPush, setSendPush] = useState(false);
     const [loading, setLoading] = useState(false);
     const [successMessage, setSuccessMessage] = useState(false);
-    const [titleFont, setTitleFont] = useState('font-playfair');
-    const [contentFont, setContentFont] = useState('font-merriweather');
     const [videoUrl, setVideoUrl] = useState('');
+    const [isMediaLibraryOpen, setIsMediaLibraryOpen] = useState(false);
+    const [mediaLibrary, setMediaLibrary] = useState<string[]>([]);
 
-    // New state for modal and toast
+    // Dynamic categories from Firestore
+    const [categories, setCategories] = useState<CategoryDoc[]>([]);
+    const [catsLoading, setCatsLoading] = useState(true);
+
+    // Modal and toast
     const [isClearModalOpen, setIsClearModalOpen] = useState(false);
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+
+    // Load categories from Firestore in real-time; fall back to defaults on error/empty
+    useEffect(() => {
+        const unsub = onSnapshot(
+            query(collection(db, 'categories_english'), orderBy('order', 'asc')),
+            (snap) => {
+                const cats = snap.docs.map(d => ({ id: d.id, ...d.data() })) as CategoryDoc[];
+                // If Firestore returns empty, use fallback so dropdown is never blank
+                const resolved = cats.length > 0 ? cats : FALLBACK_CATEGORIES;
+                setCategories(resolved);
+                setCatsLoading(false);
+                if (!category) {
+                    setCategory(resolved[0].name);
+                    setSubCategory(resolved[0].subCategories?.[0] || '');
+                }
+            },
+            (_err) => {
+                // Permission denied or network issue — use fallback
+                setCategories(FALLBACK_CATEGORIES);
+                setCatsLoading(false);
+                if (!category) {
+                    setCategory(FALLBACK_CATEGORIES[0].name);
+                    setSubCategory(FALLBACK_CATEGORIES[0].subCategories[0]);
+                }
+            }
+        );
+        return () => unsub();
+    }, []);
 
     // Load draft
     useEffect(() => {
         const draft = localStorage.getItem('asre-hazir-draft');
         if (draft) {
-            const { title: dTitle, content: dContent, category: dCategory, subCategory: dSubCategory, section: dSection, titleFont: dTitleFont, contentFont: dContentFont } = JSON.parse(draft);
-            setTitle(dTitle || '');
-            setContent(dContent || '');
-            setCategory(dCategory || 'World News');
-            setSubCategory(dSubCategory || 'Top Stories');
-            setSection(dSection || 'Top Stories');
-            setTitleFont(dTitleFont || 'font-playfair');
-            setContentFont(dContentFont || 'font-merriweather');
-            setVideoUrl(JSON.parse(draft).videoUrl || '');
+            const data = JSON.parse(draft);
+            setTitle(data.title || '');
+            setSubHeadline(data.subHeadline || '');
+            setContent(data.content || '');
+            setCategory(data.category || 'World News');
+            setSubCategory(data.subCategory || 'Top Stories');
+            setSection(data.section || 'Top Stories');
+            setVideoUrl(data.videoUrl || '');
+            setHashtags(data.hashtags || '');
+            setIsLive(data.isLive || false);
+            setSendPush(data.sendPush || false);
         }
     }, []);
 
@@ -83,11 +108,25 @@ const AddNews: React.FC = () => {
     useEffect(() => {
         const timer = setTimeout(() => {
             if (title || content) {
-                localStorage.setItem('asre-hazir-draft', JSON.stringify({ title, content, category, subCategory, section, titleFont, contentFont, videoUrl }));
+                localStorage.setItem('asre-hazir-draft', JSON.stringify({
+                    title, subHeadline, content, category, subCategory, section, videoUrl, hashtags, isLive, sendPush
+                }));
             }
         }, 2000);
         return () => clearTimeout(timer);
-    }, [title, content, category, subCategory, section, titleFont, contentFont, videoUrl]);
+    }, [title, subHeadline, content, category, subCategory, section, videoUrl, hashtags, isLive, sendPush]);
+
+    const fetchMediaLibrary = async () => {
+        setIsMediaLibraryOpen(true);
+        try {
+            const q = query(collection(db, 'news'), orderBy('createdAt', 'desc'), limit(50));
+            const snapshot = await getDocs(q);
+            const urls = Array.from(new Set(snapshot.docs.map(doc => doc.data().imageUrl).filter(Boolean))) as string[];
+            setMediaLibrary(urls);
+        } catch (error) {
+            console.error("Error fetching media library:", error);
+        }
+    };
 
     const handleClearDraftClick = () => {
         setIsClearModalOpen(true);
@@ -95,13 +134,18 @@ const AddNews: React.FC = () => {
 
     const confirmClearDraft = () => {
         setTitle('');
+        setSubHeadline('');
         setContent('');
         setImage(null);
         setImagePreview(null);
+        setExistingImageUrl(null);
         setSection('Top Stories');
         setCategory('World News');
         setSubCategory('Top Stories');
         setVideoUrl('');
+        setHashtags('');
+        setIsLive(false);
+        setSendPush(false);
         localStorage.removeItem('asre-hazir-draft');
         setIsClearModalOpen(false);
         setToast({ message: 'Draft cleared successfully', type: 'success' });
@@ -109,9 +153,9 @@ const AddNews: React.FC = () => {
 
     const handleCategoryChange = (val: string) => {
         setCategory(val);
-        const cat = CATEGORIES.find(c => c.name === val);
+        const cat = categories.find(c => c.name === val);
         if (cat) {
-            setSubCategory(cat.subCategories[0]);
+            setSubCategory(cat.subCategories[0] || '');
         } else if (val !== 'Other') {
             setSubCategory('General');
         }
@@ -120,6 +164,7 @@ const AddNews: React.FC = () => {
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files ? e.target.files[0] : null;
         setImage(file);
+        setExistingImageUrl(null);
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
@@ -136,50 +181,58 @@ const AddNews: React.FC = () => {
         setLoading(true);
 
         try {
-            // Validate image is required
-            if (!image) {
-                setToast({ message: 'Please upload an image', type: 'error' });
-                setLoading(false);
-                return;
+            let imageUrl = existingImageUrl || '';
+            if (image) {
+                try {
+                    imageUrl = await uploadImage(image, 'english');
+                } catch (imgErr: any) {
+                    console.error("Image upload error:", imgErr);
+                    setToast({ message: `Image upload failed: ${imgErr.message || 'Unknown error'}`, type: 'error' });
+                }
             }
 
-            // Upload image
-            let imageUrl = '';
-            try {
-                imageUrl = await uploadImage(image, 'english');
-                console.log('✅ Image uploaded:', imageUrl);
-            } catch (imgErr: any) {
-                console.error("Image upload error:", imgErr);
-                setToast({ message: `Image upload failed: ${imgErr.message || 'Unknown error'}`, type: 'error' });
-                setLoading(false);
-                return;
-            }
-
-            // Save to Firestore - IMAGE ONLY
-            await addDoc(collection(db, 'news'), {
+            const docData = {
                 title,
+                subHeadline,
                 content,
                 section,
                 category,
                 subCategory,
-                titleFont,
-                contentFont,
+                hashtags: hashtags.split(',').map(s => s.trim()).filter(Boolean),
+                isLive,
                 videoUrl,
-                imageUrl: imageUrl,  // Single image field
+                imageUrl: imageUrl,
                 createdAt: serverTimestamp(),
                 author: auth.currentUser?.displayName || 'Asre Hazir Desk',
                 authorId: auth.currentUser?.uid,
                 status: 'published'
-            });
+            };
 
-            console.log('✅ News article published successfully');
+            const docRef = await addDoc(collection(db, 'news'), docData);
+
+            // Trigger Push Notification record if requested
+            if (sendPush) {
+                await addDoc(collection(db, 'notifications'), {
+                    title: 'New Story Published',
+                    message: title,
+                    articleId: docRef.id,
+                    createdAt: serverTimestamp(),
+                    read: false,
+                    portal: 'english'
+                });
+            }
+
             setToast({ message: 'Article published successfully!', type: 'success' });
-
             setSuccessMessage(true);
             setTitle('');
+            setSubHeadline('');
             setContent('');
             setImage(null);
             setImagePreview(null);
+            setExistingImageUrl(null);
+            setHashtags('');
+            setIsLive(false);
+            setSendPush(false);
             localStorage.removeItem('asre-hazir-draft');
 
             setTimeout(() => setSuccessMessage(false), 5000);
@@ -194,8 +247,18 @@ const AddNews: React.FC = () => {
         }
     };
 
-    const currentSubCategories = CATEGORIES.find(c => c.name === category)?.subCategories || [];
+    const currentCat = categories.find(c => c.name === category);
+    const currentSubCategories = currentCat?.subCategories || [];
     const SECTIONS = ['Top Stories', 'Breaking News', 'Must Watch', 'Latest News', 'Regional', 'Other'];
+
+    if (catsLoading) {
+        return (
+            <div className="flex items-center justify-center min-h-[400px] gap-3 text-gray-400">
+                <Loader size={20} className="animate-spin text-primary" />
+                <span className="font-bold text-sm">Loading categories...</span>
+            </div>
+        );
+    }
 
     return (
         <div className="max-w-6xl mx-auto pb-20 px-4">
@@ -249,37 +312,69 @@ const AddNews: React.FC = () => {
                                     type="text"
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
-                                    className={`w-full text-3xl md:text-5xl font-black border-b-2 border-gray-100 bg-transparent py-4 focus:border-primary outline-none transition-all ${titleFont}`}
+                                    className="w-full text-3xl md:text-5xl font-black border-b-2 border-gray-100 bg-transparent py-4 focus:border-primary outline-none transition-all"
                                     placeholder="Enter Headline..."
                                     required
                                 />
                             </div>
 
-                            {/* Font Strategy Strategy Selection */}
+                            {/* Sub-Headline */}
+                            <div className="space-y-4">
+                                <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
+                                    <List className="w-3.5 h-3.5 text-primary" /> Sub-Headline
+                                </label>
+                                <input
+                                    type="text"
+                                    value={subHeadline}
+                                    onChange={(e) => setSubHeadline(e.target.value)}
+                                    className="w-full text-xl md:text-2xl font-bold border-b border-gray-100 bg-transparent py-2 focus:border-primary outline-none transition-all text-gray-600"
+                                    placeholder="Enter sub-headline..."
+                                />
+                            </div>
+
+                            {/* Hashtags & Live Toggle */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-zinc-50 p-8 rounded-3xl border border-gray-100">
                                 <div className="space-y-4">
                                     <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
-                                        <Sparkles className="w-3.5 h-3.5 text-primary" /> Headline Font
+                                        <Hash className="w-3.5 h-3.5 text-primary" /> Hashtags (comma separated)
                                     </label>
-                                    <select
-                                        value={titleFont}
-                                        onChange={(e) => setTitleFont(e.target.value)}
+                                    <input
+                                        type="text"
+                                        value={hashtags}
+                                        onChange={(e) => setHashtags(e.target.value)}
                                         className="w-full p-4 rounded-xl border border-gray-100 bg-white focus:ring-4 focus:ring-primary/10 outline-none transition-all font-bold text-xs h-14"
-                                    >
-                                        {FONTS_TITLE.map(f => <option key={f.id} value={f.id} className={f.id}>{f.name}</option>)}
-                                    </select>
+                                        placeholder="#politics, #hyderabad..."
+                                    />
                                 </div>
-                                <div className="space-y-4">
-                                    <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
-                                        <FileText className="w-3.5 h-3.5 text-primary" /> story Content Font
+                                <div className="space-y-4 flex flex-col justify-center">
+                                    <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-2">
+                                        <Activity className="w-3.5 h-3.5 text-primary" /> Broadcasting Options
                                     </label>
-                                    <select
-                                        value={contentFont}
-                                        onChange={(e) => setContentFont(e.target.value)}
-                                        className="w-full p-4 rounded-xl border border-gray-100 bg-white focus:ring-4 focus:ring-primary/10 outline-none transition-all font-bold text-xs h-14"
-                                    >
-                                        {FONTS_CONTENT.map(f => <option key={f.id} value={f.id} className={f.id}>{f.name}</option>)}
-                                    </select>
+                                    <div className="flex flex-col gap-3">
+                                        <div className="flex items-center justify-between gap-4 p-4 bg-white rounded-xl border border-gray-100 h-14">
+                                            <span className="font-bold text-sm text-gray-600">Show as Live News</span>
+                                            <div className="flex items-center gap-4">
+                                                {categories.some(c => c.name === category) && (
+                                                    <span className="bg-green-100 text-green-700 px-2 py-1 rounded-md text-[10px] font-bold">Eligible</span>
+                                                )}
+                                                <input
+                                                    type="checkbox"
+                                                    checked={isLive}
+                                                    onChange={(e) => setIsLive(e.target.checked)}
+                                                    className="w-6 h-6 accent-primary cursor-pointer"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center justify-between gap-4 p-4 bg-white rounded-xl border border-gray-100 h-14">
+                                            <span className="font-bold text-sm text-gray-600 font-sans italic">Send Push Notification</span>
+                                            <input
+                                                type="checkbox"
+                                                checked={sendPush}
+                                                onChange={(e) => setSendPush(e.target.checked)}
+                                                className="w-6 h-6 accent-primary cursor-pointer"
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -318,7 +413,7 @@ const AddNews: React.FC = () => {
                                         <Tag className="w-3.5 h-3.5 text-primary" /> News Category
                                     </label>
                                     <select
-                                        value={CATEGORIES.find(c => c.name === category) ? category : 'Other'}
+                                        value={categories.find(c => c.name === category) ? category : 'Other'}
                                         onChange={(e) => {
                                             const val = e.target.value;
                                             if (val === 'Other') {
@@ -330,12 +425,12 @@ const AddNews: React.FC = () => {
                                         }}
                                         className="w-full p-4 rounded-xl border border-gray-100 bg-gray-50 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-bold text-xs h-14"
                                     >
-                                        {CATEGORIES.map(cat => (
+                                        {categories.map(cat => (
                                             <option key={cat.name} value={cat.name}>{cat.name}</option>
                                         ))}
                                         <option value="Other">Other (Custom)...</option>
                                     </select>
-                                    {(category === '' || !CATEGORIES.find(c => c.name === category)) && (
+                                    {(category === '' || !categories.find(c => c.name === category)) && (
                                         <input
                                             type="text"
                                             placeholder="Enter Custom Category..."
@@ -351,7 +446,7 @@ const AddNews: React.FC = () => {
                                     <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
                                         <Layout className="w-3.5 h-3.5 text-primary" /> Sub-category
                                     </label>
-                                    {CATEGORIES.find(c => c.name === category) ? (
+                                    {currentCat ? (
                                         <select
                                             value={subCategory}
                                             onChange={(e) => setSubCategory(e.target.value)}
@@ -396,7 +491,7 @@ const AddNews: React.FC = () => {
                                 <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
                                     <FileText className="w-3.5 h-3.5 text-primary" /> Story Body
                                 </label>
-                                <div className={`quill-wrapper ${contentFont}`}>
+                                <div className="quill-wrapper font-inter">
                                     <ReactQuill
                                         theme="snow"
                                         value={content}
@@ -417,14 +512,23 @@ const AddNews: React.FC = () => {
 
                             {/* Image Upload */}
                             <div className="space-y-4">
-                                <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
-                                    <ImageIcon className="w-3.5 h-3.5 text-primary" /> Media Asset
-                                </label>
-                                <div className={`relative border-2 border-dashed rounded-[2rem] p-6 transition-all duration-500 ${imagePreview ? 'border-primary bg-primary/5' : 'border-gray-200 hover:border-primary'}`}>
-                                    {imagePreview ? (
+                                <div className="flex justify-between items-center mb-4">
+                                    <button
+                                        type="button"
+                                        onClick={fetchMediaLibrary}
+                                        className="text-primary font-bold hover:underline flex items-center gap-2 text-sm"
+                                    >
+                                        <List size={16} /> Select from Media Library
+                                    </button>
+                                    <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
+                                        <ImageIcon className="w-3.5 h-3.5 text-primary" /> Media Asset
+                                    </label>
+                                </div>
+                                <div className={`relative border-2 border-dashed rounded-[2rem] p-6 transition-all duration-500 ${imagePreview || existingImageUrl ? 'border-primary bg-primary/5' : 'border-gray-200 hover:border-primary'}`}>
+                                    {imagePreview || existingImageUrl ? (
                                         <div className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl">
-                                            <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
-                                            <button type="button" onClick={() => { setImage(null); setImagePreview(null); }} className="absolute top-4 right-4 bg-black/80 backdrop-blur-md text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase">Change Image</button>
+                                            <img src={imagePreview || existingImageUrl || ''} alt="Preview" className="w-full h-full object-cover" />
+                                            <button type="button" onClick={() => { setImage(null); setImagePreview(null); setExistingImageUrl(null); }} className="absolute top-4 right-4 bg-black/80 backdrop-blur-md text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase">Change Image</button>
                                         </div>
                                     ) : (
                                         <label className="flex flex-col items-center justify-center min-h-[16rem] cursor-pointer">
@@ -458,6 +562,37 @@ const AddNews: React.FC = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Media Library Modal */}
+            {isMediaLibraryOpen && (
+                <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+                    <div className="bg-white w-full max-w-4xl rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+                        <div className="p-8 border-b border-gray-100 flex justify-between items-center bg-zinc-900 text-white">
+                            <h2 className="text-2xl font-black uppercase italic">Media Library</h2>
+                            <button onClick={() => setIsMediaLibraryOpen(false)} className="bg-zinc-800 p-2 rounded-full hover:bg-red-600 transition-colors">
+                                <Trash2 size={20} />
+                            </button>
+                        </div>
+                        <div className="p-8 overflow-y-auto grid grid-cols-2 md:grid-cols-4 gap-4">
+                            {mediaLibrary.map((url, i) => (
+                                <div
+                                    key={i}
+                                    className="aspect-square rounded-2xl overflow-hidden border-2 border-transparent hover:border-primary cursor-pointer transition-all box-content"
+                                    onClick={() => {
+                                        setExistingImageUrl(url);
+                                        setImage(null);
+                                        setImagePreview(null);
+                                        setIsMediaLibraryOpen(false);
+                                    }}
+                                >
+                                    <img src={url} alt="Media" className="w-full h-full object-cover" />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* Confirmation Modal */}
             <ConfirmationModal
                 isOpen={isClearModalOpen}

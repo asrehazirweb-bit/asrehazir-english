@@ -22,10 +22,12 @@ export function CategoryPage({ category, title }: CategoryPageProps) {
     const filteredNews = allNews.filter(item => {
         const cat = item.category?.toLowerCase() || '';
         if (category === 'Deccan News') {
-            return cat.includes('deccan') || cat.includes('hyderabad') || cat.includes('telangana') || cat.includes('دکن');
+            const isSouthIndia = cat.includes('south india') || cat.includes('جنوبی ہند');
+            if (isSouthIndia) return false;
+            return cat.includes('deccan') || cat.includes('hyderabad') || cat.includes('telangana') || cat.includes('andhra pradesh') || cat.includes('دکن');
         }
         if (category === 'National News') {
-            return cat.includes('national') || cat.includes('india') || cat.includes('قومی');
+            return cat.includes('national') || cat.includes('india') || cat.includes('قومی') || cat.includes('south india') || cat.includes('جنوبی ہند');
         }
         if (category === 'World News') {
             return cat.includes('world') || cat.includes('international') || cat.includes('middle east') || cat.includes('عالمی');

@@ -248,3 +248,24 @@
 .ql-editor h3 {
   @apply text-lg md:text-2xl font-bold mb-2 !important;
 }
+
+/* News Ticker Animation */
+@keyframes ticker {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-ticker {
+  animation: ticker 30s linear infinite;
+  display: inline-flex;
+  width: max-content;
+}
+
+.animate-ticker:hover {
+  animation-play-state: paused;
+}

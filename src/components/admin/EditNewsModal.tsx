@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { db, storage } from '../../lib/firebase';
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc, collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { X, Save, Image as ImageIcon, Layout, Type, FileText, Tag, Loader2 } from 'lucide-react';
+import { X, Save, Image as ImageIcon, Layout, Type, FileText, Tag, Loader2, List, Hash, Activity } from 'lucide-react';
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import { type NewsArticle } from '../../hooks/useNews';
@@ -15,49 +15,44 @@ interface EditNewsModalProps {
 
 const CATEGORIES = [
     { name: 'World News', subCategories: ['Top Stories', 'Middle East', 'International', 'Diplomacy'] },
-    { name: 'National News', subCategories: ['Top Stories', 'Politics', 'Governance', 'States'] },
-    { name: 'Deccan News', subCategories: ['Hyderabad', 'Telangana', 'Andhra Pradesh', 'South India'] },
+    { name: 'National News', subCategories: ['Top Stories', 'Politics', 'Governance', 'States', 'South India'] },
+    { name: 'Deccan News', subCategories: ['Hyderabad', 'Telangana', 'Andhra Pradesh'] },
     { name: 'Articles & Essays', subCategories: ['Editorial', 'Analysis', 'Opinion', 'Special Reports'] },
     { name: 'Sports & Entertainment', subCategories: ['Cricket', 'Cinema', 'OTT', 'Lifestyle'] },
-    { name: 'Crime & Accidents', subCategories: ['Local Crime', 'Investigation', 'Security', 'Accidents'] }
+    { name: 'Crime & Accidents', subCategories: ['Local Crime', 'Investigation', 'Security', 'Accidents'] },
+    { name: 'Photos', subCategories: ['Top Stories', 'Politics', 'Sports', 'Entertainment', 'Events'] },
+    { name: 'Videos', subCategories: ['News', 'Events', 'Interviews', 'Viral'] }
 ];
 
-const FONTS_TITLE = [
-    { id: 'font-playfair', name: 'Playfair Display (Newsroom)' },
-    { id: 'font-lora', name: 'Lora (Elegant)' },
-    { id: 'font-oswald', name: 'Oswald (Bold)' },
-    { id: 'font-montserrat', name: 'Montserrat (Modern)' },
-    { id: 'font-merriweather', name: 'Merriweather (Classic)' },
-    { id: 'font-ubuntu', name: 'Ubuntu (Soft)' },
-    { id: 'font-raleway', name: 'Raleway (Stylish)' },
-    { id: 'font-roboto-slab', name: 'Roboto Slab (Traditional)' },
-    { id: 'font-inter', name: 'Inter (Standard)' },
-    { id: 'font-georgia', name: 'Georgia (Serif)' }
-];
-
-const FONTS_CONTENT = [
-    { id: 'font-merriweather', name: 'Merriweather (Clear)' },
-    { id: 'font-lora', name: 'Lora (Classic)' },
-    { id: 'font-inter', name: 'Inter (Sharp)' },
-    { id: 'font-roboto-slab', name: 'Roboto Slab (Soft)' },
-    { id: 'font-montserrat', name: 'Montserrat (Modern)' },
-    { id: 'font-playfair', name: 'Playfair Display' },
-    { id: 'font-ubuntu', name: 'Ubuntu' },
-    { id: 'font-raleway', name: 'Raleway' },
-    { id: 'font-georgia', name: 'Georgia' },
-    { id: 'font-sans', name: 'Default Sans' }
-];
+const LIVE_CATEGORIES = ['World News', 'National News', 'Deccan News', 'Sports & Entertainment'];
 
 const EditNewsModal: React.FC<EditNewsModalProps> = ({ article, onClose, onSuccess }) => {
     const [title, setTitle] = useState(article.title);
+    const [subHeadline, setSubHeadline] = useState(article.subHeadline || '');
     const [content, setContent] = useState(article.content);
     const [category, setCategory] = useState(article.category);
     const [subCategory, setSubCategory] = useState(article.subCategory || 'Top Stories');
+    const [hashtags, setHashtags] = useState(article.hashtags?.join(', ') || '');
+    const [isLive, setIsLive] = useState(article.isLive || false);
     const [image, setImage] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(article.imageUrl);
+    const [existingImageUrl, setExistingImageUrl] = useState<string | null>(article.imageUrl);
     const [loading, setLoading] = useState(false);
-    const [titleFont, setTitleFont] = useState(article.titleFont || 'font-playfair');
-    const [contentFont, setContentFont] = useState(article.contentFont || 'font-merriweather');
+    const [videoUrl, setVideoUrl] = useState(article.videoUrl || '');
+    const [isMediaLibraryOpen, setIsMediaLibraryOpen] = useState(false);
+    const [mediaLibrary, setMediaLibrary] = useState<string[]>([]);
+
+    const fetchMediaLibrary = async () => {
+        setIsMediaLibraryOpen(true);
+        try {
+            const q = query(collection(db, 'news'), orderBy('createdAt', 'desc'), limit(50));
+            const snapshot = await getDocs(q);
+            const urls = Array.from(new Set(snapshot.docs.map(doc => doc.data().imageUrl).filter(Boolean))) as string[];
+            setMediaLibrary(urls);
+        } catch (error) {
+            console.error("Error fetching media library:", error);
+        }
+    };
 
     const handleCategoryChange = (val: string) => {
         setCategory(val);
@@ -70,6 +65,7 @@ const EditNewsModal: React.FC<EditNewsModalProps> = ({ article, onClose, onSucce
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files ? e.target.files[0] : null;
         setImage(file);
+        setExistingImageUrl(null);
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
@@ -84,7 +80,7 @@ const EditNewsModal: React.FC<EditNewsModalProps> = ({ article, onClose, onSucce
         setLoading(true);
 
         try {
-            let imageUrl = article.imageUrl;
+            let imageUrl = existingImageUrl || article.imageUrl;
 
             if (image) {
                 try {
@@ -100,11 +96,13 @@ const EditNewsModal: React.FC<EditNewsModalProps> = ({ article, onClose, onSucce
             const docRef = doc(db, 'news', article.id);
             await updateDoc(docRef, {
                 title,
+                subHeadline,
                 content,
                 category,
                 subCategory,
-                titleFont,
-                contentFont,
+                hashtags: hashtags.split(',').map(s => s.trim()).filter(Boolean),
+                isLive,
+                videoUrl,
                 imageUrl,
                 updatedAt: new Date()
             });
@@ -155,36 +153,57 @@ const EditNewsModal: React.FC<EditNewsModalProps> = ({ article, onClose, onSucce
                             type="text"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
-                            className={`w-full text-2xl md:text-3xl font-black border-b-2 border-gray-100 bg-transparent py-4 focus:border-primary outline-none transition-all ${titleFont}`}
+                            className="w-full text-2xl md:text-3xl font-black border-b-2 border-gray-100 bg-transparent py-4 focus:border-primary outline-none transition-all"
                             required
                         />
                     </div>
 
-                    {/* Font Configuration */}
+                    {/* Sub-Headline */}
+                    <div className="space-y-4">
+                        <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
+                            <List className="w-3.5 h-3.5 text-primary" /> Sub-Headline
+                        </label>
+                        <input
+                            type="text"
+                            value={subHeadline}
+                            onChange={(e) => setSubHeadline(e.target.value)}
+                            className="w-full text-xl font-bold border-b border-gray-100 bg-transparent py-2 focus:border-primary outline-none transition-all text-gray-600"
+                            placeholder="Enter sub-headline..."
+                        />
+                    </div>
+
+                    {/* Hashtags & Live Toggle */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-6 bg-zinc-50 rounded-3xl border border-gray-100">
                         <div className="space-y-4">
                             <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
-                                <Save size={14} className="text-primary" /> Title Font
+                                <Hash className="w-3.5 h-3.5 text-primary" /> Hashtags (comma separated)
                             </label>
-                            <select
-                                value={titleFont}
-                                onChange={(e) => setTitleFont(e.target.value)}
-                                className="w-full p-3 rounded-xl border border-gray-100 bg-white focus:ring-4 focus:ring-primary/10 outline-none text-xs font-bold"
-                            >
-                                {FONTS_TITLE.map(f => <option key={f.id} value={f.id} className={f.id}>{f.name}</option>)}
-                            </select>
+                            <input
+                                type="text"
+                                value={hashtags}
+                                onChange={(e) => setHashtags(e.target.value)}
+                                className="w-full p-3 rounded-xl border border-gray-100 bg-white focus:ring-4 focus:ring-primary/10 outline-none text-xs font-bold h-12"
+                                placeholder="#politics, #hyderabad..."
+                            />
                         </div>
-                        <div className="space-y-4">
-                            <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
-                                <FileText size={14} className="text-primary" /> Content Font
+                        <div className="space-y-4 flex flex-col justify-center">
+                            <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-2">
+                                <Activity className="w-3.5 h-3.5 text-primary" /> Live News
                             </label>
-                            <select
-                                value={contentFont}
-                                onChange={(e) => setContentFont(e.target.value)}
-                                className="w-full p-3 rounded-xl border border-gray-100 bg-white focus:ring-4 focus:ring-primary/10 outline-none text-xs font-bold"
-                            >
-                                {FONTS_CONTENT.map(f => <option key={f.id} value={f.id} className={f.id}>{f.name}</option>)}
-                            </select>
+                            <div className="flex items-center justify-between gap-4 p-3 bg-white rounded-xl border border-gray-100 h-12">
+                                <span className="font-bold text-xs text-gray-600">Show as Live News</span>
+                                <div className="flex items-center gap-4">
+                                    {LIVE_CATEGORIES.includes(category) && (
+                                        <span className="bg-green-100 text-green-700 px-2 py-1 rounded-md text-[10px] font-bold">Eligible</span>
+                                    )}
+                                    <input
+                                        type="checkbox"
+                                        checked={isLive}
+                                        onChange={(e) => setIsLive(e.target.checked)}
+                                        className="w-5 h-5 accent-primary cursor-pointer"
+                                    />
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -192,12 +211,12 @@ const EditNewsModal: React.FC<EditNewsModalProps> = ({ article, onClose, onSucce
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div className="space-y-4">
                             <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
-                                <Tag className="w-3.5 h-3.5 text-primary" /> Section
+                                <Tag className="w-3.5 h-3.5 text-primary" /> Category
                             </label>
                             <select
                                 value={category}
                                 onChange={(e) => handleCategoryChange(e.target.value)}
-                                className="w-full p-4 rounded-2xl border border-gray-100 bg-gray-50 focus:ring-4 focus:ring-primary/10 outline-none transition-all appearance-none cursor-pointer font-bold text-sm"
+                                className="w-full p-4 rounded-2xl border border-gray-100 bg-gray-50 focus:ring-4 focus:ring-primary/10 outline-none transition-all appearance-none cursor-pointer font-bold text-sm h-14"
                             >
                                 {CATEGORIES.map(cat => <option key={cat.name} value={cat.name}>{cat.name}</option>)}
                             </select>
@@ -209,19 +228,35 @@ const EditNewsModal: React.FC<EditNewsModalProps> = ({ article, onClose, onSucce
                             <select
                                 value={subCategory}
                                 onChange={(e) => setSubCategory(e.target.value)}
-                                className="w-full p-4 rounded-2xl border border-gray-100 bg-gray-50 focus:ring-4 focus:ring-primary/10 outline-none transition-all appearance-none cursor-pointer font-bold text-sm"
+                                className="w-full p-4 rounded-2xl border border-gray-100 bg-gray-50 focus:ring-4 focus:ring-primary/10 outline-none transition-all appearance-none cursor-pointer font-bold text-sm h-14"
                             >
                                 {currentSubCategories.map(sub => <option key={sub} value={sub}>{sub}</option>)}
                             </select>
                         </div>
                     </div>
 
+                    {/* Video URL (Conditional) */}
+                    {category === 'Videos' && (
+                        <div className="space-y-4 animate-in slide-in-from-top duration-500">
+                            <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
+                                <Tag className="w-3.5 h-3.5 text-primary" /> External Video Link
+                            </label>
+                            <input
+                                type="url"
+                                value={videoUrl}
+                                onChange={(e) => setVideoUrl(e.target.value)}
+                                className="w-full p-4 rounded-2xl border border-gray-100 bg-gray-50 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-bold"
+                                placeholder="Paste video link here"
+                            />
+                        </div>
+                    )}
+
                     {/* Content */}
                     <div className="space-y-4">
                         <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
                             <FileText className="w-3.5 h-3.5 text-primary" /> Narrative Content
                         </label>
-                        <div className={`quill-wrapper ${contentFont}`}>
+                        <div className="quill-wrapper font-inter">
                             <ReactQuill
                                 theme="snow"
                                 value={content}
@@ -242,26 +277,65 @@ const EditNewsModal: React.FC<EditNewsModalProps> = ({ article, onClose, onSucce
 
                     {/* Image Update */}
                     <div className="space-y-4">
-                        <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
-                            <ImageIcon className="w-3.5 h-3.5 text-primary" /> Media Update
-                        </label>
+                        <div className="flex justify-between items-center mb-4">
+                            <button
+                                type="button"
+                                onClick={fetchMediaLibrary}
+                                className="text-primary font-bold hover:underline flex items-center gap-1 text-xs"
+                            >
+                                <List size={14} /> Media Library
+                            </button>
+                            <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
+                                <ImageIcon className="w-3.5 h-3.5 text-primary" /> Media Asset
+                            </label>
+                        </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {imagePreview && (
+                            {(imagePreview || existingImageUrl) && (
                                 <div className="relative aspect-video rounded-3xl overflow-hidden shadow-xl border border-gray-100">
-                                    <img src={imagePreview} alt="Current" className="w-full h-full object-cover" />
+                                    <img src={imagePreview || existingImageUrl || ''} alt="Current" className="w-full h-full object-cover" />
                                     <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
-                                        <span className="text-[10px] font-black text-white uppercase tracking-widest">Current Image</span>
+                                        <span className="text-[10px] font-black text-white uppercase tracking-widest">Selected Image</span>
                                     </div>
                                 </div>
                             )}
                             <label className="flex flex-col items-center justify-center border-2 border-dashed border-gray-200 rounded-3xl cursor-pointer hover:border-primary transition-all aspect-video group">
                                 <ImageIcon size={24} className="text-gray-300 mb-2 group-hover:scale-110 transition-transform" />
-                                <span className="text-xs font-bold text-gray-400">Change Media</span>
+                                <span className="text-xs font-bold text-gray-400">Upload New</span>
                                 <input type="file" onChange={handleImageChange} className="hidden" accept="image/*" />
                             </label>
                         </div>
                     </div>
                 </form>
+
+                {/* Media Library Modal */}
+                {isMediaLibraryOpen && (
+                    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+                        <div className="bg-white w-full max-w-4xl rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col max-h-[80vh]">
+                            <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-zinc-900 text-white">
+                                <h2 className="text-xl font-black uppercase italic">Select from Library</h2>
+                                <button onClick={() => setIsMediaLibraryOpen(false)} className="bg-zinc-800 p-2 rounded-full hover:bg-red-600">
+                                    <X size={18} />
+                                </button>
+                            </div>
+                            <div className="p-6 overflow-y-auto grid grid-cols-2 md:grid-cols-4 gap-4">
+                                {mediaLibrary.map((url, i) => (
+                                    <div
+                                        key={i}
+                                        className="aspect-square rounded-2xl overflow-hidden border-2 border-transparent hover:border-primary cursor-pointer transition-all"
+                                        onClick={() => {
+                                            setExistingImageUrl(url);
+                                            setImage(null);
+                                            setImagePreview(null);
+                                            setIsMediaLibraryOpen(false);
+                                        }}
+                                    >
+                                        <img src={url} alt="Media" className="w-full h-full object-cover" />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 {/* Modal Footer */}
                 <div className="p-8 border-t border-gray-50 bg-gray-50/50 flex gap-4">

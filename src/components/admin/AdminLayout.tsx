@@ -1,7 +1,7 @@
 import React from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { auth } from '../../lib/firebase';
-import { LayoutDashboard, FileText, PlusSquare, LogOut, Home, ShieldCheck, Zap, Menu, X, Megaphone } from 'lucide-react';
+import { LayoutDashboard, FileText, PlusSquare, LogOut, Home, ShieldCheck, Zap, Menu, X, Megaphone, FolderOpen } from 'lucide-react';
 
 import ConfirmationModal from './ConfirmationModal';
 import { useState } from 'react';
@@ -28,6 +28,7 @@ const AdminLayout: React.FC = () => {
         { path: '/admin', label: 'Dashboard', icon: <LayoutDashboard size={18} /> },
         { path: '/admin/add-news', label: 'News Desk', icon: <PlusSquare size={18} /> },
         { path: '/admin/manage', label: 'Archives', icon: <FileText size={18} /> },
+        { path: '/admin/categories', label: 'Categories', icon: <FolderOpen size={18} /> },
         { path: '/admin/ads', label: 'Ads Manager', icon: <Megaphone size={18} /> },
     ];
 

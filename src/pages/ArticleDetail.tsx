@@ -197,9 +197,26 @@ const ArticleDetail: React.FC = () => {
                     <span className="text-gray-400 truncate max-w-[150px]">{article.subCategory || 'Latest'}</span>
                 </div>
 
-                <h1 className={`text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-black text-gray-900 leading-[1.15] mb-6 md:mb-8 tracking-tight ${article.titleFont || 'font-serif'}`}>
+                {/* LIVE Badge */}
+                {article.isLive && (
+                    <div className="flex items-center gap-2 mb-4">
+                        <span className="inline-flex items-center gap-2 bg-red-600 text-white px-4 py-1.5 rounded-full text-[11px] font-black uppercase tracking-[0.3em] shadow-lg shadow-red-600/30 animate-pulse">
+                            <span className="w-2 h-2 rounded-full bg-white animate-ping"></span>
+                            Live
+                        </span>
+                        <span className="text-xs text-red-600 font-bold">Updating Live</span>
+                    </div>
+                )}
+
+                <h1 className={`text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-black text-gray-900 leading-[1.15] mb-4 md:mb-6 tracking-tight ${article.titleFont || 'font-serif'}`}>
                     {article.title}
                 </h1>
+
+                {article.subHeadline && (
+                    <p className="text-lg md:text-2xl text-gray-600 font-serif italic mb-8 leading-relaxed border-l-4 border-primary pl-6 py-2">
+                        {article.subHeadline}
+                    </p>
+                )}
 
                 <div className="flex flex-wrap items-center justify-between gap-6 pb-8 border-b border-gray-100">
                     <div className="flex items-center gap-4">
@@ -286,19 +303,33 @@ const ArticleDetail: React.FC = () => {
                         {/* Article Footer */}
                         <div className="mt-16 pt-8 border-t border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-6">
                             <div className="flex flex-wrap gap-2">
-                                {['News', article.category, article.subCategory].filter(Boolean).map(tag => (
-                                    <span key={tag} className="px-3 py-1 bg-gray-100 text-gray-600 text-[10px] font-black uppercase tracking-widest rounded-full">
-                                        #{tag}
-                                    </span>
-                                ))}
+                                {article.hashtags && article.hashtags.length > 0 ? (
+                                    article.hashtags.map(tag => (
+                                        <Link
+                                            key={tag.trim()}
+                                            to={`/search?q=${encodeURIComponent(tag.trim())}`}
+                                            className="px-3 py-1 bg-primary/5 text-primary text-[10px] font-black uppercase tracking-widest rounded-full hover:bg-primary hover:text-white transition-all transform hover:-translate-y-0.5"
+                                        >
+                                            #{tag.trim()}
+                                        </Link>
+                                    ))
+                                ) : (
+                                    ['News', article.category, article.subCategory].filter(Boolean).map(tag => (
+                                        <span key={tag} className="px-3 py-1 bg-gray-100 text-gray-600 text-[10px] font-black uppercase tracking-widest rounded-full">
+                                            #{tag}
+                                        </span>
+                                    ))
+                                )}
                             </div>
 
                             <div className="flex items-center gap-4">
                                 <span className="text-xs font-black uppercase tracking-widest text-gray-400">Share Story:</span>
                                 <div className="flex gap-2">
-                                    <button onClick={() => handleShare('facebook')} className="text-gray-400 hover:text-primary transition-colors"><Facebook size={20} /></button>
-                                    <button onClick={() => handleShare('twitter')} className="text-gray-400 hover:text-primary transition-colors"><Twitter size={20} /></button>
-                                    <button onClick={() => handleShare('copy')} className="text-gray-400 hover:text-primary transition-colors"><Share2 size={20} /></button>
+                                    <button onClick={() => handleShare('facebook')} className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-50 text-gray-400 hover:bg-blue-600 hover:text-white transition-all"><Facebook size={16} /></button>
+                                    <button onClick={() => handleShare('twitter')} className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-50 text-gray-400 hover:bg-black hover:text-white transition-all">
+                                        <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
+                                    </button>
+                                    <button onClick={() => handleShare('copy')} className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-50 text-gray-400 hover:bg-primary hover:text-white transition-all"><Share2 size={16} /></button>
                                 </div>
                             </div>
                         </div>

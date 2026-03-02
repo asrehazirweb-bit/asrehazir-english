@@ -9,10 +9,12 @@ import AdminDashboard from './pages/admin/Dashboard';
 import AddNews from './pages/admin/AddNews';
 import ManageNews from './pages/admin/ManageNews';
 import AdsManagement from './pages/admin/AdsManagement';
+import ManageCategories from './pages/admin/ManageCategories';
 import LoginPage from './pages/LoginPage';
 import ArticleDetail from './pages/ArticleDetail';
 import SavedNews from './pages/SavedNews';
 import { SearchPage } from './pages/SearchPage';
+import { LivePage } from './pages/LivePage';
 import ScrollToTop from './components/ScrollToTop';
 
 function App() {
@@ -46,6 +48,7 @@ function App() {
         <Route element={<Layout><ArticleDetail /></Layout>} path="/news/:id" />
         <Route element={<Layout><SavedNews /></Layout>} path="/saved-news" />
         <Route element={<Layout><SearchPage /></Layout>} path="/search" />
+        <Route element={<Layout><LivePage /></Layout>} path="/live" />
 
         {/* Admin Routes */}
         <Route
@@ -60,6 +63,7 @@ function App() {
           <Route path="add-news" element={<AddNews />} />
           <Route path="manage" element={<ManageNews />} />
           <Route path="ads" element={<AdsManagement />} />
+          <Route path="categories" element={<ManageCategories />} />
         </Route>
 
         {/* Catch-all 404 - Redirect to Home */}

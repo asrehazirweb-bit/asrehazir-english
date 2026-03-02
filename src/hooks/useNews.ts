@@ -5,16 +5,20 @@ import { collection, query, where, orderBy, limit, onSnapshot } from 'firebase/f
 export interface NewsArticle {
     id: string;
     title: string;
+    subHeadline?: string;
     content: string;
     category: string;
     subCategory?: string;
+    hashtags?: string[];
+    isLive?: boolean;
     imageUrl: string;
     createdAt: any;
     author: string;
     authorId: string;
     section?: string;
-    titleFont?: string;
-    contentFont?: string;
+    videoUrl?: string;
+    titleFont?: string; // Legacy
+    contentFont?: string; // Legacy
 }
 
 export const useNews = (category?: string, maxItems: number = 20, subCategory?: string) => {
