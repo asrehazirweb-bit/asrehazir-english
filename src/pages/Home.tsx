@@ -170,7 +170,7 @@ export function Home() {
                 </div>
 
                 {/* === RIGHT SIDEBAR COLUMN (4 Columns) — Sticky === */}
-                <div className="lg:col-span-4 self-start lg:sticky lg:top-[80px]">
+                <div className="lg:col-span-4 self-start lg:sticky lg:top-[80px] max-h-screen overflow-y-auto pr-2 custom-scrollbar">
                     <HomeSidebar
                         topStories={heroTopStories}
                         offbeatItems={offbeatItems}
