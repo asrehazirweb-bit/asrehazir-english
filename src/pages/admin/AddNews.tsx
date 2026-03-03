@@ -157,7 +157,7 @@ const AddNews: React.FC = () => {
         const cat = categories.find(c => c.name === val);
         if (cat) {
             setSubCategory(cat.subCategories[0] || '');
-        } else if (val !== 'Other') {
+        } else {
             setSubCategory('General');
         }
     };
@@ -250,7 +250,7 @@ const AddNews: React.FC = () => {
 
     const currentCat = categories.find(c => c.name === category);
     const currentSubCategories = currentCat?.subCategories || [];
-    const SECTIONS = ['Top Stories', 'Breaking News', 'Must Watch', 'Latest News', 'Regional', 'Other'];
+    const SECTIONS = ['Top Stories', 'Breaking News', 'Must Watch', 'Latest News', 'Regional'];
 
     if (catsLoading) {
         return (
@@ -387,25 +387,12 @@ const AddNews: React.FC = () => {
                                         <Sparkles className="w-3.5 h-3.5 text-primary" /> Page Section
                                     </label>
                                     <select
-                                        value={SECTIONS.includes(section) ? section : 'Other'}
-                                        onChange={(e) => {
-                                            const val = e.target.value;
-                                            if (val === 'Other') setSection('');
-                                            else setSection(val);
-                                        }}
+                                        value={section}
+                                        onChange={(e) => setSection(e.target.value)}
                                         className="w-full p-4 rounded-xl border border-gray-100 bg-gray-50 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-bold text-xs h-14"
                                     >
                                         {SECTIONS.map(s => <option key={s} value={s}>{s}</option>)}
                                     </select>
-                                    {!SECTIONS.includes(section) && (
-                                        <input
-                                            type="text"
-                                            placeholder="Enter Custom Section..."
-                                            value={section}
-                                            onChange={(e) => setSection(e.target.value)}
-                                            className="w-full p-3 mt-2 rounded-lg border border-primary/20 bg-white outline-none focus:border-primary transition-all font-bold text-xs"
-                                        />
-                                    )}
                                 </div>
 
                                 {/* Category Selection */}
@@ -414,33 +401,16 @@ const AddNews: React.FC = () => {
                                         <Tag className="w-3.5 h-3.5 text-primary" /> News Category
                                     </label>
                                     <select
-                                        value={categories.find(c => c.name === category) ? category : 'Other'}
-                                        onChange={(e) => {
-                                            const val = e.target.value;
-                                            if (val === 'Other') {
-                                                setCategory('');
-                                                setSubCategory('General');
-                                            } else {
-                                                handleCategoryChange(val);
-                                            }
-                                        }}
+                                        value={category}
+                                        onChange={(e) => handleCategoryChange(e.target.value)}
                                         className="w-full p-4 rounded-xl border border-gray-100 bg-gray-50 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-bold text-xs h-14"
                                     >
                                         {categories.map(cat => (
                                             <option key={cat.name} value={cat.name}>{cat.name}</option>
                                         ))}
-                                        <option value="Other">Other (Custom)...</option>
                                     </select>
-                                    {(category === '' || !categories.find(c => c.name === category)) && (
-                                        <input
-                                            type="text"
-                                            placeholder="Enter Custom Category..."
-                                            value={category}
-                                            onChange={(e) => setCategory(e.target.value)}
-                                            className="w-full p-3 mt-2 rounded-lg border border-primary/20 bg-white outline-none focus:border-primary transition-all font-bold text-xs"
-                                        />
-                                    )}
                                 </div>
+
 
                                 {/* Subcategory Selection */}
                                 <div className="space-y-4">
