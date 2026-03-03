@@ -57,7 +57,14 @@
     max-width: 100%;
   }
 
-  html,
+  html {
+    width: 100%;
+    max-width: 100%;
+    position: relative;
+    margin: 0;
+    padding: 0;
+  }
+
   body {
     width: 100%;
     max-width: 100%;
@@ -80,6 +87,7 @@
     max-width: 100%;
     overflow-x: hidden !important;
   }
+
 
   h1 {
     font-size: clamp(24px, 5vw, 64px);
