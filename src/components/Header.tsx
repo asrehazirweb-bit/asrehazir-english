@@ -124,11 +124,13 @@ export function Header() {
                 {/* Main Branding */}
                 <div className={`w-full mx-auto px-4 md:px-6 transition-all duration-300 ${isScrolled ? 'py-1.5 md:py-2' : 'py-3 md:py-10'}`}>
                     <div className="flex justify-between items-center relative gap-4">
-                        <button className="md:hidden p-1.5 -ml-1 text-gray-900" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                        {/* Hamburger - Left */}
+                        <button className="md:hidden p-1.5 -ml-1 text-gray-900 z-10" onClick={() => setIsMenuOpen(!isMenuOpen)}>
                             <Menu size={22} />
                         </button>
 
-                        <Link to="/" className="md:absolute md:left-1/2 md:-translate-x-1/2 group transition-transform duration-300 active:scale-95">
+                        {/* Logo — ALWAYS centered (absolute on all screens) */}
+                        <Link to="/" className="absolute left-1/2 -translate-x-1/2 group transition-transform duration-300 active:scale-95">
                             <img
                                 src="/images/asrehazirlogo.jpeg"
                                 alt="Asre Hazir"
@@ -136,23 +138,25 @@ export function Header() {
                             />
                         </Link>
 
-                        <div className="flex items-center gap-1 md:gap-4 ml-auto md:ml-0">
+                        {/* Right side buttons */}
+                        <div className="flex items-center gap-1 md:gap-4 ml-auto">
                             <div className="hidden md:flex items-center gap-2 mr-4">
                                 <a href="https://asre-hazir-epaper.vercel.app" target="_blank" rel="noreferrer" className="px-4 py-2 border-2 border-primary text-primary rounded-xl font-black uppercase text-[10px] hover:bg-primary hover:text-white transition-all shadow-lg shadow-primary/10">E-Paper</a>
                                 <a href="https://asrehazir-urdu.vercel.app" target="_blank" rel="noreferrer" className="px-4 py-2 bg-zinc-900 text-white rounded-xl font-black uppercase text-[10px] hover:bg-black transition-all shadow-xl shadow-zinc-900/10">اردو پورٹل</a>
                             </div>
                             <button
                                 onClick={() => setIsSearchOpen(true)}
-                                className="p-2 text-gray-500 hover:text-primary transition-all"
+                                className="p-2 text-gray-500 hover:text-primary transition-all z-10"
                             >
                                 <Search size={22} className="w-5 h-5 md:w-[22px] md:h-[22px]" />
                             </button>
-                            <Link to="/login" className="hidden sm:block bg-gray-100 text-gray-900 px-5 py-2 text-[11px] font-black uppercase tracking-wider rounded-full hover:bg-zinc-200 transition-all">
+                            <Link to="/login" className="hidden sm:block bg-gray-100 text-gray-900 px-5 py-2 text-[11px] font-black uppercase tracking-wider rounded-full hover:bg-zinc-200 transition-all z-10">
                                 Admin
                             </Link>
                         </div>
                     </div>
                 </div>
+
 
                 {/* Header Ad Slot */}
                 {!isScrolled && (
