@@ -572,12 +572,12 @@ const AddNews: React.FC = () => {
                     onClick={(e) => { if (e.target === e.currentTarget) setIsMediaLibraryOpen(false); }}
                 >
                     <div
-                        className="w-full sm:max-w-3xl flex flex-col"
+                        className="w-full sm:max-w-5xl flex flex-col"
                         style={{
                             background: '#fff',
                             borderRadius: window.innerWidth < 640 ? '1.5rem 1.5rem 0 0' : '2rem',
-                            maxHeight: window.innerWidth < 640 ? '80vh' : '85vh',
-                            height: window.innerWidth < 640 ? '80vh' : 'auto',
+                            maxHeight: window.innerWidth < 640 ? '85vh' : '90vh',
+                            height: window.innerWidth < 640 ? '85vh' : '90vh',
                             overflow: 'hidden',
                             boxShadow: '0 -10px 60px rgba(0,0,0,0.3)',
                         }}
@@ -619,7 +619,7 @@ const AddNews: React.FC = () => {
                             </div>
                         )}
 
-                        {/* Scrollable Grid */}
+                        {/* Scrollable Grid — 3 cols mobile / 5 cols desktop */}
                         <div
                             style={{
                                 flex: 1,
@@ -627,10 +627,13 @@ const AddNews: React.FC = () => {
                                 overflowY: 'auto',
                                 overflowX: 'hidden',
                                 WebkitOverflowScrolling: 'touch',
-                                padding: 12,
+                                padding: 10,
                                 display: 'grid',
-                                gridTemplateColumns: 'repeat(2, 1fr)',
-                                gap: 10,
+                                gridTemplateColumns: window.innerWidth < 640
+                                    ? 'repeat(3, 1fr)'
+                                    : 'repeat(5, 1fr)',
+                                gap: 8,
+                                alignContent: 'start',
                             }}
                         >
                             {mediaLibrary.length === 0 ? (
