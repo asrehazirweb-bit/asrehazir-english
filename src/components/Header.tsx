@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { Search, Menu, Facebook, Instagram, X, ChevronRight, ChevronDown } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
-import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { collection, query, orderBy, onSnapshot, doc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { SOCIAL_LINKS } from '../constants/socialLinks';
 import { AdBlock } from './home/AdBlock';
@@ -36,20 +36,30 @@ export function Header() {
     const [searchQuery, setSearchQuery] = useState('');
     const [categories, setCategories] = useState<CategoryDoc[]>([]);
     const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+    const [livePageEnabled, setLivePageEnabled] = useState(true);
     const navigate = useNavigate();
+    const location = useLocation();
 
-    // Fetch dynamic categories
+    // Fetch dynamic categories and config
     useEffect(() => {
+        const unsubConfig = onSnapshot(doc(db, 'settings', 'live_config'), (snap) => {
+            if (snap.exists()) {
+                setLivePageEnabled(snap.data().livePageEnabled ?? true);
+            }
+        });
+
         const q = query(collection(db, 'categories_english'), orderBy('order', 'asc'));
-        const unsub = onSnapshot(q, (snap) => {
+        const unsubCats = onSnapshot(q, (snap) => {
             const cats = snap.docs.map(doc => ({ id: doc.id, ...doc.data() })) as CategoryDoc[];
-            // Use fallback if Firestore is empty
             setCategories(cats.length > 0 ? cats : FALLBACK_CATEGORIES);
         }, (_err) => {
-            // Use fallback on error
             setCategories(FALLBACK_CATEGORIES);
         });
-        return () => unsub();
+
+        return () => {
+            unsubConfig();
+            unsubCats();
+        };
     }, []);
 
     useEffect(() => {
@@ -117,7 +127,7 @@ export function Header() {
                                     Urdu Portal
                                 </a>
                                 <span className="text-gray-300">|</span>
-                                <a href="https://asre-hazir-epaper.vercel.app" target="_blank" rel="noreferrer" className="flex items-center gap-1.5 uppercase font-black hover:text-primary transition-colors text-primary">
+                                <a href="https://asre-hazir-epaper.vercel.app?view=latest" target="_blank" rel="noreferrer" className="flex items-center gap-1.5 uppercase font-black hover:text-primary transition-colors text-primary">
                                     <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
                                     Electronic Edition
                                 </a>
@@ -165,7 +175,7 @@ export function Header() {
                         {/* Right side buttons */}
                         <div className="flex items-center gap-1 md:gap-4 ml-auto">
                             <div className="hidden md:flex items-center gap-2 mr-4">
-                                <a href="https://asre-hazir-epaper.vercel.app" target="_blank" rel="noreferrer" className="px-4 py-2 border-2 border-primary text-primary rounded-xl font-black uppercase text-[10px] hover:bg-primary hover:text-white transition-all shadow-lg shadow-primary/10">E-Paper</a>
+                                <a href="https://asre-hazir-epaper.vercel.app?view=latest" target="_blank" rel="noreferrer" className="px-4 py-2 border-2 border-primary text-primary rounded-xl font-black uppercase text-[10px] hover:bg-primary hover:text-white transition-all shadow-lg shadow-primary/10">E-Paper</a>
                                 <a href="https://asrehazir-urdu.vercel.app" target="_blank" rel="noreferrer" className="px-4 py-2 bg-zinc-900 text-white rounded-xl font-black uppercase text-[10px] hover:bg-black transition-all shadow-xl shadow-zinc-900/10">اردو پورٹل</a>
                             </div>
                             <button
@@ -199,15 +209,17 @@ export function Header() {
                                 <span className="absolute bottom-0 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full bg-primary"></span>
                             </Link>
                         </li>
-                        <li>
-                            <Link to="/live" className="px-5 py-2 text-[11px] font-black uppercase tracking-[0.1em] text-red-600 hover:text-red-700 transition-colors relative group">
-                                <span className="flex items-center gap-1.5">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-ping flex-shrink-0"></span>
-                                    Live
-                                </span>
-                                <span className="absolute bottom-0 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full bg-red-600"></span>
-                            </Link>
-                        </li>
+                        {livePageEnabled && (
+                            <li>
+                                <Link to="/live" className={`px-5 py-2 text-[11px] font-black uppercase tracking-[0.1em] hover:text-red-700 transition-colors relative group ${location.pathname === '/live' ? 'text-red-600' : 'text-red-500'}`}>
+                                    <span className="flex items-center gap-1.5">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-ping flex-shrink-0"></span>
+                                        Live
+                                    </span>
+                                    <span className={`absolute bottom-0 left-0 h-0.5 transition-all duration-300 bg-red-600 ${location.pathname === '/live' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
+                                </Link>
+                            </li>
+                        )}
 
                         {/* Dynamic Categories */}
                         {categories.map((cat) => (
@@ -294,12 +306,14 @@ export function Header() {
                                     <li>
                                         <Link to="/" onClick={() => setIsMenuOpen(false)} className="block py-3 text-lg font-bold text-gray-800 hover:text-primary transition-all underline decoration-gray-100 underline-offset-8">Home</Link>
                                     </li>
-                                    <li>
-                                        <Link to="/live" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-2 py-3 text-lg font-bold text-red-600 hover:text-red-700 transition-all underline decoration-red-100 underline-offset-8">
-                                            <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
-                                            Live News
-                                        </Link>
-                                    </li>
+                                    {livePageEnabled && (
+                                        <li>
+                                            <Link to="/live" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-2 py-3 text-lg font-bold text-red-600 hover:text-red-700 transition-all underline decoration-red-100 underline-offset-8">
+                                                <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
+                                                Live News
+                                            </Link>
+                                        </li>
+                                    )}
                                     {categories.map((cat) => (
                                         <li key={cat.id} className="border-b border-gray-50 last:border-0 pb-2">
                                             <Link
@@ -358,7 +372,7 @@ export function Header() {
                                 {/* Portal Links for Mobile */}
                                 <div className="grid grid-cols-2 gap-3 mb-4">
                                     <a
-                                        href="https://asre-hazir-epaper.vercel.app"
+                                        href="https://asre-hazir-epaper.vercel.app?view=latest"
                                         target="_blank"
                                         rel="noreferrer"
                                         className="flex items-center justify-center gap-2 border-2 border-primary text-primary py-3 font-black uppercase text-xs rounded-xl hover:bg-primary hover:text-white transition-all"

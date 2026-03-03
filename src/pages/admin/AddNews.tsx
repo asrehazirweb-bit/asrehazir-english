@@ -40,7 +40,7 @@ const AddNews: React.FC = () => {
     const [category, setCategory] = useState('');
     const [subCategory, setSubCategory] = useState('');
     const [hashtags, setHashtags] = useState('');
-    const [isLive, setIsLive] = useState(false);
+    const [showInLive, setShowInLive] = useState(false);
     const [image, setImage] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [existingImageUrl, setExistingImageUrl] = useState<string | null>(null);
@@ -112,7 +112,7 @@ const AddNews: React.FC = () => {
             setSection(data.section || 'Top Stories');
             setVideoUrl(data.videoUrl || '');
             setHashtags(data.hashtags || '');
-            setIsLive(data.isLive || false);
+            setShowInLive(data.showInLive || false);
             setSendPush(data.sendPush || false);
         }
     }, []);
@@ -122,12 +122,12 @@ const AddNews: React.FC = () => {
         const timer = setTimeout(() => {
             if (title || content) {
                 localStorage.setItem('asre-hazir-draft', JSON.stringify({
-                    title, subHeadline, content, category, subCategory, section, videoUrl, hashtags, isLive, sendPush
+                    title, subHeadline, content, category, subCategory, section, videoUrl, hashtags, showInLive, sendPush
                 }));
             }
         }, 2000);
         return () => clearTimeout(timer);
-    }, [title, subHeadline, content, category, subCategory, section, videoUrl, hashtags, isLive, sendPush]);
+    }, [title, subHeadline, content, category, subCategory, section, videoUrl, hashtags, showInLive, sendPush]);
 
     const fetchMediaLibrary = async () => {
         setIsMediaLibraryOpen(true);
@@ -157,7 +157,7 @@ const AddNews: React.FC = () => {
         setSubCategory('Top Stories');
         setVideoUrl('');
         setHashtags('');
-        setIsLive(false);
+        setShowInLive(false);
         setSendPush(false);
         localStorage.removeItem('asre-hazir-draft');
         setIsClearModalOpen(false);
@@ -212,7 +212,7 @@ const AddNews: React.FC = () => {
                 category,
                 subCategory,
                 hashtags: hashtags.split(',').map(s => s.trim()).filter(Boolean),
-                isLive,
+                showInLive,
                 videoUrl,
                 imageUrl: imageUrl,
                 createdAt: serverTimestamp(),
@@ -244,7 +244,7 @@ const AddNews: React.FC = () => {
             setImagePreview(null);
             setExistingImageUrl(null);
             setHashtags('');
-            setIsLive(false);
+            setShowInLive(false);
             setSendPush(false);
             localStorage.removeItem('asre-hazir-draft');
 
@@ -372,8 +372,8 @@ const AddNews: React.FC = () => {
                                                 )}
                                                 <input
                                                     type="checkbox"
-                                                    checked={isLive}
-                                                    onChange={(e) => setIsLive(e.target.checked)}
+                                                    checked={showInLive}
+                                                    onChange={(e) => setShowInLive(e.target.checked)}
                                                     className="w-6 h-6 accent-primary cursor-pointer"
                                                 />
                                             </div>

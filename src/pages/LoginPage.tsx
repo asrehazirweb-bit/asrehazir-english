@@ -8,7 +8,7 @@ import { googleProvider } from '../lib/firebase';
 import { useAuth } from '../context/AuthContext';
 
 const LoginPage: React.FC = () => {
-    const { user, isAdmin, loading } = useAuth();
+    const { user, userData, isAdmin, loading } = useAuth();
     const [localLoading, setLocalLoading] = useState(false);
     const [error, setError] = useState('');
     const navigate = useNavigate();
@@ -76,18 +76,52 @@ const LoginPage: React.FC = () => {
                             <span className="text-sm font-semibold">Access Denied</span>
                         </div>
                         <p className="text-xs text-amber-700 mb-3">
-                            You are logged in, but your account does not have admin privileges. Please contact the developer with your UID:
+                            You are logged in, but your account does not have admin privileges.
                         </p>
-                        <div className="bg-white p-2 rounded border border-amber-200 flex items-center justify-between">
-                            <code className="text-[10px] break-all font-mono text-gray-800">
-                                {user.uid}
-                            </code>
+
+                        {/* PART 2: Admin Access Request */}
+                        {userData?.requestStatus === 'pending' ? (
+                            <div className="bg-amber-100/50 p-3 rounded-lg border border-amber-200 text-center">
+                                <p className="text-[10px] font-bold text-amber-800 uppercase tracking-widest">Request Pending</p>
+                                <p className="text-[9px] text-amber-600 mt-1">Our main admin will review your access soon.</p>
+                            </div>
+                        ) : userData?.requestStatus === 'approved' ? (
+                            <div className="bg-green-50 p-3 rounded-lg border border-green-200 text-center">
+                                <p className="text-[10px] font-bold text-green-800 uppercase tracking-widest">Access Approved!</p>
+                                <p className="text-[9px] text-green-600 mt-1">Please refresh the page to access the dashboard.</p>
+                            </div>
+                        ) : (
                             <button
-                                onClick={() => navigator.clipboard.writeText(user.uid)}
-                                className="text-[10px] text-primary font-semibold hover:underline"
+                                onClick={async () => {
+                                    const { doc, updateDoc } = await import('firebase/firestore');
+                                    const { db } = await import('../lib/firebase');
+                                    await updateDoc(doc(db, 'users', user.uid), {
+                                        adminRequest: true,
+                                        requestStatus: 'pending'
+                                    });
+                                    // Normally we would update local state via context, 
+                                    // but AuthContext's onAuthStateChanged will pick it up on reload or re-sync
+                                    window.location.reload();
+                                }}
+                                className="w-full py-2.5 bg-amber-600 text-white rounded-lg text-xs font-bold uppercase tracking-wider hover:bg-amber-700 transition-all shadow-md active:scale-95"
                             >
-                                Copy
+                                Request Admin Access
                             </button>
+                        )}
+
+                        <div className="mt-4 pt-4 border-t border-amber-200">
+                            <p className="text-[9px] text-amber-600 mb-2">UID for reference:</p>
+                            <div className="bg-white p-2 rounded border border-amber-200 flex items-center justify-between">
+                                <code className="text-[10px] break-all font-mono text-gray-800">
+                                    {user.uid}
+                                </code>
+                                <button
+                                    onClick={() => navigator.clipboard.writeText(user.uid)}
+                                    className="text-[10px] text-primary font-semibold hover:underline"
+                                >
+                                    Copy
+                                </button>
+                            </div>
                         </div>
                     </div>
                 )}

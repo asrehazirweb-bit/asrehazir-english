@@ -11,7 +11,20 @@ service cloud.firestore {
     // ─── Users ────────────────────────────────────────────────────────────────
     match /users/{userId} {
       allow read: if request.auth != null;
-      allow write: if request.auth != null && request.auth.uid == userId;
+      
+      // PART 1: Initial Registration
+      allow create: if request.auth != null && request.auth.uid == userId 
+                    && request.resource.data.role == 'user';
+      
+      // PART 2 & 4: Admin Access Request & Approval Logic
+      allow update: if request.auth != null && (
+        // Users can update their own data but NOT their role
+        (request.auth.uid == userId && 
+         !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'appAccess']))
+        || 
+        // PART 8: Only Admin can Approve/Reject or Change roles
+        isAdmin()
+      );
     }
 
     // ─── News ─────────────────────────────────────────────────────────────────
@@ -67,6 +80,12 @@ service cloud.firestore {
 
     // ─── Video Gallery ────────────────────────────────────────────────────────
     match /videos/{videoId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ─── App Settings ─────────────────────────────────────────────────────────
+    match /settings/{docId} {
       allow read: if true;
       allow write: if isAdmin();
     }

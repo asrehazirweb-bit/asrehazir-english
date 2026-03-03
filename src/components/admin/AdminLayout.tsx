@@ -1,12 +1,14 @@
 import React from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { auth } from '../../lib/firebase';
-import { LayoutDashboard, FileText, PlusSquare, LogOut, Home, ShieldCheck, Zap, Menu, X, Megaphone, FolderOpen } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
+import { LayoutDashboard, FileText, PlusSquare, LogOut, Home, ShieldCheck, Zap, Menu, X, Megaphone, FolderOpen, Settings } from 'lucide-react';
 
 import ConfirmationModal from './ConfirmationModal';
 import { useState } from 'react';
 
 const AdminLayout: React.FC = () => {
+    const { userData } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
     const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
@@ -30,6 +32,10 @@ const AdminLayout: React.FC = () => {
         { path: '/admin/manage', label: 'Archives', icon: <FileText size={18} /> },
         { path: '/admin/categories', label: 'Categories', icon: <FolderOpen size={18} /> },
         { path: '/admin/ads', label: 'Ads Manager', icon: <Megaphone size={18} /> },
+        ...(userData?.role === 'admin' ? [
+            { path: '/admin/users', label: 'Admin Requests', icon: <Zap size={18} /> },
+            { path: '/admin/settings', label: 'App Settings', icon: <Settings size={18} /> }
+        ] : []),
     ];
 
     return (

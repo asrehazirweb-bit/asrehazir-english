@@ -10,6 +10,8 @@ import AddNews from './pages/admin/AddNews';
 import ManageNews from './pages/admin/ManageNews';
 import AdsManagement from './pages/admin/AdsManagement';
 import ManageCategories from './pages/admin/ManageCategories';
+import ManageUsers from './pages/admin/ManageUsers';
+import AppSettings from './pages/admin/AppSettings';
 import LoginPage from './pages/LoginPage';
 import ArticleDetail from './pages/ArticleDetail';
 import SavedNews from './pages/SavedNews';
@@ -69,6 +71,8 @@ function App() {
           <Route path="manage" element={<ManageNews />} />
           <Route path="ads" element={<AdsManagement />} />
           <Route path="categories" element={<ManageCategories />} />
+          <Route path="users" element={<ManageUsers />} />
+          <Route path="settings" element={<AppSettings />} />
         </Route>
 
         {/* Catch-all 404 - Redirect to Home */}

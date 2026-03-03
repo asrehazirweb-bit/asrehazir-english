@@ -1,18 +1,30 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { auth, db } from '../lib/firebase';
 import { onAuthStateChanged, type User, getRedirectResult } from 'firebase/auth';
-import { doc, getDoc} from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
+
+interface UserData {
+    uid: string;
+    email: string | null;
+    displayName: string | null;
+    role: "admin" | "user";
+    adminRequest: boolean;
+    requestStatus: "pending" | "approved" | "rejected" | null;
+    createdAt?: any;
+}
 
 interface AuthContextType {
     user: User | null;
+    userData: UserData | null;
     isAdmin: boolean;
     loading: boolean;
 }
 
-const AuthContext = createContext<AuthContextType>({ user: null, isAdmin: false, loading: true });
+const AuthContext = createContext<AuthContextType>({ user: null, userData: null, isAdmin: false, loading: true });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
+    const [userData, setUserData] = useState<UserData | null>(null);
     const [isAdmin, setIsAdmin] = useState(false);
     const [loading, setLoading] = useState(true);
 
@@ -41,17 +53,33 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                     const userDoc = await getDoc(userRef);
 
                     if (userDoc.exists()) {
-                        const userData = userDoc.data();
-                        console.log("Firestore User Data:", userData);
-                        if (userData.role === 'admin') {
-                            setIsAdmin(true);
-                        } else {
-                            console.warn("User role is not admin:", userData.role);
-                            setIsAdmin(false);
-                        }
+                        const data = userDoc.data() as UserData;
+                        setUserData(data);
+                        console.log("Firestore User Data:", data);
+                        setIsAdmin(data.role === 'admin');
                     } else {
-                        console.warn("No user profile found in Firestore for UID:", user.uid);
+                        // Create default user profile if it doesn't exist (PART 1: Registration)
+                        console.log("Creating new user profile in Firestore for UID:", user.uid);
+                        const newUser: UserData = {
+                            uid: user.uid,
+                            email: user.email,
+                            displayName: user.displayName,
+                            role: "user",
+                            adminRequest: false,
+                            requestStatus: null,
+                            createdAt: new Date()
+                        };
+
+                        // Using setDoc here might need careful Firestore Rules
+                        // For now, we update state. In a real app, this might be handled 
+                        // by a Cloud Function or a specific registration function to be safe.
+                        setUserData(newUser);
                         setIsAdmin(false);
+
+                        // Note: If Firestore rules block this, we'll see an error here.
+                        // We will update Firestore rules next.
+                        const { setDoc, serverTimestamp } = await import('firebase/firestore');
+                        await setDoc(userRef, { ...newUser, createdAt: serverTimestamp() });
                     }
                 } catch (error) {
                     console.error("Error fetching user data from Firestore:", error);
@@ -60,7 +88,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                     setLoading(false);
                 }
             } else {
-                // No user, definitely not an admin
+                // No user
+                setUserData(null);
                 setIsAdmin(false);
                 setLoading(false);
             }
@@ -70,7 +99,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ user, isAdmin, loading }}>
+        <AuthContext.Provider value={{ user, userData, isAdmin, loading }}>
             {children}
         </AuthContext.Provider>
     );
