@@ -43,9 +43,9 @@ export function Sidebar({ offbeatItems = [], topStories = [] }: SidebarProps) {
     const finalTop = displayTop.slice(0, 8);
 
     return (
-        <div className="flex flex-col gap-8 w-full h-full relative">
+        <div className="flex flex-col gap-8 w-full">
 
-            {/* 0. TOP STORIES BLOCK (Static - Scrolls away) */}
+            {/* TOP STORIES BLOCK — always visible at top of sidebar */}
             {finalTop.length > 0 && (
                 <div className="border border-gray-100 bg-white">
                     <div className="p-4 border-b border-gray-100 flex items-center gap-2">
@@ -69,13 +69,11 @@ export function Sidebar({ offbeatItems = [], topStories = [] }: SidebarProps) {
                             </Link>
                         ))}
                     </div>
-
                 </div>
             )}
 
-            {/* STICKY CONTAINER starts here */}
-            {/* This block will stick to the top as user scrolls past Top Stories */}
-            <div className="sticky top-4 flex flex-col gap-8">
+            {/* REST OF SIDEBAR — scrollable if taller than viewport */}
+            <div className="flex flex-col gap-8 max-h-[calc(100vh-100px)] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent pr-0.5">
 
                 {/* 1. OFFBEAT BLOCK */}
                 <div className="border border-gray-100 bg-white">

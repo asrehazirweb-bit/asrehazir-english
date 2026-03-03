@@ -126,7 +126,7 @@ export function Home() {
                 </div>
             )}
 
-            <div className="w-full mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12 mt-6">
+            <div className="w-full mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12 mt-6 items-start">
 
                 {/* === LEFT CONTENT COLUMN (8 Columns) === */}
                 <div className="lg:col-span-8 flex flex-col">
@@ -169,8 +169,8 @@ export function Home() {
 
                 </div>
 
-                {/* === RIGHT SIDEBAR COLUMN (4 Columns) === */}
-                <div className="lg:col-span-4">
+                {/* === RIGHT SIDEBAR COLUMN (4 Columns) — Sticky === */}
+                <div className="lg:col-span-4 self-start lg:sticky lg:top-[80px]">
                     <HomeSidebar
                         topStories={heroTopStories}
                         offbeatItems={offbeatItems}
