@@ -564,41 +564,108 @@ const AddNews: React.FC = () => {
                 </div>
             </div>
 
-            {/* Media Library Modal */}
+            {/* Media Library Modal — Mobile First */}
             {isMediaLibraryOpen && (
-                <div className="fixed inset-0 z-[200] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm">
-                    <div className="bg-white w-full sm:max-w-4xl sm:rounded-[2.5rem] rounded-t-[2rem] shadow-2xl overflow-hidden flex flex-col max-h-[85vh] sm:max-h-[90vh]">
+                <div
+                    className="fixed inset-0 z-[9999] flex flex-col justify-end sm:justify-center sm:items-center sm:p-4"
+                    style={{ backgroundColor: 'rgba(0,0,0,0.7)' }}
+                    onClick={(e) => { if (e.target === e.currentTarget) setIsMediaLibraryOpen(false); }}
+                >
+                    <div
+                        className="w-full sm:max-w-3xl flex flex-col"
+                        style={{
+                            background: '#fff',
+                            borderRadius: window.innerWidth < 640 ? '1.5rem 1.5rem 0 0' : '2rem',
+                            maxHeight: window.innerWidth < 640 ? '80vh' : '85vh',
+                            height: window.innerWidth < 640 ? '80vh' : 'auto',
+                            overflow: 'hidden',
+                            boxShadow: '0 -10px 60px rgba(0,0,0,0.3)',
+                        }}
+                    >
+                        {/* Drag handle (mobile) */}
+                        <div className="flex justify-center pt-3 pb-1 sm:hidden shrink-0">
+                            <div style={{ width: 40, height: 4, borderRadius: 9999, background: '#d1d5db' }} />
+                        </div>
 
                         {/* Header */}
-                        <div className="px-5 py-4 sm:p-8 border-b border-gray-100 flex justify-between items-center bg-zinc-900 text-white shrink-0">
-                            <h2 className="text-lg sm:text-2xl font-black uppercase italic">Media Library</h2>
+                        <div
+                            className="flex justify-between items-center shrink-0 px-5 py-4"
+                            style={{ background: '#18181b', color: '#fff', borderBottom: '1px solid rgba(255,255,255,0.08)' }}
+                        >
+                            <div>
+                                <p style={{ fontSize: 10, fontWeight: 900, letterSpacing: '0.25em', textTransform: 'uppercase', color: '#a1a1aa', marginBottom: 2 }}>Admin Panel</p>
+                                <h2 style={{ fontSize: 18, fontWeight: 900, textTransform: 'uppercase', fontStyle: 'italic', margin: 0 }}>Media Library</h2>
+                            </div>
                             <button
                                 onClick={() => setIsMediaLibraryOpen(false)}
-                                className="bg-zinc-700 hover:bg-red-600 transition-colors p-2 rounded-xl flex items-center gap-1 text-[10px] font-black uppercase tracking-wider"
+                                style={{
+                                    background: '#3f3f46', border: 'none', color: '#fff',
+                                    borderRadius: 12, padding: '8px 14px',
+                                    display: 'flex', alignItems: 'center', gap: 6,
+                                    fontSize: 11, fontWeight: 900, cursor: 'pointer',
+                                    textTransform: 'uppercase', letterSpacing: '0.1em'
+                                }}
                             >
-                                <X size={16} /> Close
+                                <X size={15} /> Close
                             </button>
                         </div>
 
-                        {/* Grid */}
-                        <div className="p-3 sm:p-6 overflow-y-auto grid grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-4 flex-1">
+                        {/* Count bar */}
+                        {mediaLibrary.length > 0 && (
+                            <div className="px-4 py-2 shrink-0" style={{ background: '#f9fafb', borderBottom: '1px solid #f3f4f6' }}>
+                                <p style={{ fontSize: 10, fontWeight: 700, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.15em', margin: 0 }}>
+                                    {mediaLibrary.length} images — tap to select
+                                </p>
+                            </div>
+                        )}
+
+                        {/* Scrollable Grid */}
+                        <div
+                            style={{
+                                flex: 1,
+                                minHeight: 0,
+                                overflowY: 'auto',
+                                overflowX: 'hidden',
+                                WebkitOverflowScrolling: 'touch',
+                                padding: 12,
+                                display: 'grid',
+                                gridTemplateColumns: 'repeat(2, 1fr)',
+                                gap: 10,
+                            }}
+                        >
                             {mediaLibrary.length === 0 ? (
-                                <div className="col-span-3 sm:col-span-4 flex flex-col items-center justify-center py-16 text-gray-400">
-                                    <ImageIcon size={40} className="mb-3 text-gray-300" />
-                                    <p className="text-sm font-bold">No images found</p>
+                                <div style={{ gridColumn: '1 / -1', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '60px 0', color: '#d1d5db' }}>
+                                    <ImageIcon size={48} style={{ marginBottom: 12 }} />
+                                    <p style={{ fontWeight: 700, color: '#9ca3af', fontSize: 14 }}>No images yet</p>
+                                    <p style={{ fontSize: 11, color: '#d1d5db', marginTop: 4 }}>Upload an image with a news article first</p>
                                 </div>
                             ) : mediaLibrary.map((url, i) => (
                                 <div
                                     key={i}
-                                    className="aspect-square rounded-xl sm:rounded-2xl overflow-hidden border-2 border-transparent hover:border-primary cursor-pointer transition-all active:scale-95"
                                     onClick={() => {
                                         setExistingImageUrl(url);
                                         setImage(null);
                                         setImagePreview(null);
                                         setIsMediaLibraryOpen(false);
                                     }}
+                                    style={{
+                                        aspectRatio: '1/1',
+                                        borderRadius: 12,
+                                        overflow: 'hidden',
+                                        border: '2px solid transparent',
+                                        cursor: 'pointer',
+                                        transition: 'border-color 0.2s, transform 0.1s',
+                                        background: '#f3f4f6',
+                                    }}
+                                    onTouchStart={(e) => (e.currentTarget.style.transform = 'scale(0.96)')}
+                                    onTouchEnd={(e) => (e.currentTarget.style.transform = 'scale(1)')}
                                 >
-                                    <img src={url} alt="Media" className="w-full h-full object-cover" loading="lazy" />
+                                    <img
+                                        src={url}
+                                        alt={`media-${i}`}
+                                        loading="lazy"
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                                    />
                                 </div>
                             ))}
                         </div>
