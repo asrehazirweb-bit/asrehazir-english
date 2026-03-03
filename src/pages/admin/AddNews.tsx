@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { db, auth } from '../../lib/firebase';
 import { collection, addDoc, serverTimestamp, query, orderBy, limit, getDocs, onSnapshot } from 'firebase/firestore';
 import { uploadImage } from '../../lib/cloudinary';
-import { Image as ImageIcon, Send, Layout, Type, FileText, Tag, Trash2, Sparkles, CheckCircle2, List, Activity, Hash, Loader } from 'lucide-react';
+import { Image as ImageIcon, Send, Layout, Type, FileText, Tag, Trash2, Sparkles, CheckCircle2, List, Activity, Hash, Loader, X } from 'lucide-react';
+
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import ConfirmationModal from '../../components/admin/ConfirmationModal';
@@ -565,19 +566,31 @@ const AddNews: React.FC = () => {
 
             {/* Media Library Modal */}
             {isMediaLibraryOpen && (
-                <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-                    <div className="bg-white w-full max-w-4xl rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-                        <div className="p-8 border-b border-gray-100 flex justify-between items-center bg-zinc-900 text-white">
-                            <h2 className="text-2xl font-black uppercase italic">Media Library</h2>
-                            <button onClick={() => setIsMediaLibraryOpen(false)} className="bg-zinc-800 p-2 rounded-full hover:bg-red-600 transition-colors">
-                                <Trash2 size={20} />
+                <div className="fixed inset-0 z-[200] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm">
+                    <div className="bg-white w-full sm:max-w-4xl sm:rounded-[2.5rem] rounded-t-[2rem] shadow-2xl overflow-hidden flex flex-col max-h-[85vh] sm:max-h-[90vh]">
+
+                        {/* Header */}
+                        <div className="px-5 py-4 sm:p-8 border-b border-gray-100 flex justify-between items-center bg-zinc-900 text-white shrink-0">
+                            <h2 className="text-lg sm:text-2xl font-black uppercase italic">Media Library</h2>
+                            <button
+                                onClick={() => setIsMediaLibraryOpen(false)}
+                                className="bg-zinc-700 hover:bg-red-600 transition-colors p-2 rounded-xl flex items-center gap-1 text-[10px] font-black uppercase tracking-wider"
+                            >
+                                <X size={16} /> Close
                             </button>
                         </div>
-                        <div className="p-8 overflow-y-auto grid grid-cols-2 md:grid-cols-4 gap-4">
-                            {mediaLibrary.map((url, i) => (
+
+                        {/* Grid */}
+                        <div className="p-3 sm:p-6 overflow-y-auto grid grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-4 flex-1">
+                            {mediaLibrary.length === 0 ? (
+                                <div className="col-span-3 sm:col-span-4 flex flex-col items-center justify-center py-16 text-gray-400">
+                                    <ImageIcon size={40} className="mb-3 text-gray-300" />
+                                    <p className="text-sm font-bold">No images found</p>
+                                </div>
+                            ) : mediaLibrary.map((url, i) => (
                                 <div
                                     key={i}
-                                    className="aspect-square rounded-2xl overflow-hidden border-2 border-transparent hover:border-primary cursor-pointer transition-all box-content"
+                                    className="aspect-square rounded-xl sm:rounded-2xl overflow-hidden border-2 border-transparent hover:border-primary cursor-pointer transition-all active:scale-95"
                                     onClick={() => {
                                         setExistingImageUrl(url);
                                         setImage(null);
@@ -585,7 +598,7 @@ const AddNews: React.FC = () => {
                                         setIsMediaLibraryOpen(false);
                                     }}
                                 >
-                                    <img src={url} alt="Media" className="w-full h-full object-cover" />
+                                    <img src={url} alt="Media" className="w-full h-full object-cover" loading="lazy" />
                                 </div>
                             ))}
                         </div>
