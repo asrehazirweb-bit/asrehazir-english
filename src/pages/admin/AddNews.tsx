@@ -250,7 +250,7 @@ const AddNews: React.FC = () => {
 
     const currentCat = categories.find(c => c.name === category);
     const currentSubCategories = currentCat?.subCategories || [];
-    const SECTIONS = ['Top Stories', 'Breaking News', 'Must Watch', 'Latest News', 'Regional'];
+    const SECTIONS = ['Top Stories', 'South India', 'Breaking News', 'Must Watch', 'Latest News', 'Regional'];
 
     if (catsLoading) {
         return (
