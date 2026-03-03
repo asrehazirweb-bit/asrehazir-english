@@ -25,15 +25,20 @@ function App() {
         {/* Public Routes */}
         <Route element={<Layout><Home /></Layout>} path="/" />
 
-        {/* News Categories */}
-        <Route element={<Layout><CategoryPage category="World News" title="World News" /></Layout>} path="/world" />
-        <Route element={<Layout><CategoryPage category="National News" title="National News" /></Layout>} path="/national" />
-        <Route element={<Layout><CategoryPage category="Deccan News" title="Deccan News" /></Layout>} path="/deccan" />
-        <Route element={<Layout><CategoryPage category="Photos" title="Photos" /></Layout>} path="/photos" />
-        <Route element={<Layout><CategoryPage category="Videos" title="Videos" /></Layout>} path="/videos" />
-        <Route element={<Layout><CategoryPage category="Articles & Essays" title="Articles & Essays" /></Layout>} path="/articles-essays" />
-        <Route element={<Layout><CategoryPage category="Sports & Entertainment" title="Sports & Entertainment" /></Layout>} path="/sports-entertainment" />
-        <Route element={<Layout><CategoryPage category="Crime & Accidents" title="Crime & Accidents" /></Layout>} path="/crime-accidents" />
+        {/* Dynamic News Categories */}
+        <Route element={<Layout><CategoryPage /></Layout>} path="/category/:categoryName" />
+        <Route element={<Layout><CategoryPage /></Layout>} path="/category/:categoryName/:subCategory" />
+
+        {/* Legacy redirect for old URLs (optional but good for SEO) */}
+        <Route element={<Navigate to="/category/World News" replace />} path="/world" />
+        <Route element={<Navigate to="/category/National News" replace />} path="/national" />
+        <Route element={<Navigate to="/category/Hyderabad" replace />} path="/deccan" />
+        <Route element={<Navigate to="/category/Photos" replace />} path="/photos" />
+        <Route element={<Navigate to="/category/Videos" replace />} path="/videos" />
+        <Route element={<Navigate to="/category/Articles & Essays" replace />} path="/articles-essays" />
+        <Route element={<Navigate to="/category/Sports & Entertainment" replace />} path="/sports-entertainment" />
+        <Route element={<Navigate to="/category/Crime & Accidents" replace />} path="/crime-accidents" />
+
 
         {/* Static Pages */}
         <Route element={<Layout><AdvertisementsPage /></Layout>} path="/advertisements" />

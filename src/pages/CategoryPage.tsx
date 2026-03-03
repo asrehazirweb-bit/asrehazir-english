@@ -1,53 +1,60 @@
-
+import { useParams } from 'react-router-dom';
 import { Sidebar } from '../components/home/Sidebar';
 import { IndiaNewsFeed } from '../components/india/IndiaNewsFeed';
 import { useNews } from '../hooks/useNews';
-
-interface CategoryPageProps {
-    category: string;
-    title: string;
-}
 
 const stripHtml = (html: string) => {
     const doc = new DOMParser().parseFromString(html, 'text/html');
     return doc.body.textContent || "";
 };
 
-export function CategoryPage({ category, title }: CategoryPageProps) {
-    // Fetch more to allow for client-side filtering of legacy categories
+export function CategoryPage() {
+    const { categoryName, subCategory } = useParams();
+    const displayTitle = subCategory || categoryName || 'News';
+
+    // Fetch more to allow for client-side filtering
     const { news: allNews, loading, formatTime } = useNews('All', 100);
     const sideBarNews = useNews('All', 8);
 
-    // Legacy mapping logic
+    // Dynamic filtering logic
     const filteredNews = allNews.filter(item => {
-        const cat = item.category?.toLowerCase() || '';
-        if (category === 'Deccan News') {
-            const isSouthIndia = cat.includes('south india') || cat.includes('جنوبی ہند');
-            if (isSouthIndia) return false;
-            return cat.includes('deccan') || cat.includes('hyderabad') || cat.includes('telangana') || cat.includes('andhra pradesh') || cat.includes('دکن');
+        const itemCat = item.category || '';
+        const itemSubCat = item.subCategory || '';
+
+        // Exact match for category and subcategory if provided
+        if (subCategory) {
+            return itemCat === categoryName && itemSubCat === subCategory;
         }
-        if (category === 'National News') {
-            return cat.includes('national') || cat.includes('india') || cat.includes('قومی') || cat.includes('south india') || cat.includes('جنوبی ہند');
+
+        if (categoryName) {
+            // Check if it matches the main category
+            if (itemCat === categoryName) return true;
+
+            // Legacy mapping fallback for common categories
+            const cat = categoryName.toLowerCase();
+            const itemCatLower = itemCat.toLowerCase();
+
+            if (cat === 'hyderabad' || cat === 'deccan news') {
+                return itemCatLower.includes('deccan') || itemCatLower.includes('hyderabad') || itemCatLower.includes('telangana') || itemCatLower.includes('andhra pradesh');
+            }
+            if (cat === 'national news') {
+                return itemCatLower.includes('national') || itemCatLower.includes('india');
+            }
+            if (cat === 'world news') {
+                return itemCatLower.includes('world') || itemCatLower.includes('international') || itemCatLower.includes('middle east');
+            }
+            if (cat === 'articles & essays') {
+                return itemCatLower.includes('articles') || itemCatLower.includes('essays');
+            }
+            if (cat === 'sports & entertainment') {
+                return itemCatLower.includes('sports') || itemCatLower.includes('entertainment');
+            }
+            if (cat === 'crime & accidents') {
+                return itemCatLower.includes('crime') || itemCatLower.includes('accident');
+            }
         }
-        if (category === 'World News') {
-            return cat.includes('world') || cat.includes('international') || cat.includes('middle east') || cat.includes('عالمی');
-        }
-        if (category === 'Articles & Essays') {
-            return cat.includes('articles') || cat.includes('essays') || cat.includes('business') || cat.includes('مضامین');
-        }
-        if (category === 'Sports & Entertainment') {
-            return cat.includes('sports') || cat.includes('entertainment') || cat.includes('کھیل');
-        }
-        if (category === 'Crime & Accidents') {
-            return cat.includes('crime') || cat.includes('accident') || cat.includes('جرائم');
-        }
-        if (category === 'Photos' || category === 'تصویریں') {
-            return cat.includes('photo') || cat.includes('gallery') || cat.includes('تصویر');
-        }
-        if (category === 'Videos' || category === 'ویڈیوز') {
-            return cat.includes('video') || cat.includes('ویڈیو') || cat.includes('ویڈیوز');
-        }
-        return item.category === category;
+
+        return false;
     });
 
     const mappedNews = filteredNews.map(item => ({
@@ -55,7 +62,7 @@ export function CategoryPage({ category, title }: CategoryPageProps) {
         title: item.title,
         excerpt: stripHtml(item.content).substring(0, 150) + '...',
         image: item.imageUrl,
-        location: category,
+        location: item.category || 'News',
         subCategory: item.subCategory,
         videoUrl: (item as any).videoUrl,
         date: formatTime(item.createdAt)
@@ -81,11 +88,19 @@ export function CategoryPage({ category, title }: CategoryPageProps) {
 
                 {/* Main Content - 8 Columns */}
                 <div className="lg:col-span-8 flex flex-col">
-                    <div className="mb-8 border-b-2 border-primary pb-2 flex justify-between items-end">
-                        <h1 className="text-3xl md:text-4xl font-black text-gray-900 uppercase tracking-tight">
-                            {title}
-                        </h1>
-                        <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-gray-500 hidden md:block">
+                    <div className="mb-8 border-b-2 border-primary pb-2 flex flex-col md:flex-row md:justify-between md:items-end gap-2">
+                        <div>
+                            {subCategory && (
+                                <div className="flex items-center gap-2 text-[10px] font-sans font-black uppercase tracking-widest text-gray-400 mb-1">
+                                    <span>{categoryName}</span>
+                                    <span>/</span>
+                                </div>
+                            )}
+                            <h1 className="text-3xl md:text-4xl font-black text-gray-900 uppercase tracking-tight">
+                                {displayTitle}
+                            </h1>
+                        </div>
+                        <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-gray-500">
                             Asre Hazir Special Coverage
                         </span>
                     </div>
@@ -100,7 +115,7 @@ export function CategoryPage({ category, title }: CategoryPageProps) {
                         </div>
                     ) : (
                         <div className="text-center py-20 bg-gray-50 rounded-xl border border-dashed border-gray-200">
-                            <p className="text-gray-500 font-sans italic">No reports found in {title} at this time.</p>
+                            <p className="text-gray-500 font-sans italic">No reports found in {displayTitle} at this time.</p>
                         </div>
                     )}
 
@@ -118,3 +133,4 @@ export function CategoryPage({ category, title }: CategoryPageProps) {
         </div>
     );
 }
+
