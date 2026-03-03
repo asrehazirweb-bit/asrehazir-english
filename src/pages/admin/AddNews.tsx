@@ -65,13 +65,25 @@ const AddNews: React.FC = () => {
             query(collection(db, 'categories_english'), orderBy('order', 'asc')),
             (snap) => {
                 const cats = snap.docs.map(d => ({ id: d.id, ...d.data() })) as CategoryDoc[];
-                // If Firestore returns empty, use fallback so dropdown is never blank
-                const resolved = cats.length > 0 ? cats : FALLBACK_CATEGORIES;
-                setCategories(resolved);
+
+                // Merge Firestore categories with Fallbacks to ensure required items like 'South India' are ALWAYS there
+                const merged = [...FALLBACK_CATEGORIES];
+                cats.forEach(dbCat => {
+                    const existingIdx = merged.findIndex(m => m.name === dbCat.name);
+                    if (existingIdx > -1) {
+                        // Merge sub-categories, avoiding duplicates
+                        const combinedSubs = Array.from(new Set([...merged[existingIdx].subCategories, ...dbCat.subCategories]));
+                        merged[existingIdx] = { ...dbCat, subCategories: combinedSubs };
+                    } else {
+                        merged.push(dbCat);
+                    }
+                });
+
+                setCategories(merged.sort((a, b) => a.order - b.order));
                 setCatsLoading(false);
                 if (!category) {
-                    setCategory(resolved[0].name);
-                    setSubCategory(resolved[0].subCategories?.[0] || '');
+                    setCategory(merged[0].name);
+                    setSubCategory(merged[0].subCategories?.[0] || '');
                 }
             },
             (_err) => {
