@@ -134,13 +134,20 @@ export function Home() {
                     {/* 1. Hero */}
                     {heroLeadStory && <HeroSection leadStory={heroLeadStory} />}
 
-                    {/* 2. Latest News */}
+                    {/* 2. Articles & Essays (Moved UP) */}
+                    <CategoryGridSection
+                        category="Articles & Essays"
+                        items={news.filter(n => n.category === 'Articles & Essays' || n.category === 'Business' || n.category === 'Technology')}
+                        formatTime={formatTime}
+                    />
+
+                    {/* 3. Latest News */}
                     <div className="mb-12">
                         <AdBlock placement="between_news" className="h-24 md:hidden mb-12" label="Breaking News Ad" />
                         <LatestNewsSection items={latestNewsItems} />
                     </div>
 
-                    {/* 3. Telangana Section */}
+                    {/* 4. Telangana Section */}
                     {telanganaFeature && (
                         <TelanganaSection
                             featured={telanganaFeature}
@@ -148,20 +155,13 @@ export function Home() {
                         />
                     )}
 
-                    {/* Regional (South) */}
+                    {/* 5. Regional (South) */}
                     <RegionalAndOffbeatSection regionalItems={regionalItems} />
 
-                    {/* 4. India / Stats */}
+                    {/* 6. India / Stats */}
                     <CategoryFeatureSection
                         tabs={['National', 'International', 'Regional']}
                         allNews={news}
-                        formatTime={formatTime}
-                    />
-
-                    {/* 5. Articles & Essays */}
-                    <CategoryGridSection
-                        category="Articles & Essays"
-                        items={news.filter(n => n.category === 'Articles & Essays' || n.category === 'Business' || n.category === 'Technology')}
                         formatTime={formatTime}
                     />
 

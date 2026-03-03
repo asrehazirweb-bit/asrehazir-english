@@ -8,6 +8,8 @@ import Toast from '../components/ui/Toast';
 import { useAuth } from '../context/AuthContext';
 import { saveNewsArticle, unsaveNewsArticle, isNewsSaved } from '../lib/savedNews';
 import DOMPurify from 'dompurify';
+import SocialShare from '../components/SocialShare';
+import { useMetaTags } from '../hooks/useMetaTags';
 
 const getCategoryPath = (category: string) => {
     const cat = category.toLowerCase();
@@ -71,6 +73,13 @@ const ArticleDetail: React.FC = () => {
         fetchArticle();
         window.scrollTo(0, 0);
     }, [id]);
+
+    useMetaTags({
+        title: article?.title ? `${article.title} - Asre Hazir` : 'Asre Hazir News',
+        description: article?.content?.replace(/<[^>]*>/g, '').slice(0, 160),
+        image: article?.imageUrl,
+        url: window.location.href
+    });
 
     useEffect(() => {
         const handleScroll = () => {
@@ -299,6 +308,9 @@ const ArticleDetail: React.FC = () => {
                                 dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(article.content) }}
                             />
                         </div>
+
+                        {/* Social Share Section (Dynamic) */}
+                        <SocialShare url={window.location.href} title={article.title} />
 
                         {/* Article Footer */}
                         <div className="mt-16 pt-8 border-t border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-6">

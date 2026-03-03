@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { Facebook, Twitter, Youtube, ChevronRight } from 'lucide-react';
+import { Facebook, X as XIcon, ChevronRight } from 'lucide-react';
+import { SOCIAL_LINKS } from '../../constants/socialLinks';
 import { AdBlock } from './AdBlock';
 
 interface NewsItem {
@@ -95,23 +96,26 @@ export function Sidebar({ offbeatItems = [], topStories = [] }: SidebarProps) {
                     </div>
                 </div>
 
-                {/* 2. SOCIAL STATS CARD */}
-                <div className="flex w-full h-[100px]">
-                    <div className="flex-1 bg-[#4267B2] text-white flex flex-col items-center justify-center cursor-pointer hover:opacity-90 transition-opacity">
-                        <Facebook size={24} className="mb-2" />
-                        <span className="font-bold text-sm">1.4M</span>
-                        <span className="text-[10px] uppercase opacity-80">Fans</span>
-                    </div>
-                    <div className="flex-1 bg-[#000000] text-white flex flex-col items-center justify-center cursor-pointer hover:opacity-90 transition-opacity">
-                        <Twitter size={24} className="mb-2" />
-                        <span className="font-bold text-sm">40.4K</span>
-                        <span className="text-[10px] uppercase opacity-80">Followers</span>
-                    </div>
-                    <div className="flex-1 bg-[#FF0000] text-white flex flex-col items-center justify-center cursor-pointer hover:opacity-90 transition-opacity">
-                        <Youtube size={24} className="mb-2" />
-                        <span className="font-bold text-sm">1.9M</span>
-                        <span className="text-[10px] uppercase opacity-80">Subscribers</span>
-                    </div>
+                {/* 2. SOCIAL CARDS */}
+                <div className="flex w-full h-[80px]">
+                    <a
+                        href={SOCIAL_LINKS.facebook}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex-1 bg-[#1877F2] text-white flex flex-col items-center justify-center cursor-pointer hover:shadow-inner transition-all group"
+                    >
+                        <Facebook size={20} className="mb-px group-hover:scale-110 transition-transform" />
+                        <span className="font-sans font-black text-[10px] uppercase tracking-tighter">Facebook</span>
+                    </a>
+                    <a
+                        href={SOCIAL_LINKS.x}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex-1 bg-[#000000] text-white flex flex-col items-center justify-center cursor-pointer hover:shadow-inner transition-all group"
+                    >
+                        <XIcon size={20} className="mb-px group-hover:scale-110 transition-transform" />
+                        <span className="font-sans font-black text-[10px] uppercase tracking-tighter">Follow on X</span>
+                    </a>
                 </div>
 
                 <AdBlock placement="sidebar" className="h-[250px] !my-0" label="Premium Sidebar Ad" />
