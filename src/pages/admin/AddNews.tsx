@@ -417,27 +417,21 @@ const AddNews: React.FC = () => {
                                     <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
                                         <Layout className="w-3.5 h-3.5 text-primary" /> Sub-category
                                     </label>
-                                    {currentCat ? (
-                                        <select
-                                            value={subCategory}
-                                            onChange={(e) => setSubCategory(e.target.value)}
-                                            className="w-full p-4 rounded-xl border border-gray-100 bg-gray-50 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-bold text-xs h-14"
-                                        >
-                                            {currentSubCategories.map(sub => (
+                                    <select
+                                        value={subCategory}
+                                        onChange={(e) => setSubCategory(e.target.value)}
+                                        className="w-full p-4 rounded-xl border border-gray-100 bg-gray-50 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-bold text-xs h-14"
+                                    >
+                                        {currentSubCategories.length > 0 ? (
+                                            currentSubCategories.map(sub => (
                                                 <option key={sub} value={sub}>{sub}</option>
-                                            ))}
-                                            <option value="Other">Other (Custom)...</option>
-                                        </select>
-                                    ) : (
-                                        <input
-                                            type="text"
-                                            placeholder="Enter Sub-category..."
-                                            value={subCategory}
-                                            onChange={(e) => setSubCategory(e.target.value)}
-                                            className="w-full p-4 rounded-xl border border-gray-100 bg-gray-50 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-bold text-xs h-14"
-                                        />
-                                    )}
+                                            ))
+                                        ) : (
+                                            <option value="General">General</option>
+                                        )}
+                                    </select>
                                 </div>
+
                             </div>
 
                             {/* Video URL (Conditional) */}
