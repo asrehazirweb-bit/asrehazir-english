@@ -13,6 +13,20 @@ interface CategoryDoc {
     order: number;
 }
 
+// Fallback categories for English portal
+const FALLBACK_CATEGORIES: CategoryDoc[] = [
+    { id: 'f1', name: 'World News', subCategories: ['Top Stories', 'Middle East', 'International', 'Diplomacy'], order: 1 },
+    { id: 'f2', name: 'National News', subCategories: ['Top Stories', 'South India', 'Politics', 'Governance', 'States'], order: 2 },
+    { id: 'f3', name: 'Hyderabad', subCategories: ['Local News', 'Crime', 'Politics', 'Business', 'Events'], order: 3 },
+    { id: 'f4', name: 'Telangana', subCategories: ['Local News', 'Politics', 'Development', 'Agriculture'], order: 4 },
+    { id: 'f5', name: 'Andhra Pradesh', subCategories: ['Local News', 'Politics', 'Development', 'Business'], order: 5 },
+    { id: 'f6', name: 'Photos', subCategories: ['Top Stories', 'Politics', 'Sports', 'Entertainment', 'Events'], order: 6 },
+    { id: 'f7', name: 'Videos', subCategories: ['News', 'Events', 'Interviews', 'Viral'], order: 7 },
+    { id: 'f8', name: 'Articles & Essays', subCategories: ['Editorial', 'Analysis', 'Opinion', 'Special Reports'], order: 8 },
+    { id: 'f9', name: 'Sports & Entertainment', subCategories: ['Cricket', 'Cinema', 'OTT', 'Lifestyle'], order: 9 },
+    { id: 'f10', name: 'Crime & Accidents', subCategories: ['Local Crime', 'Investigation', 'Security', 'Accidents'], order: 10 },
+];
+
 export function Header() {
     const currentDate = format(new Date(), 'EEEE, MMMM do, yyyy');
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -28,8 +42,11 @@ export function Header() {
         const q = query(collection(db, 'categories_english'), orderBy('order', 'asc'));
         const unsub = onSnapshot(q, (snap) => {
             const cats = snap.docs.map(doc => ({ id: doc.id, ...doc.data() })) as CategoryDoc[];
-            console.log('Fetched Categories:', cats); // Debug
-            setCategories(cats);
+            // Use fallback if Firestore is empty
+            setCategories(cats.length > 0 ? cats : FALLBACK_CATEGORIES);
+        }, (_err) => {
+            // Use fallback on error
+            setCategories(FALLBACK_CATEGORIES);
         });
         return () => unsub();
     }, []);

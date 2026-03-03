@@ -20,7 +20,7 @@ interface CategoryDoc {
 // Used when Firestore rules are not yet configured or collection is empty.
 const FALLBACK_CATEGORIES: CategoryDoc[] = [
     { id: 'f1', name: 'World News', subCategories: ['Top Stories', 'Middle East', 'International', 'Diplomacy'], order: 1 },
-    { id: 'f2', name: 'National News', subCategories: ['Top Stories', 'Politics', 'Governance', 'States'], order: 2 },
+    { id: 'f2', name: 'National News', subCategories: ['Top Stories', 'South India', 'Politics', 'Governance', 'States'], order: 2 },
     { id: 'f3', name: 'Hyderabad', subCategories: ['Local News', 'Crime', 'Politics', 'Business', 'Events'], order: 3 },
     { id: 'f4', name: 'Telangana', subCategories: ['Local News', 'Politics', 'Development', 'Agriculture'], order: 4 },
     { id: 'f5', name: 'Andhra Pradesh', subCategories: ['Local News', 'Politics', 'Development', 'Business'], order: 5 },
