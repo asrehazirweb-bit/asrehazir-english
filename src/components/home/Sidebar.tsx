@@ -118,7 +118,7 @@ export function Sidebar({ offbeatItems = [], topStories = [] }: SidebarProps) {
                     </a>
                 </div>
 
-                <AdBlock placement="sidebar" className="h-[250px] !my-0" label="Premium Sidebar Ad" />
+                <AdBlock placement="sidebar" className="!my-0" label="Premium Sidebar Ad" />
 
                 {/* 3. DISCOVER MORE CARD */}
                 <div className="border border-gray-100 bg-white p-6">

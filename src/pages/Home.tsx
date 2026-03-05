@@ -158,7 +158,7 @@ export function Home() {
 
                     {/* 3. Latest News */}
                     <div className="mb-12">
-                        <AdBlock placement="between_news" className="h-24 md:hidden mb-12" label="Breaking News Ad" />
+                        <AdBlock placement="between_news" className="md:hidden mb-12" label="Breaking News Ad" />
                         <LatestNewsSection items={latestNewsItems} />
                     </div>
 
@@ -180,7 +180,7 @@ export function Home() {
                         formatTime={formatTime}
                     />
 
-                    <AdBlock placement="between_news" className="h-32 md:hidden mb-12" label="Inside Story Ad" />
+                    <AdBlock placement="between_news" className="md:hidden mb-12" label="Inside Story Ad" />
 
                 </div>
 
@@ -206,7 +206,7 @@ export function Home() {
             </div>
 
             {/* === AD BLOCK === */}
-            <AdBlock className="h-40 mb-12" label="Premium Banner Ad" />
+            <AdBlock className="mb-12" label="Premium Banner Ad" />
 
             {worldNews.length > 0 && (
                 <div className="w-full mx-auto px-4 mb-12">
