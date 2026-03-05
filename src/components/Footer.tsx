@@ -7,7 +7,7 @@ export function Footer() {
     return (
         <footer className="w-full bg-secondary text-white pt-16 pb-8 mt-16 px-8 border-t-4 border-accent transition-colors">
             <div className="w-full max-w-7xl mx-auto mb-16">
-                <AdBlock placement="footer" className="!my-0 h-auto" label="Footer Advertisement" />
+                <AdBlock placement="footer" className="!my-0 max-h-[140px] !min-h-0" label="Footer Advertisement" />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
                 <div className="col-span-1 md:col-span-1">
