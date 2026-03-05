@@ -10,6 +10,7 @@ import { saveNewsArticle, unsaveNewsArticle, isNewsSaved } from '../lib/savedNew
 import DOMPurify from 'dompurify';
 import SocialShare from '../components/SocialShare';
 import { useMetaTags } from '../hooks/useMetaTags';
+import { AdBlock } from '../components/home/AdBlock';
 
 const getCategoryPath = (category: string) => {
     const cat = category.toLowerCase();
@@ -20,6 +21,32 @@ const getCategoryPath = (category: string) => {
     if (cat.includes('sports') || cat.includes('entertainment')) return '/sports-entertainment';
     if (cat.includes('crime') || cat.includes('accident')) return '/crime-accidents';
     return '/';
+};
+
+// Helper to render content with ads between paragraphs
+const renderContentWithAds = (content: string, fontClass: string) => {
+    if (!content) return null;
+
+    const sanitized = DOMPurify.sanitize(content);
+    // Split by paragraph tags while keeping the tags
+    const paragraphs = sanitized.match(/<p>.*?<\/p>|[^<]+/g) || [];
+
+    if (paragraphs.length <= 2) {
+        return <div className={`article-content text-gray-800 leading-relaxed mb-6 text-base md:text-xl ${fontClass}`} dangerouslySetInnerHTML={{ __html: sanitized }} />;
+    }
+
+    const firstHalf = paragraphs.slice(0, 2).join('');
+    const remaining = paragraphs.slice(2).join('');
+
+    return (
+        <div className={`article-content text-gray-800 leading-relaxed mb-6 text-base md:text-xl ${fontClass}`}>
+            <div dangerouslySetInnerHTML={{ __html: firstHalf }} />
+            <div className="my-10">
+                <AdBlock placement="between_news" className="!my-0" label="In-Article Ad" />
+            </div>
+            <div dangerouslySetInnerHTML={{ __html: remaining }} />
+        </div>
+    );
 };
 
 const ArticleDetail: React.FC = () => {
@@ -314,10 +341,7 @@ const ArticleDetail: React.FC = () => {
                     {/* Main Content */}
                     <div className="lg:col-span-12">
                         <div className="prose prose-lg max-w-none">
-                            <div
-                                className={`article-content text-gray-800 leading-relaxed mb-6 text-base md:text-xl ${article.contentFont || 'font-sans'}`}
-                                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(article.content) }}
-                            />
+                            {renderContentWithAds(article.content, article.contentFont || 'font-sans')}
                         </div>
 
                         {/* Social Share Section (Dynamic) */}
