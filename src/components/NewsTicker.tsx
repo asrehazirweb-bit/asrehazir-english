@@ -44,22 +44,22 @@ export function NewsTicker({ items }: NewsTickerProps) {
 
             {/* Scrolling Track */}
             <div className="flex-1 overflow-hidden relative">
-                <div
-                    className="flex items-center h-full whitespace-nowrap animate-ticker"
-                    ref={trackRef}
-                >
-                    {items.map((item, idx) => (
-                        <span key={item.id} className="inline-flex items-center">
-                            <Link
-                                to={`/news/${item.id}`}
-                                className="text-[13px] font-bold text-gray-800 hover:text-primary transition-colors px-8 whitespace-nowrap"
-                            >
-                                {item.title}
-                            </Link>
-                            {idx < items.length - 1 && (
-                                <span className="text-primary font-black mx-2">•</span>
-                            )}
-                        </span>
+                <div className="flex items-center h-full whitespace-nowrap animate-ticker">
+                    {/* Render triple for absolute seamlessness on wider screens */}
+                    {[...Array(3)].map((_, i) => (
+                        <div key={i} className="flex items-center">
+                            {items.map((item) => (
+                                <span key={`${i}-${item.id}`} className="inline-flex items-center">
+                                    <Link
+                                        to={`/news/${item.id}`}
+                                        className="text-[13px] font-bold text-gray-800 hover:text-primary transition-colors px-8 whitespace-nowrap"
+                                    >
+                                        {item.title}
+                                    </Link>
+                                    <span className="text-primary font-black mx-2">•</span>
+                                </span>
+                            ))}
+                        </div>
                     ))}
                 </div>
             </div>

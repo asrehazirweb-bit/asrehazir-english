@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
+import { NewsTicker } from './components/news/NewsTicker';
 
 interface LayoutProps {
     children: ReactNode;
@@ -13,6 +14,7 @@ export function Layout({ children }: LayoutProps) {
     return (
         <div className="mx-auto w-full max-w-full min-h-screen bg-white relative flex flex-col transition-colors duration-300">
 
+            <NewsTicker />
             <Header />
             <main className="flex-grow">
                 {children}
