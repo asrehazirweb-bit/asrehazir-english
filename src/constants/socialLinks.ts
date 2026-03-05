@@ -4,5 +4,5 @@ export const SOCIAL_LINKS = {
     telegram: 'https://t.me/asrehazirportal',
     x: 'https://x.com/asrehazirportal',
     whatsapp: 'https://whatsapp.com/channel/0029VaBhGsGFy72HMOILTQ0P',
-    whatsappChat: 'https://wa.me/919121532805'
+    whatsappChat: 'https://wa.me/919908079301'
 };

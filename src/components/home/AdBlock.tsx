@@ -22,7 +22,8 @@ export function AdBlock({
     // Prioritize custom ad if provided
     const ad = customImage ? { imageUrl: customImage, link: customLink || '#' } : fetchedAd;
 
-    if (loading) {
+    // Only show loading if we don't have a custom image and we are still fetching the generic ad
+    if (loading && !customImage) {
         return <div className={`w-full bg-gray-50 animate-pulse rounded-xl h-24 my-8 ${className}`} />;
     }
 

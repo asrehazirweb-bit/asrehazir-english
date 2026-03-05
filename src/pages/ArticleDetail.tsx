@@ -31,16 +31,18 @@ const renderContentWithAds = (content: string, fontClass: string, postAdImageUrl
     // Split by paragraph tags while keeping the tags
     const paragraphs = sanitized.match(/<p>.*?<\/p>|[^<]+/g) || [];
 
-    if (paragraphs.length <= 2) {
+    if (paragraphs.length === 0) {
         return <div className={`article-content text-gray-800 leading-relaxed mb-6 text-base md:text-xl ${fontClass}`} dangerouslySetInnerHTML={{ __html: sanitized }} />;
     }
 
-    const firstHalf = paragraphs.slice(0, 2).join('');
-    const remaining = paragraphs.slice(2).join('');
+    // Determine where to split (after 2 paragraphs if possible, else after 1)
+    const splitIndex = paragraphs.length >= 3 ? 2 : 1;
+    const firstPart = paragraphs.slice(0, splitIndex).join('');
+    const secondPart = paragraphs.slice(splitIndex).join('');
 
     return (
         <div className={`article-content text-gray-800 leading-relaxed mb-6 text-base md:text-xl ${fontClass}`}>
-            <div dangerouslySetInnerHTML={{ __html: firstHalf }} />
+            <div dangerouslySetInnerHTML={{ __html: firstPart }} />
             <div className="my-10">
                 {postAdImageUrl ? (
                     <AdBlock
@@ -54,7 +56,7 @@ const renderContentWithAds = (content: string, fontClass: string, postAdImageUrl
                     <AdBlock placement="between_news" className="!my-0" label="In-Article Ad" />
                 )}
             </div>
-            <div dangerouslySetInnerHTML={{ __html: remaining }} />
+            {secondPart && <div dangerouslySetInnerHTML={{ __html: secondPart }} />}
         </div>
     );
 };
