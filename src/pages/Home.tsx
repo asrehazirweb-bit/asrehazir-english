@@ -8,6 +8,9 @@ import { RegionalAndOffbeatSection } from '../components/home/RegionalAndOffbeat
 import { CategoryFeatureSection, CategoryGridSection } from '../components/home/CategoryFeatureSection';
 import { NewsTicker } from '../components/NewsTicker';
 import { useNews } from '../hooks/useNews';
+import { useState, useEffect } from 'react';
+import { db } from '../lib/firebase';
+import { doc, onSnapshot } from 'firebase/firestore';
 
 const stripHtml = (html: string) => {
     const doc = new DOMParser().parseFromString(html, 'text/html');
@@ -99,8 +102,20 @@ export function Home() {
         titleFont: item.titleFont
     }));
 
+    const [livePageEnabled, setLivePageEnabled] = useState(true);
+
+    useEffect(() => {
+        const unsubscribe = onSnapshot(doc(db, 'settings', 'live_config'), (snap) => {
+            if (snap.exists()) {
+                setLivePageEnabled(snap.data().livePageEnabled ?? true);
+            }
+        });
+        return () => unsubscribe();
+    }, []);
+
     // Separate live news articles
-    const liveNews = news.filter(n => n.isLive);
+    // Note: We check specifically for showInLive (new system) or isLive (legacy) 
+    const liveNews = news.filter(n => (n as any).showInLive || n.isLive);
 
     return (
         <div className="pt-0">
@@ -109,7 +124,7 @@ export function Home() {
             <NewsTicker items={news.slice(0, 10).map(n => ({ id: n.id, title: n.title }))} />
 
             {/* === LIVE NEWS STRIP === */}
-            {liveNews.length > 0 && (
+            {livePageEnabled && liveNews.length > 0 && (
                 <div className="w-full bg-red-600 text-white px-4 py-3 flex items-center gap-4 overflow-x-auto scrollbar-hide">
                     <div className="flex-shrink-0 flex items-center gap-2 border-r border-red-400 pr-4">
                         <span className="w-2.5 h-2.5 rounded-full bg-white animate-ping"></span>

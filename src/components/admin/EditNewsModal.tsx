@@ -33,7 +33,7 @@ const EditNewsModal: React.FC<EditNewsModalProps> = ({ article, onClose, onSucce
     const [category, setCategory] = useState(article.category);
     const [subCategory, setSubCategory] = useState(article.subCategory || 'Top Stories');
     const [hashtags, setHashtags] = useState(article.hashtags?.join(', ') || '');
-    const [isLive, setIsLive] = useState(article.isLive || false);
+    const [showInLive, setShowInLive] = useState(article.showInLive || article.isLive || false);
     const [image, setImage] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(article.imageUrl);
     const [existingImageUrl, setExistingImageUrl] = useState<string | null>(article.imageUrl);
@@ -101,7 +101,8 @@ const EditNewsModal: React.FC<EditNewsModalProps> = ({ article, onClose, onSucce
                 category,
                 subCategory,
                 hashtags: hashtags.split(',').map(s => s.trim()).filter(Boolean),
-                isLive,
+                showInLive,
+                isLive: showInLive, // Keep both for safety
                 videoUrl,
                 imageUrl,
                 updatedAt: new Date()
@@ -198,8 +199,8 @@ const EditNewsModal: React.FC<EditNewsModalProps> = ({ article, onClose, onSucce
                                     )}
                                     <input
                                         type="checkbox"
-                                        checked={isLive}
-                                        onChange={(e) => setIsLive(e.target.checked)}
+                                        checked={showInLive}
+                                        onChange={(e) => setShowInLive(e.target.checked)}
                                         className="w-5 h-5 accent-primary cursor-pointer"
                                     />
                                 </div>

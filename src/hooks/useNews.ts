@@ -11,6 +11,7 @@ export interface NewsArticle {
     subCategory?: string;
     hashtags?: string[];
     isLive?: boolean;
+    showInLive?: boolean;
     imageUrl: string;
     createdAt: any;
     author: string;
