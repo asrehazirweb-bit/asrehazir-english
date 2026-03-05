@@ -24,7 +24,7 @@ const getCategoryPath = (category: string) => {
 };
 
 // Helper to render content with ads between paragraphs
-const renderContentWithAds = (content: string, fontClass: string) => {
+const renderContentWithAds = (content: string, fontClass: string, postAdImageUrl?: string, postAdLink?: string) => {
     if (!content) return null;
 
     const sanitized = DOMPurify.sanitize(content);
@@ -42,7 +42,17 @@ const renderContentWithAds = (content: string, fontClass: string) => {
         <div className={`article-content text-gray-800 leading-relaxed mb-6 text-base md:text-xl ${fontClass}`}>
             <div dangerouslySetInnerHTML={{ __html: firstHalf }} />
             <div className="my-10">
-                <AdBlock placement="between_news" className="!my-0" label="In-Article Ad" />
+                {postAdImageUrl ? (
+                    <AdBlock
+                        placement="custom"
+                        customImage={postAdImageUrl}
+                        customLink={postAdLink}
+                        className="!my-0"
+                        label="Featured Partner"
+                    />
+                ) : (
+                    <AdBlock placement="between_news" className="!my-0" label="In-Article Ad" />
+                )}
             </div>
             <div dangerouslySetInnerHTML={{ __html: remaining }} />
         </div>
@@ -341,7 +351,7 @@ const ArticleDetail: React.FC = () => {
                     {/* Main Content */}
                     <div className="lg:col-span-12">
                         <div className="prose prose-lg max-w-none">
-                            {renderContentWithAds(article.content, article.contentFont || 'font-sans')}
+                            {renderContentWithAds(article.content, article.contentFont || 'font-sans', article.postAdImageUrl, article.postAdLink)}
                         </div>
 
                         {/* Social Share Section (Dynamic) */}

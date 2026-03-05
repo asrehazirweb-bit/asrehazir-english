@@ -6,10 +6,21 @@ interface AdBlockProps {
     className?: string;
     label?: string;
     placement?: string;
+    customImage?: string;
+    customLink?: string;
 }
 
-export function AdBlock({ className = "", label = "Advertisement", placement = "between_news" }: AdBlockProps) {
-    const { ad, loading } = useAds(placement);
+export function AdBlock({
+    className = "",
+    label = "Advertisement",
+    placement = "between_news",
+    customImage,
+    customLink
+}: AdBlockProps) {
+    const { ad: fetchedAd, loading } = useAds(placement);
+
+    // Prioritize custom ad if provided
+    const ad = customImage ? { imageUrl: customImage, link: customLink || '#' } : fetchedAd;
 
     if (loading) {
         return <div className={`w-full bg-gray-50 animate-pulse rounded-xl h-24 my-8 ${className}`} />;

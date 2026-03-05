@@ -20,6 +20,8 @@ export interface NewsArticle {
     videoUrl?: string;
     titleFont?: string; // Legacy
     contentFont?: string; // Legacy
+    postAdImageUrl?: string;
+    postAdLink?: string;
 }
 
 export const useNews = (category?: string, maxItems: number = 20, subCategory?: string) => {

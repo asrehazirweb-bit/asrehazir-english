@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { db, storage } from '../../lib/firebase';
 import { doc, updateDoc, collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { X, Save, Image as ImageIcon, Layout, Type, FileText, Tag, Loader2, List, Hash, Activity } from 'lucide-react';
+import { X, Save, Image as ImageIcon, Layout, Type, FileText, Tag, Loader2, List, Hash, Activity, Sparkles } from 'lucide-react';
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import { type NewsArticle } from '../../hooks/useNews';
@@ -75,6 +75,27 @@ const EditNewsModal: React.FC<EditNewsModalProps> = ({ article, onClose, onSucce
         }
     };
 
+    const [postAdImage, setPostAdImage] = useState<File | null>(null);
+    const [postAdImagePreview, setPostAdImagePreview] = useState<string | null>(article.postAdImageUrl || null);
+    const [postAdLink, setPostAdLink] = useState(article.postAdLink || '');
+    const [existingPostAdUrl, setExistingPostAdUrl] = useState<string | null>(article.postAdImageUrl || null);
+    const [isPostAdMediaOpen, setIsPostAdMediaOpen] = useState(false);
+
+    const handlePostAdImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files ? e.target.files[0] : null;
+        setPostAdImage(file);
+        setExistingPostAdUrl(null);
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPostAdImagePreview(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        } else {
+            setPostAdImagePreview(null);
+        }
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
@@ -93,6 +114,17 @@ const EditNewsModal: React.FC<EditNewsModalProps> = ({ article, onClose, onSucce
                 }
             }
 
+            let postAdImageUrl = existingPostAdUrl || article.postAdImageUrl || '';
+            if (postAdImage) {
+                try {
+                    const adStorageRef = ref(storage, `ads/${Date.now()}_${postAdImage.name}`);
+                    await uploadBytes(adStorageRef, postAdImage);
+                    postAdImageUrl = await getDownloadURL(adStorageRef);
+                } catch (storageErr) {
+                    console.error("Ad image upload error:", storageErr);
+                }
+            }
+
             const docRef = doc(db, 'news', article.id);
             await updateDoc(docRef, {
                 title,
@@ -105,6 +137,8 @@ const EditNewsModal: React.FC<EditNewsModalProps> = ({ article, onClose, onSucce
                 isLive: showInLive, // Keep both for safety
                 videoUrl,
                 imageUrl,
+                postAdImageUrl,
+                postAdLink,
                 updatedAt: new Date()
             });
 
@@ -276,6 +310,54 @@ const EditNewsModal: React.FC<EditNewsModalProps> = ({ article, onClose, onSucce
                         </div>
                     </div>
 
+                    {/* Post Specific Ad */}
+                    <div className="space-y-6 bg-zinc-50 p-8 rounded-3xl border border-gray-100">
+                        <div className="flex items-center gap-2 mb-2">
+                            <Sparkles className="text-primary" size={16} />
+                            <h3 className="text-xs font-black uppercase tracking-widest text-zinc-900">Post Specific Advertisement</h3>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div className="space-y-4">
+                                <div className="flex justify-between items-center mb-2">
+                                    <button
+                                        type="button"
+                                        onClick={async () => {
+                                            await fetchMediaLibrary();
+                                            setIsPostAdMediaOpen(true);
+                                        }}
+                                        className="text-primary font-bold hover:underline flex items-center gap-1 text-[10px]"
+                                    >
+                                        <List size={12} /> From Library
+                                    </button>
+                                    <label className="text-[9px] font-black uppercase tracking-widest text-gray-400">Ad Image</label>
+                                </div>
+                                <div className={`relative border-2 border-dashed rounded-2xl p-4 transition-all ${postAdImagePreview || existingPostAdUrl ? 'border-primary bg-primary/5' : 'border-gray-200'}`}>
+                                    {postAdImagePreview || existingPostAdUrl ? (
+                                        <div className="relative aspect-video rounded-xl overflow-hidden shadow-lg bg-white">
+                                            <img src={postAdImagePreview || existingPostAdUrl || ''} alt="Ad Preview" className="w-full h-full object-contain" />
+                                            <button type="button" onClick={() => { setPostAdImage(null); setPostAdImagePreview(null); setExistingPostAdUrl(null); }} className="absolute top-2 right-2 bg-black/80 text-white px-2 py-1 rounded-md text-[8px] font-black uppercase">Change</button>
+                                        </div>
+                                    ) : (
+                                        <label className="flex flex-col items-center justify-center min-h-[8rem] cursor-pointer">
+                                            <ImageIcon className="w-6 h-6 text-gray-300 mb-2" />
+                                            <span className="text-gray-900 font-bold text-[10px]">Select Post Ad</span>
+                                            <input type="file" onChange={handlePostAdImageChange} className="hidden" accept="image/*" />
+                                        </label>
+                                    )}
+                                </div>
+                            </div>
+                            <div className="space-y-4">
+                                <label className="text-[9px] font-black uppercase tracking-widest text-gray-400">Ad Target Link</label>
+                                <textarea
+                                    value={postAdLink}
+                                    onChange={(e) => setPostAdLink(e.target.value)}
+                                    className="w-full p-4 rounded-2xl border border-gray-100 bg-white focus:ring-4 focus:ring-primary/10 outline-none text-xs font-bold h-[8rem] resize-none"
+                                    placeholder="https://example.com/promotion"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
                     {/* Image Update */}
                     <div className="space-y-4">
                         <div className="flex justify-between items-center mb-4">
@@ -309,12 +391,12 @@ const EditNewsModal: React.FC<EditNewsModalProps> = ({ article, onClose, onSucce
                 </form>
 
                 {/* Media Library Modal */}
-                {isMediaLibraryOpen && (
+                {(isMediaLibraryOpen || isPostAdMediaOpen) && (
                     <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
                         <div className="bg-white w-full max-w-4xl rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col max-h-[80vh]">
                             <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-zinc-900 text-white">
                                 <h2 className="text-xl font-black uppercase italic">Select from Library</h2>
-                                <button onClick={() => setIsMediaLibraryOpen(false)} className="bg-zinc-800 p-2 rounded-full hover:bg-red-600">
+                                <button onClick={() => { setIsMediaLibraryOpen(false); setIsPostAdMediaOpen(false); }} className="bg-zinc-800 p-2 rounded-full hover:bg-red-600">
                                     <X size={18} />
                                 </button>
                             </div>
@@ -324,10 +406,17 @@ const EditNewsModal: React.FC<EditNewsModalProps> = ({ article, onClose, onSucce
                                         key={i}
                                         className="aspect-square rounded-2xl overflow-hidden border-2 border-transparent hover:border-primary cursor-pointer transition-all"
                                         onClick={() => {
-                                            setExistingImageUrl(url);
-                                            setImage(null);
-                                            setImagePreview(null);
-                                            setIsMediaLibraryOpen(false);
+                                            if (isPostAdMediaOpen) {
+                                                setExistingPostAdUrl(url);
+                                                setPostAdImage(null);
+                                                setPostAdImagePreview(null);
+                                                setIsPostAdMediaOpen(false);
+                                            } else {
+                                                setExistingImageUrl(url);
+                                                setImage(null);
+                                                setImagePreview(null);
+                                                setIsMediaLibraryOpen(false);
+                                            }
                                         }}
                                     >
                                         <img src={url} alt="Media" className="w-full h-full object-cover" />

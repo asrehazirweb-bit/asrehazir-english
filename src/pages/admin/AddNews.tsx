@@ -189,6 +189,27 @@ const AddNews: React.FC = () => {
         }
     };
 
+    const [postAdImage, setPostAdImage] = useState<File | null>(null);
+    const [postAdImagePreview, setPostAdImagePreview] = useState<string | null>(null);
+    const [postAdLink, setPostAdLink] = useState('');
+    const [existingPostAdUrl, setExistingPostAdUrl] = useState<string | null>(null);
+    const [isPostAdMediaOpen, setIsPostAdMediaOpen] = useState(false);
+
+    const handlePostAdImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files ? e.target.files[0] : null;
+        setPostAdImage(file);
+        setExistingPostAdUrl(null);
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPostAdImagePreview(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        } else {
+            setPostAdImagePreview(null);
+        }
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
@@ -204,6 +225,15 @@ const AddNews: React.FC = () => {
                 }
             }
 
+            let postAdImageUrl = existingPostAdUrl || '';
+            if (postAdImage) {
+                try {
+                    postAdImageUrl = await uploadImage(postAdImage, 'english');
+                } catch (imgErr: any) {
+                    console.error("Post ad image upload error:", imgErr);
+                }
+            }
+
             const docData = {
                 title,
                 subHeadline,
@@ -215,6 +245,8 @@ const AddNews: React.FC = () => {
                 showInLive,
                 videoUrl,
                 imageUrl: imageUrl,
+                postAdImageUrl,
+                postAdLink,
                 createdAt: serverTimestamp(),
                 author: auth.currentUser?.displayName || 'Asre Hazir Desk',
                 authorId: auth.currentUser?.uid,
@@ -243,6 +275,10 @@ const AddNews: React.FC = () => {
             setImage(null);
             setImagePreview(null);
             setExistingImageUrl(null);
+            setPostAdImage(null);
+            setPostAdImagePreview(null);
+            setPostAdLink('');
+            setExistingPostAdUrl(null);
             setHashtags('');
             setShowInLive(false);
             setSendPush(false);
@@ -250,8 +286,10 @@ const AddNews: React.FC = () => {
 
             setTimeout(() => setSuccessMessage(false), 5000);
 
-            const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
-            if (fileInput) fileInput.value = '';
+            const fileInputs = document.querySelectorAll('input[type="file"]');
+            fileInputs.forEach(input => {
+                (input as HTMLInputElement).value = '';
+            });
         } catch (error) {
             console.error('Error adding document: ', error);
             setToast({ message: 'Broadcast failed. Check connection.', type: 'error' });
@@ -517,6 +555,61 @@ const AddNews: React.FC = () => {
                                 </div>
                             </div>
 
+                            {/* Post Specific Ad */}
+                            <div className="space-y-6 bg-zinc-50 p-8 rounded-[2.5rem] border border-zinc-200">
+                                <div className="flex items-center gap-3 mb-2">
+                                    <Sparkles className="text-primary" size={18} />
+                                    <h3 className="text-sm font-black uppercase tracking-widest text-zinc-900">Post Specific Advertisement (Optional)</h3>
+                                </div>
+                                <p className="text-xs text-zinc-500 font-medium">If set, this ad will appear inside this specific news post instead of the generic one.</p>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <div className="space-y-4">
+                                        <div className="flex justify-between items-center mb-2">
+                                            <button
+                                                type="button"
+                                                onClick={async () => {
+                                                    await fetchMediaLibrary();
+                                                    setIsPostAdMediaOpen(true);
+                                                }}
+                                                className="text-primary font-bold hover:underline flex items-center gap-2 text-xs"
+                                            >
+                                                <List size={14} /> From Library
+                                            </button>
+                                            <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
+                                                Ad Image
+                                            </label>
+                                        </div>
+                                        <div className={`relative border-2 border-dashed rounded-3xl p-4 transition-all duration-500 ${postAdImagePreview || existingPostAdUrl ? 'border-primary bg-primary/5' : 'border-gray-200 hover:border-primary'}`}>
+                                            {postAdImagePreview || existingPostAdUrl ? (
+                                                <div className="relative aspect-video rounded-xl overflow-hidden shadow-lg bg-white">
+                                                    <img src={postAdImagePreview || existingPostAdUrl || ''} alt="Ad Preview" className="w-full h-full object-contain" />
+                                                    <button type="button" onClick={() => { setPostAdImage(null); setPostAdImagePreview(null); setExistingPostAdUrl(null); }} className="absolute top-2 right-2 bg-black/80 backdrop-blur-md text-white px-3 py-1.5 rounded-lg text-[9px] font-black uppercase">Change</button>
+                                                </div>
+                                            ) : (
+                                                <label className="flex flex-col items-center justify-center min-h-[10rem] cursor-pointer">
+                                                    <ImageIcon className="w-8 h-8 text-gray-300 mb-2" />
+                                                    <span className="text-gray-900 font-bold text-xs text-center">Upload Post Ad<br /><span className="text-[10px] font-medium text-gray-400">Recommended: 728x90 or similar</span></span>
+                                                    <input type="file" onChange={handlePostAdImageChange} className="hidden" accept="image/*" />
+                                                </label>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-4">
+                                        <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
+                                            Ad Target Link (URL)
+                                        </label>
+                                        <textarea
+                                            value={postAdLink}
+                                            onChange={(e) => setPostAdLink(e.target.value)}
+                                            className="w-full p-4 rounded-2xl border border-gray-100 bg-white focus:ring-4 focus:ring-primary/10 outline-none transition-all font-bold text-xs h-[10rem] resize-none"
+                                            placeholder="https://example.com/promotion"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
                             {/* Submit Button */}
                             <button
                                 type="submit"
@@ -541,11 +634,11 @@ const AddNews: React.FC = () => {
             </div>
 
             {/* Media Library Modal — Mobile First */}
-            {isMediaLibraryOpen && (
+            {(isMediaLibraryOpen || isPostAdMediaOpen) && (
                 <div
                     className="fixed inset-0 z-[9999] flex flex-col justify-end sm:justify-center sm:items-center sm:p-4"
                     style={{ backgroundColor: 'rgba(0,0,0,0.7)' }}
-                    onClick={(e) => { if (e.target === e.currentTarget) setIsMediaLibraryOpen(false); }}
+                    onClick={(e) => { if (e.target === e.currentTarget) { setIsMediaLibraryOpen(false); setIsPostAdMediaOpen(false); } }}
                 >
                     <div
                         className="w-full sm:max-w-5xl flex flex-col"
@@ -622,10 +715,17 @@ const AddNews: React.FC = () => {
                                 <div
                                     key={i}
                                     onClick={() => {
-                                        setExistingImageUrl(url);
-                                        setImage(null);
-                                        setImagePreview(null);
-                                        setIsMediaLibraryOpen(false);
+                                        if (isPostAdMediaOpen) {
+                                            setExistingPostAdUrl(url);
+                                            setPostAdImage(null);
+                                            setPostAdImagePreview(null);
+                                            setIsPostAdMediaOpen(false);
+                                        } else {
+                                            setExistingImageUrl(url);
+                                            setImage(null);
+                                            setImagePreview(null);
+                                            setIsMediaLibraryOpen(false);
+                                        }
                                     }}
                                     style={{
                                         aspectRatio: '1/1',
