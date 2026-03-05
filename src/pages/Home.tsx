@@ -19,6 +19,16 @@ const stripHtml = (html: string) => {
 
 export function Home() {
     const { news, loading, formatTime } = useNews('All', 50);
+    const [livePageEnabled, setLivePageEnabled] = useState(true);
+
+    useEffect(() => {
+        const unsubscribe = onSnapshot(doc(db, 'settings', 'live_config'), (snap) => {
+            if (snap.exists()) {
+                setLivePageEnabled(snap.data().livePageEnabled ?? true);
+            }
+        });
+        return () => unsubscribe();
+    }, []);
 
     if (loading) {
         return (
@@ -102,16 +112,6 @@ export function Home() {
         titleFont: item.titleFont
     }));
 
-    const [livePageEnabled, setLivePageEnabled] = useState(true);
-
-    useEffect(() => {
-        const unsubscribe = onSnapshot(doc(db, 'settings', 'live_config'), (snap) => {
-            if (snap.exists()) {
-                setLivePageEnabled(snap.data().livePageEnabled ?? true);
-            }
-        });
-        return () => unsubscribe();
-    }, []);
 
     // Separate live news articles
     // Note: We check specifically for showInLive (new system) or isLive (legacy) 
