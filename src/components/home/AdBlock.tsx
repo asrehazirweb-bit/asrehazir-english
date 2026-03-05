@@ -29,10 +29,10 @@ export function AdBlock({ className = "min-h-[120px]", label = "Advertisement", 
             href={ad.link}
             target="_blank"
             rel="noopener noreferrer"
-            className={`block w-full overflow-hidden rounded-xl ${className} my-8 border border-gray-100 hover:opacity-95 transition-all shadow-md hover:shadow-lg`}
+            className={`block w-full overflow-hidden rounded-xl ${className} my-8 border border-gray-100 hover:opacity-95 transition-all shadow-md hover:shadow-lg h-auto`}
         >
             <div className="relative w-full h-full flex items-center justify-center bg-gray-50">
-                <img src={ad.imageUrl} alt="Advertisement" className="max-w-full max-h-full object-contain" />
+                <img src={ad.imageUrl} alt="Advertisement" className="w-full h-auto object-contain block" />
                 <div className="absolute top-2 right-2 bg-black/40 backdrop-blur-md px-2 py-0.5 rounded text-[8px] text-white uppercase font-black tracking-widest">Ad</div>
             </div>
         </a>
