@@ -6,7 +6,6 @@ import { AdBlock } from '../components/home/AdBlock';
 import { LatestNewsSection } from '../components/home/LatestNewsSection';
 import { RegionalAndOffbeatSection } from '../components/home/RegionalAndOffbeatSection';
 import { CategoryFeatureSection, CategoryGridSection } from '../components/home/CategoryFeatureSection';
-import { NewsTicker } from '../components/NewsTicker';
 import { useNews } from '../hooks/useNews';
 import { useState, useEffect } from 'react';
 import { db } from '../lib/firebase';
@@ -120,8 +119,7 @@ export function Home() {
     return (
         <div className="pt-0">
 
-            {/* === NEWS TICKER === */}
-            <NewsTicker items={news.slice(0, 10).map(n => ({ id: n.id, title: n.title }))} />
+            {/* === NEWS TICKER REMOVED (Now in Layout) === */}
 
             {/* === LIVE NEWS STRIP === */}
             {livePageEnabled && liveNews.length > 0 && (

@@ -1,6 +1,9 @@
+
 import React, { useEffect, useState } from 'react';
 import { db } from '../../lib/firebase';
 import { collection, query, orderBy, onSnapshot, limit } from 'firebase/firestore';
+import { Link } from 'react-router-dom';
+import { Zap } from 'lucide-react';
 
 interface NewsItem {
     id: string;
@@ -34,20 +37,32 @@ export const NewsTicker: React.FC = () => {
     ];
 
     return (
-        <div className="bg-primary text-white overflow-hidden py-3 border-y border-primary shadow-lg relative z-50 w-full">
-            <div className="flex whitespace-nowrap animate-ticker">
-                {/* Render triple for absolute seamlessness */}
-                {[...Array(3)].map((_, i) => (
-                    <div key={i} className="flex items-center">
-                        {displayPosts.map((post) => (
-                            <span key={`${i}-${post.id}`} className="inline-flex items-center mx-12">
-                                <span className="bg-white text-primary text-[10px] font-black px-2 py-0.5 rounded mr-4 shadow-sm uppercase">Latest</span>
-                                <span className="text-sm md:text-base font-bold tracking-tight">{post.title}</span>
-                                <span className="mx-12 text-white/30 font-light">/</span>
-                            </span>
-                        ))}
-                    </div>
-                ))}
+        <div className="w-full bg-white border-b border-gray-100 overflow-hidden flex items-stretch h-10 relative z-50">
+            {/* BREAKING Label */}
+            <div className="flex-shrink-0 bg-primary text-white px-4 flex items-center gap-2 z-10 shadow-lg">
+                <Zap size={14} fill="currentColor" />
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] whitespace-nowrap">
+                    Breaking
+                </span>
+            </div>
+
+            {/* Scrolling Track Container */}
+            <div className="flex-1 overflow-hidden relative flex items-center">
+                <div className="flex items-center whitespace-nowrap animate-ticker gap-10">
+                    {[...Array(3)].map((_, i) => (
+                        <div key={i} className="flex items-center shrink-0 gap-10">
+                            {displayPosts.map((post) => (
+                                <Link
+                                    key={`${i}-${post.id}`}
+                                    to={`/news/${post.id}`}
+                                    className="text-[13px] font-bold text-gray-800 hover:text-primary transition-colors whitespace-nowrap shrink-0"
+                                >
+                                    {post.title}
+                                </Link>
+                            ))}
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     );

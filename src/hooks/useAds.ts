@@ -10,11 +10,20 @@ interface Ad {
     active: boolean;
 }
 
+// Session cache to ensure ads stay static once loaded
+const adCache: Record<string, Ad> = {};
+
 export const useAds = (placement: string) => {
-    const [ad, setAd] = useState<Ad | null>(null);
-    const [loading, setLoading] = useState(true);
+    const [ad, setAd] = useState<Ad | null>(adCache[placement] || null);
+    const [loading, setLoading] = useState(!adCache[placement]);
 
     useEffect(() => {
+        // If already in cache, do nothing
+        if (adCache[placement]) {
+            setLoading(false);
+            return;
+        }
+
         const fetchAd = async () => {
             try {
                 const q = query(
@@ -24,9 +33,11 @@ export const useAds = (placement: string) => {
                 );
                 const snapshot = await getDocs(q);
                 if (!snapshot.empty) {
-                    // Get a random active ad for this placement
                     const ads = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Ad));
                     const randomAd = ads[Math.floor(Math.random() * ads.length)];
+                    
+                    // Store in cache for this session
+                    adCache[placement] = randomAd;
                     setAd(randomAd);
                 }
             } catch (error) {

@@ -20,7 +20,7 @@ export function HeroSection({ leadStory, className = "" }: HeroSectionProps) {
     return (
         <Link to={`/news/${leadStory.id}`} className={`relative w-full block mb-16 group cursor-pointer border-b border-gray-100 pb-12 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/5 ${className}`}>
             {/* Image Container */}
-            <div className="relative aspect-video sm:aspect-[21/10] w-full overflow-hidden mb-10 bg-gray-100 rounded-xl shadow-inner">
+            <div className="relative h-[40vh] md:h-[50vh] lg:h-[60vh] w-full overflow-hidden mb-10 bg-gray-100 rounded-xl shadow-inner">
                 <img
                     src={leadStory.image}
                     alt={leadStory.title}

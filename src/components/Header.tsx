@@ -166,7 +166,7 @@ export function Header() {
                         {/* Logo — ALWAYS centered (absolute on all screens) */}
                         <Link to="/" className="absolute left-1/2 -translate-x-1/2 group transition-transform duration-300 active:scale-95">
                             <img
-                                src="/images/asrehazirlogo.jpeg"
+                                src="/images/new_logo.png"
                                 alt="Asre Hazir"
                                 className={`${isScrolled ? 'h-8 md:h-12' : 'h-14 sm:h-18 md:h-24'} w-auto transition-all duration-300 object-contain`}
                             />
@@ -240,13 +240,13 @@ export function Header() {
 
                                 {/* Dropdown */}
                                 {cat.subCategories && cat.subCategories.length > 0 && activeDropdown === cat.id && (
-                                    <div className="absolute top-full left-1/2 -translate-x-1/2 w-56 pt-2 z-[100] animate-in fade-in slide-in-from-top-2 duration-200">
+                                    <div className="absolute top-full left-1/2 -translate-x-1/2 min-w-[180px] w-max max-w-[90vw] pt-2 z-[100] animate-in fade-in slide-in-from-top-2 duration-200">
                                         <div className="bg-white border border-gray-100 shadow-2xl rounded-2xl overflow-hidden py-3">
                                             {cat.subCategories.map((sub) => (
                                                 <Link
                                                     key={sub}
                                                     to={`/category/${encodeURIComponent(cat.name)}/${encodeURIComponent(sub)}`}
-                                                    className="block px-6 py-2.5 text-[11px] font-black uppercase tracking-wider text-gray-600 hover:text-primary hover:bg-gray-50 transition-all border-l-4 border-transparent hover:border-primary"
+                                                    className="block px-6 py-2.5 text-[11px] font-black uppercase tracking-wider text-gray-600 hover:text-primary hover:bg-gray-50 transition-all border-l-4 border-transparent hover:border-primary whitespace-nowrap"
                                                 >
                                                     {sub}
                                                 </Link>
